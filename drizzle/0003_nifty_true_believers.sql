@@ -1,0 +1,2 @@
+ALTER TABLE "top_scores" DROP CONSTRAINT "top_scores_year_event_code_match_number_pk";--> statement-breakpoint
+ALTER TABLE "top_scores" ADD CONSTRAINT "top_scores_year_event_code_match_level_match_number_pk" PRIMARY KEY("year","event_code","match_level","match_number");

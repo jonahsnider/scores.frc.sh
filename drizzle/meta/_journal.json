@@ -1,0 +1,41 @@
+{
+	"version": "5",
+	"dialect": "pg",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "5",
+			"when": 1710663779078,
+			"tag": "0000_thin_taskmaster",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "5",
+			"when": 1710663807775,
+			"tag": "0001_uneven_selene",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "5",
+			"when": 1710665012227,
+			"tag": "0002_powerful_pretty_boy",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "5",
+			"when": 1710665249928,
+			"tag": "0003_nifty_true_believers",
+			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "5",
+			"when": 1710715345718,
+			"tag": "0004_colorful_adam_warlock",
+			"breakpoints": true
+		}
+	]
+}

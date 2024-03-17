@@ -1,0 +1,1 @@
+ALTER TABLE "top_scores" ALTER COLUMN "timestamp" SET DATA TYPE timestamp with time zone;

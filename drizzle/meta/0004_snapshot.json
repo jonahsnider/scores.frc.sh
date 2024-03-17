@@ -1,0 +1,97 @@
+{
+	"id": "56881fb7-4f84-4a96-9742-62cfa362a47b",
+	"prevId": "3b4e5600-be94-4260-84fa-b18c9e1dd74c",
+	"version": "5",
+	"dialect": "pg",
+	"tables": {
+		"top_scores": {
+			"name": "top_scores",
+			"schema": "",
+			"columns": {
+				"year": {
+					"name": "year",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"event_code": {
+					"name": "event_code",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"event_week_number": {
+					"name": "event_week_number",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"match_number": {
+					"name": "match_number",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"match_level": {
+					"name": "match_level",
+					"type": "match_level",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"score": {
+					"name": "score",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"winning_teams": {
+					"name": "winning_teams",
+					"type": "jsonb",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp with time zone",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {
+				"top_scores_timestamp_index": {
+					"name": "top_scores_timestamp_index",
+					"columns": ["timestamp"],
+					"isUnique": false
+				},
+				"top_scores_score_index": {
+					"name": "top_scores_score_index",
+					"columns": ["score"],
+					"isUnique": false
+				}
+			},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {
+				"top_scores_year_event_code_match_level_match_number_pk": {
+					"name": "top_scores_year_event_code_match_level_match_number_pk",
+					"columns": ["year", "event_code", "match_level", "match_number"]
+				}
+			},
+			"uniqueConstraints": {}
+		}
+	},
+	"enums": {
+		"match_level": {
+			"name": "match_level",
+			"values": {
+				"QUALIFICATION": "QUALIFICATION",
+				"PLAYOFF": "PLAYOFF"
+			}
+		}
+	},
+	"schemas": {},
+	"_meta": {
+		"columns": {},
+		"schemas": {},
+		"tables": {}
+	}
+}

@@ -1,0 +1,39 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.0.0/schema.json",
+	"files": {
+		"ignore": [".next", "node_modules", ".vercel", "**/package.json"]
+	},
+	"formatter": {
+		"formatWithErrors": true,
+		"lineWidth": 120
+	},
+	"javascript": {
+		"formatter": {
+			"jsxQuoteStyle": "single",
+			"quoteStyle": "single"
+		},
+		"globals": ["React"]
+	},
+	"json": {
+		"parser": {
+			"allowComments": true
+		}
+	},
+	"linter": {
+		"rules": {
+			"all": true,
+			"nursery": {
+				"all": false
+			},
+			"style": {
+				"all": true,
+				"noParameterProperties": "off"
+			},
+			"complexity": {
+				"all": true,
+				"useLiteralKeys": "off",
+				"noStaticOnlyClass": "off"
+			}
+		}
+	}
+}
