@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic';
-import { useMemo } from 'react';
 import { trpc } from '../trpc';
 
 type Props = {
@@ -25,13 +24,16 @@ export function ScoreChart({ year, eventCode }: Props) {
 		y: match.score,
 	}));
 
-	// TODO: Figure out why this doesn't seem to work immediately, only works after tabbing back in?
-	if (matches.error) {
-		if (matches.error.data?.code === 'NOT_FOUND') {
-			return <p>Event not found</p>;
-		}
-
+	if (matches.isError) {
 		return <p>Error loading data</p>;
+	}
+
+	if (matches.isPending) {
+		return <p>Loading...</p>;
+	}
+
+	if (matches.isSuccess && matches.data === null) {
+		return <p>No event found</p>;
 	}
 
 	// TODO: Render differently for multi-week (global) scores

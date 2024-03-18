@@ -3,10 +3,9 @@ import { z } from 'zod';
 import { CacheManagerService } from '../cache-manager/cache-manager.service';
 import { MatchLevel } from '../first/enums/match-level.enum';
 
+import { EventsService } from '../events/events.service';
 import { publicProcedure, router } from '../trpc/trpc';
 import { HighScoresService } from './high-scores.service';
-import { EventsService } from '../events/events.service';
-import { TRPCError } from '@trpc/server';
 
 const EventYear = z.number().int().min(CacheManagerService.YEAR_OLDEST).max(CacheManagerService.YEAR_NEWEST);
 const EventCode = z.string().min(1).toUpperCase();
@@ -35,13 +34,13 @@ export class HighScoresRouter {
 		return router({
 			getHighScores: publicProcedure
 				.input(z.object({ year: EventYear, eventCode: EventCode.optional() }))
-				.output(EventMatch.array())
+				.output(EventMatch.array().nullable())
 				.query(async ({ input }) => {
 					if (input.eventCode) {
 						const eventExists = await this.eventsService.eventExists(input.year, input.eventCode);
 
 						if (!eventExists) {
-							throw new TRPCError({ code: 'NOT_FOUND', message: 'Event not found' });
+							return null;
 						}
 					}
 
