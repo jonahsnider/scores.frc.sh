@@ -8,6 +8,7 @@ import { ConfigModule } from './config/config.module';
 import { DbModule } from './db/db.module';
 import { EventsModule } from './events/events.module';
 import { FirstModule } from './first/first.module';
+import { HealthModule } from './health/health.module';
 import { HighScoresModule } from './high-scores/high-scores.module';
 import { MatchResultsModule } from './match-results/match-results.module';
 import { QueuesModule } from './queues/queues.module';
@@ -39,6 +40,7 @@ import { TrpcModule } from './trpc/trpc.module';
 		FirstModule,
 		TrpcModule,
 		CacheManagerModule,
+		HealthModule,
 	],
 	exports: [BullModule],
 })
