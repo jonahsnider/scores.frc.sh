@@ -10,7 +10,6 @@ import { MatchResultsService } from './match-results.service';
 
 @Module({
 	imports: [
-		BullModule,
 		BullModule.registerQueueAsync({
 			inject: [REDIS_PROCESSOR_PROVIDER],
 			useFactory: (redis: Ioredis) => ({

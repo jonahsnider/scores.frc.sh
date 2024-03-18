@@ -12,7 +12,6 @@ import { EventsService } from './events.service';
 @Module({
 	imports: [
 		FirstModule,
-		BullModule,
 		BullModule.registerQueueAsync({
 			inject: [REDIS_PROCESSOR_PROVIDER],
 			useFactory: (redis: Ioredis) => ({
