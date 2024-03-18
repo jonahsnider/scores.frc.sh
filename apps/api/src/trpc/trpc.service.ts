@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, type INestApplication } from '@nestjs/common';
+import { type INestApplication, Inject, Injectable, Logger } from '@nestjs/common';
 import { captureException } from '@sentry/bun';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import cors from 'cors';

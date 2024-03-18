@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CacheManagerService } from './cache-manager.service';
 import { QueuesModule } from '../queues/queues.module';
+import { CacheManagerService } from './cache-manager.service';
 
 @Module({
 	imports: [QueuesModule],

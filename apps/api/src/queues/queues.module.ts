@@ -1,7 +1,7 @@
 import { createBullBoard } from '@bull-board/api';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { ExpressAdapter } from '@bull-board/express';
-import { Inject, Module, type MiddlewareConsumer, type NestModule } from '@nestjs/common';
+import { Inject, type MiddlewareConsumer, Module, type NestModule } from '@nestjs/common';
 import type { Router } from 'express';
 import { QueuesService } from './queues.service';
 

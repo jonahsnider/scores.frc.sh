@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
-import { QueueNames } from './enums/queue-names.enum';
-import { QUEUE_REDIS_PROVIDER } from '../redis/providers';
 import type Ioredis from 'ioredis';
+import { QUEUE_REDIS_PROVIDER } from '../redis/providers';
+import { QueueNames } from './enums/queue-names.enum';
 
 // biome-ignore lint/suspicious/noExplicitAny: This is required
 type AnyQueue = Queue<any, any, any>;

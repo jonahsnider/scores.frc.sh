@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { EventsModule } from '../events/events.module';
 import { HighScoresRouter } from './high-scores.router';
 import { HighScoresService } from './high-scores.service';
-import { EventsModule } from '../events/events.module';
 
 @Module({
 	imports: [EventsModule],
