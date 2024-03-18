@@ -42,6 +42,5 @@ import { TrpcModule } from './trpc/trpc.module';
 		CacheManagerModule,
 		HealthModule,
 	],
-	exports: [BullModule],
 })
 export class AppModule {}
