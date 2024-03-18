@@ -65,7 +65,7 @@ export class EventsService {
 		@Inject(DB_PROVIDER) private readonly db: Db,
 	) {}
 
-	async getScores(event: { year: number; code: string; weekNumber: number }): Promise<Match[]> {
+	async getMatches(event: { year: number; code: string; weekNumber: number }): Promise<Match[]> {
 		const [qualScores, playoffScores, schedule] = await Promise.all([
 			this.firstService.listEventScores(event.year, event.code, MatchLevel.Qualification),
 			this.firstService.listEventScores(event.year, event.code, MatchLevel.Playoff),
@@ -82,17 +82,34 @@ export class EventsService {
 		return [...qualMatches, ...playoffMatches];
 	}
 
-	async purgeOrphanedEvents(year: number): Promise<void> {
+	async purgeOrphanedEvents(year: number): Promise<string[]> {
 		const events = await this.firstService.listEvents(year);
 
-		await this.db.delete(Schema.topScores).where(
-			and(
-				eq(Schema.topScores.year, year),
-				notInArray(
-					Schema.topScores.eventCode,
-					events.Events.map((event) => event.code),
+		const deleted = await this.db
+			.delete(Schema.topScores)
+			.where(
+				and(
+					eq(Schema.topScores.year, year),
+					notInArray(
+						Schema.topScores.eventCode,
+						events.Events.map((event) => event.code),
+					),
 				),
-			),
-		);
+			)
+			.returning({
+				eventCode: Schema.topScores.eventCode,
+			});
+
+		return deleted.map((score) => score.eventCode);
+	}
+
+	async eventExists(year: number, code: string): Promise<boolean> {
+		const [row] = await this.db
+			.select()
+			.from(Schema.topScores)
+			.where(and(eq(Schema.topScores.year, year), eq(Schema.topScores.eventCode, code)))
+			.limit(1);
+
+		return Boolean(row);
 	}
 }

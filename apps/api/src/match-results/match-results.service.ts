@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { sql } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { Schema } from '../db/index';
 import type { Db } from '../db/interfaces/db.interface';
 import { DB_PROVIDER } from '../db/providers';
@@ -70,23 +70,25 @@ export class MatchResultsService {
 	constructor(@Inject(DB_PROVIDER) private readonly db: Db) {}
 
 	async saveTopScores(matches: TopScoreMatch[]): Promise<void> {
-		const values = matches.map(MatchResultsService.matchToDbMatch);
+		const [firstMatch] = matches;
 
-		await this.db
-			.insert(Schema.topScores)
-			.values(values)
-			.onConflictDoUpdate({
-				target: [
-					Schema.topScores.year,
-					Schema.topScores.eventCode,
-					Schema.topScores.matchLevel,
-					Schema.topScores.matchNumber,
-				],
-				set: {
-					score: sql`EXCLUDED.score`,
-					timestamp: sql`EXCLUDED.timestamp`,
-					winningTeams: sql`EXCLUDED.winning_teams`,
-				},
+		if (firstMatch) {
+			const values = matches.map(MatchResultsService.matchToDbMatch);
+
+			await this.db.transaction(async (tx) => {
+				// Clear out all matches for this event, in case there are any orphaned matches
+				await tx
+					.delete(Schema.topScores)
+					.where(
+						and(
+							eq(Schema.topScores.year, firstMatch.event.year),
+							eq(Schema.topScores.eventCode, firstMatch.event.code),
+							eq(Schema.topScores.matchLevel, matchLevelToDb(firstMatch.level)),
+						),
+					);
+
+				await tx.insert(Schema.topScores).values(values);
 			});
+		}
 	}
 }

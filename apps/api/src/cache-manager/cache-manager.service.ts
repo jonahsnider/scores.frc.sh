@@ -1,9 +1,9 @@
-import { InjectQueue } from '@nestjs/bullmq';
 import { Inject, Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import convert from 'convert';
 import { ConfigService } from '../config/config.service';
 import type { QueueType } from '../events/interfaces/fetch-events-queue.interface';
 import { QueueNames } from '../queues/enums/queue-names.enum';
+import { QueuesService } from '../queues/queues.service';
 
 @Injectable()
 export class CacheManagerService implements OnModuleInit {
@@ -17,10 +17,14 @@ export class CacheManagerService implements OnModuleInit {
 
 	private readonly logger = new Logger(CacheManagerService.name);
 
+	private readonly fetchEventsQueue: QueueType;
+
 	constructor(
 		@Inject(ConfigService) private readonly configService: ConfigService,
-		@InjectQueue(QueueNames.FetchEvents) private readonly fetchEventsQueue: QueueType,
-	) {}
+		@Inject(QueuesService) queuesService: QueuesService,
+	) {
+		this.fetchEventsQueue = queuesService.getQueue(QueueNames.FetchEvents);
+	}
 
 	async onModuleInit(): Promise<void> {
 		for (let year = CacheManagerService.YEAR_OLDEST; year <= CacheManagerService.YEAR_NEWEST; year++) {

@@ -1,8 +1,5 @@
-import { ExpressAdapter } from '@bull-board/express';
-import { BullBoardModule } from '@bull-board/nestjs';
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
-import type Ioredis from 'ioredis';
 import { CacheManagerModule } from './cache-manager/cache-manager.module';
 import { ConfigModule } from './config/config.module';
 import { DbModule } from './db/db.module';
@@ -12,27 +9,36 @@ import { HealthModule } from './health/health.module';
 import { HighScoresModule } from './high-scores/high-scores.module';
 import { MatchResultsModule } from './match-results/match-results.module';
 import { QueuesModule } from './queues/queues.module';
-import { REDIS_QUEUE_PROVIDER } from './redis/providers';
+
+import { SentryModule } from '@ntegral/nestjs-sentry';
+import { ConfigService } from './config/config.service';
 import { RedisModule } from './redis/redis.module';
 import { TrpcModule } from './trpc/trpc.module';
 
 @Module({
 	imports: [
 		ConfigModule,
+		SentryModule.forRootAsync({
+			imports: [ConfigModule],
+			inject: [ConfigService],
+			useFactory: (config: ConfigService) => ({
+				dsn: config.sentryDsn,
+				environment: config.nodeEnv,
+			}),
+		}),
 		DbModule,
 		RedisModule,
 		BullModule.forRootAsync({
-			inject: [REDIS_QUEUE_PROVIDER],
-			useFactory: (redis: Ioredis) => ({ connection: redis }),
+			inject: [ConfigService],
+			useFactory: (config: ConfigService) => ({
+				connection: {
+					username: config.redis.username,
+					password: config.redis.password,
+					host: config.redis.host,
+					port: config.redis.port,
+				},
+			}),
 		}),
-		...(process.env.NODE_ENV === 'development'
-			? [
-					BullBoardModule.forRoot({
-						route: '/internal/queues',
-						adapter: ExpressAdapter,
-					}),
-			  ]
-			: []),
 		QueuesModule,
 		EventsModule,
 		HighScoresModule,

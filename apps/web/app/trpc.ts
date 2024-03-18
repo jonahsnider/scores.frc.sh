@@ -1,11 +1,11 @@
-import type { AppRouter } from '@frc-colors/api';
+import type { AppRouterType } from '@scores.frc.sh/api/src/trpc/app.router';
 import { transformer } from '@frc-colors/api/src/trpc/transformer';
 import { httpBatchLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 import getBaseApiUrl from '../shared.js';
 
-export const trpc = createTRPCNext<AppRouter>({
+export const trpc = createTRPCNext<AppRouterType>({
 	transformer,
 	config: () => ({
 		links: [
@@ -17,5 +17,5 @@ export const trpc = createTRPCNext<AppRouter>({
 	}),
 });
 
-export type RouterInput = inferRouterInputs<AppRouter>;
-export type RouterOutput = inferRouterOutputs<AppRouter>;
+export type RouterInput = inferRouterInputs<AppRouterType>;
+export type RouterOutput = inferRouterOutputs<AppRouterType>;

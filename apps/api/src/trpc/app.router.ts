@@ -12,3 +12,5 @@ export class AppRouter {
 		});
 	}
 }
+
+export type AppRouterType = ReturnType<AppRouter['createRouter']>;

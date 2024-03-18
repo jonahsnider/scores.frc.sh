@@ -10,7 +10,13 @@ export class ConfigService {
 	public readonly port: number;
 	public readonly databaseUrl: string;
 	public readonly sentryDsn: string;
-	public readonly redisUrl: string;
+	public readonly redis: {
+		readonly url: string;
+		readonly host: string;
+		readonly port: number;
+		readonly password: string;
+		readonly username: string;
+	};
 	public readonly adminUsername: string;
 	public readonly adminApiToken: string;
 	public readonly websiteUrl: string;
@@ -47,9 +53,18 @@ export class ConfigService {
 		this.port = env.PORT;
 		this.databaseUrl = env.DATABASE_URL;
 		this.sentryDsn = env.SENTRY_DSN;
-		this.redisUrl = env.REDIS_URL;
 		this.adminUsername = env.ADMIN_USERNAME;
 		this.adminApiToken = env.ADMIN_API_TOKEN;
 		this.websiteUrl = env.WEBSITE_URL;
+
+		const redisUrl = new URL(env.REDIS_URL);
+
+		this.redis = {
+			url: env.REDIS_URL,
+			host: redisUrl.hostname,
+			port: Number(redisUrl.port),
+			password: redisUrl.password,
+			username: redisUrl.username,
+		};
 	}
 }
