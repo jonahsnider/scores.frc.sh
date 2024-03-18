@@ -10,7 +10,7 @@ export class CacheManagerService implements OnModuleInit {
 	static readonly YEAR_OLDEST = 2016;
 	static readonly YEAR_NEWEST = new Date().getFullYear();
 
-	private static readonly FORCE_REFRESH_IN_DEV = true;
+	private static readonly FORCE_REFRESH_IN_DEV = false;
 
 	private static readonly CACHE_REFRESH_INTERVAL_CURRENT_YEAR = convert(1, 'hour');
 	private static readonly CACHE_REFRESH_INTERVAL_PAST_YEAR = convert(1, 'week');
