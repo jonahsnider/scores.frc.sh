@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { url, cleanEnv, port, str } from 'envalid';
 
 type NodeEnv = 'production' | 'development' | 'staging';
 
+@Injectable()
 export class ConfigService {
 	public readonly nodeEnv: NodeEnv;
 	public readonly frcEventsApi: Readonly<{ username: string; password: string }>;
@@ -51,5 +53,3 @@ export class ConfigService {
 		this.websiteUrl = env.WEBSITE_URL;
 	}
 }
-
-export const configService = new ConfigService();

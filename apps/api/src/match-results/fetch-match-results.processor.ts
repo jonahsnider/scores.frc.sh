@@ -1,13 +1,14 @@
-import { BaseWorker } from '../queues/base.worker';
-
+import { Processor, WorkerHost } from '@nestjs/bullmq';
+import { Inject } from '@nestjs/common';
 import convert from 'convert';
-import type { EventsService } from '../events/events.service';
+import { EventsService } from '../events/events.service';
 import type { FrcEvent } from '../first/interfaces/frc-events.interface';
-import { fetchMatchResultsQueue } from '../queues/queues';
-import type { DataType, JobType, NameType, ReturnType } from './interfaces/fetch-match-results.queue.interface';
+import { QueueNames } from '../queues/enums/queue-names.enum';
+import type { JobType, ReturnType } from './interfaces/fetch-match-results.queue.interface';
 import { MatchResultsService } from './match-results.service';
 
-export class FetchMatchResultsWorker extends BaseWorker<DataType, ReturnType, NameType> {
+@Processor(QueueNames.FetchMatchResults, { concurrency: 3 })
+export class FetchMatchResultsProcessor extends WorkerHost {
 	private static readonly REPEAT_UPCOMING_EVENT_INTERVAL = convert(6, 'hour');
 	private static readonly REPEAT_FINISHED_EVENT_INTERVAL = convert(1, 'day');
 	private static readonly REPEAT_IN_PROGRESS_EVENT_INTERVAL = convert(5, 'minutes');
@@ -18,17 +19,17 @@ export class FetchMatchResultsWorker extends BaseWorker<DataType, ReturnType, Na
 		const now = new Date();
 
 		if (now < start) {
-			return FetchMatchResultsWorker.REPEAT_UPCOMING_EVENT_INTERVAL;
+			return FetchMatchResultsProcessor.REPEAT_UPCOMING_EVENT_INTERVAL;
 		}
 
 		if (now > end) {
-			return FetchMatchResultsWorker.REPEAT_FINISHED_EVENT_INTERVAL;
+			return FetchMatchResultsProcessor.REPEAT_FINISHED_EVENT_INTERVAL;
 		}
 
-		return FetchMatchResultsWorker.REPEAT_IN_PROGRESS_EVENT_INTERVAL;
+		return FetchMatchResultsProcessor.REPEAT_IN_PROGRESS_EVENT_INTERVAL;
 	}
 
-	protected override async process(job: JobType): Promise<ReturnType> {
+	override async process(job: JobType): Promise<ReturnType> {
 		const scores = await this.events.getScores({
 			code: job.data.eventCode,
 			weekNumber: job.data.eventWeekNumber,
@@ -41,11 +42,9 @@ export class FetchMatchResultsWorker extends BaseWorker<DataType, ReturnType, Na
 	}
 
 	constructor(
-		private readonly events: EventsService,
-		private readonly matchResults: MatchResultsService,
+		@Inject(EventsService) private readonly events: EventsService,
+		@Inject(MatchResultsService) private readonly matchResults: MatchResultsService,
 	) {
-		super(fetchMatchResultsQueue, {
-			concurrency: 3,
-		});
+		super();
 	}
 }

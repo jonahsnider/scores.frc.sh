@@ -1,13 +1,18 @@
+import { Inject, Injectable } from '@nestjs/common';
 import { asc, eq } from 'drizzle-orm';
-import { db } from '../db/db';
 import { Schema } from '../db/index';
+import type { Db } from '../db/interfaces/db.interface';
+import { DB_PROVIDER } from '../db/providers';
 import { matchLevelFromDb } from '../db/util';
 import type { TopScoreMatch } from '../match-results/interfaces/top-score-match.interface';
 
+@Injectable()
 export class HighScoresService {
+	constructor(@Inject(DB_PROVIDER) private readonly db: Db) {}
+
 	async getGlobalHighScores(year: number): Promise<TopScoreMatch[]> {
 		// Get every top scoring match we have stored
-		const topScoringMatches = await db
+		const topScoringMatches = await this.db
 			.select()
 			.from(Schema.topScores)
 			.where(eq(Schema.topScores.year, year))
@@ -38,5 +43,3 @@ export class HighScoresService {
 		}));
 	}
 }
-
-export const highScoresService = new HighScoresService();

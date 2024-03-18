@@ -1,13 +1,14 @@
+import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { db } from '../db/db';
 import { Schema } from '../db/index';
+import type { Db } from '../db/interfaces/db.interface';
+import { DB_PROVIDER } from '../db/providers';
 import { matchLevelToDb } from '../db/util';
-import { eventsService } from '../events/events.service';
 import type { Match } from '../events/interfaces/match.interface';
 import { MatchLevel } from '../first/enums/match-level.enum';
-import { FetchMatchResultsWorker } from './fetch-match-results.worker';
 import type { TopScoreMatch } from './interfaces/top-score-match.interface';
 
+@Injectable()
 export class MatchResultsService {
 	private static matchToDbMatch(match: TopScoreMatch): typeof Schema.topScores.$inferSelect {
 		return {
@@ -66,10 +67,12 @@ export class MatchResultsService {
 		};
 	}
 
+	constructor(@Inject(DB_PROVIDER) private readonly db: Db) {}
+
 	async saveTopScores(matches: TopScoreMatch[]): Promise<void> {
 		const values = matches.map(MatchResultsService.matchToDbMatch);
 
-		await db
+		await this.db
 			.insert(Schema.topScores)
 			.values(values)
 			.onConflictDoUpdate({
@@ -86,8 +89,4 @@ export class MatchResultsService {
 				},
 			});
 	}
-
-	private readonly worker = new FetchMatchResultsWorker(eventsService, this);
 }
-
-export const matchResultsService = new MatchResultsService();

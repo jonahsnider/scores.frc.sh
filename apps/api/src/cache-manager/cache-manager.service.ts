@@ -1,9 +1,12 @@
+import { InjectQueue } from '@nestjs/bullmq';
+import { Inject, Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import convert from 'convert';
-import { configService } from '../config/config.service';
-import { baseLogger } from '../logger/logger';
-import { fetchEventsQueue } from '../queues/queues';
+import { ConfigService } from '../config/config.service';
+import type { QueueType } from '../events/interfaces/fetch-events-queue.interface';
+import { QueueNames } from '../queues/enums/queue-names.enum';
 
-export class CacheManager {
+@Injectable()
+export class CacheManagerService implements OnModuleInit {
 	static readonly YEAR_OLDEST = 2016;
 	static readonly YEAR_NEWEST = new Date().getFullYear();
 
@@ -12,16 +15,21 @@ export class CacheManager {
 	private static readonly CACHE_REFRESH_INTERVAL_CURRENT_YEAR = convert(1, 'hour');
 	private static readonly CACHE_REFRESH_INTERVAL_PAST_YEAR = convert(1, 'week');
 
-	private readonly logger = baseLogger.child({ module: 'cache manager' });
+	private readonly logger = new Logger(CacheManagerService.name);
 
-	async init(): Promise<void> {
-		for (let year = CacheManager.YEAR_OLDEST; year <= CacheManager.YEAR_NEWEST; year++) {
+	constructor(
+		@Inject(ConfigService) private readonly configService: ConfigService,
+		@InjectQueue(QueueNames.FetchEvents) private readonly fetchEventsQueue: QueueType,
+	) {}
+
+	async onModuleInit(): Promise<void> {
+		for (let year = CacheManagerService.YEAR_OLDEST; year <= CacheManagerService.YEAR_NEWEST; year++) {
 			const repeatInterval =
-				year === CacheManager.YEAR_NEWEST
-					? CacheManager.CACHE_REFRESH_INTERVAL_CURRENT_YEAR
-					: CacheManager.CACHE_REFRESH_INTERVAL_PAST_YEAR;
+				year === CacheManagerService.YEAR_NEWEST
+					? CacheManagerService.CACHE_REFRESH_INTERVAL_CURRENT_YEAR
+					: CacheManagerService.CACHE_REFRESH_INTERVAL_PAST_YEAR;
 
-			await fetchEventsQueue.add(
+			await this.fetchEventsQueue.add(
 				`fetch-events-${year}`,
 				{ year },
 				{
@@ -32,13 +40,13 @@ export class CacheManager {
 			);
 		}
 
-		if (CacheManager.FORCE_REFRESH_IN_DEV && configService.nodeEnv === 'development') {
-			this.logger.info('Scheduling cache refresh right now');
-			await fetchEventsQueue.add(`fetch-events-${CacheManager.YEAR_NEWEST}`, { year: CacheManager.YEAR_NEWEST });
+		if (CacheManagerService.FORCE_REFRESH_IN_DEV && this.configService.nodeEnv === 'development') {
+			this.logger.log('Scheduling cache refresh right now');
+			await this.fetchEventsQueue.add(`fetch-events-${CacheManagerService.YEAR_NEWEST}`, {
+				year: CacheManagerService.YEAR_NEWEST,
+			});
 		}
 
-		this.logger.info('Cache refreshes scheduled');
+		this.logger.log('Cache refreshes scheduled');
 	}
 }
-
-export const cacheManager = new CacheManager();
