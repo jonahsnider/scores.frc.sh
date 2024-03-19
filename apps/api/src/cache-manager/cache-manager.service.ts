@@ -1,13 +1,17 @@
-import { Inject, Injectable, Logger, type OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, type OnApplicationBootstrap } from '@nestjs/common';
 import convert from 'convert';
+import { eq } from 'drizzle-orm';
 import { ConfigService } from '../config/config.service';
+import { Schema } from '../db/index';
+import type { Db } from '../db/interfaces/db.interface';
+import { DB_PROVIDER } from '../db/providers';
 import type { QueueType } from '../events/interfaces/fetch-events-queue.interface';
 import { QueueNames } from '../queues/enums/queue-names.enum';
 import { QueuesService } from '../queues/queues.service';
 
 @Injectable()
-export class CacheManagerService implements OnModuleInit {
-	static readonly YEAR_OLDEST = 2016;
+export class CacheManagerService implements OnApplicationBootstrap {
+	static readonly YEAR_OLDEST = 2023;
 	static readonly YEAR_NEWEST = new Date().getFullYear();
 
 	private static readonly FORCE_REFRESH_IN_DEV = false;
@@ -22,11 +26,12 @@ export class CacheManagerService implements OnModuleInit {
 	constructor(
 		@Inject(ConfigService) private readonly configService: ConfigService,
 		@Inject(QueuesService) queuesService: QueuesService,
+		@Inject(DB_PROVIDER) private readonly db: Db,
 	) {
 		this.fetchEventsQueue = queuesService.getQueue(QueueNames.FetchEvents);
 	}
 
-	async onModuleInit(): Promise<void> {
+	async onApplicationBootstrap(): Promise<void> {
 		for (let year = CacheManagerService.YEAR_OLDEST; year <= CacheManagerService.YEAR_NEWEST; year++) {
 			const repeatInterval =
 				year === CacheManagerService.YEAR_NEWEST
@@ -42,6 +47,12 @@ export class CacheManagerService implements OnModuleInit {
 					},
 				},
 			);
+			this.logger.verbose(`Scheduled cache refresh for year ${year}`);
+
+			if (await this.shouldRefreshNow(year)) {
+				this.logger.log(`No data found for ${year}, scheduling a one-off refresh now`);
+				await this.fetchEventsQueue.add(`fetch-events-${year}`, { year });
+			}
 		}
 
 		if (CacheManagerService.FORCE_REFRESH_IN_DEV && this.configService.nodeEnv === 'development') {
@@ -52,5 +63,12 @@ export class CacheManagerService implements OnModuleInit {
 		}
 
 		this.logger.log('Cache refreshes scheduled');
+	}
+
+	private async shouldRefreshNow(year: number): Promise<boolean> {
+		// If we have 0 matches in the database, we should do a refresh
+		const row = await this.db.query.topScores.findFirst({ where: eq(Schema.topScores.year, year) });
+
+		return !row;
 	}
 }

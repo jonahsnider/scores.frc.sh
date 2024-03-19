@@ -1,13 +1,12 @@
 'use client';
 
 import { mapFill } from '@jonahsnider/util';
+import { Select, SelectItem, TextInput } from '@tremor/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { H1 } from './components/headings/h1';
-import { H3 } from './components/headings/h3';
 import { ScoreChart } from './components/score-chart';
 
-const MIN_YEAR = 2016;
+const MIN_YEAR = 2023;
 const MAX_YEAR = new Date().getFullYear();
 
 const DEFAULT_YEAR = MAX_YEAR;
@@ -43,34 +42,23 @@ export default function HomePage() {
 
 	return (
 		<main className='flex flex-col gap-4 justify-center items-center'>
-			<H1>scores.frc.sh</H1>
-
-			<div className='pb-4'>
-				{!eventCode && <H3>Global high scores for {year}</H3>}
-				{eventCode && (
-					<H3>
-						High scores for {eventCode} {year}
-					</H3>
-				)}
-			</div>
+			<h1 className='text-4xl font-bold'>scores.frc.sh</h1>
 
 			<div className='flex flex-col gap-4 justify-center items-center w-full'>
 				<div className='flex gap-4'>
-					<select
-						className='p-2 bg-neutral-800 rounded shadow outline-none'
-						value={year}
-						onChange={(e) => setYear(e.target.value)}
-					>
+					<Select value={year.toString()} onValueChange={(value) => setYear(value)}>
 						{mapFill((index) => MIN_YEAR + index, MAX_YEAR - MIN_YEAR + 1).map((year) => (
-							<option key={year}>{year}</option>
+							<SelectItem key={year} value={year.toString()}>
+								{year}
+							</SelectItem>
 						))}
-					</select>
-					<input
-						className='p-2 bg-neutral-800 rounded shadow outline-none'
+					</Select>
+
+					<TextInput
 						type='text'
-						value={eventCode ?? ''}
 						placeholder='Event code (optional)'
-						onChange={(e) => setEventCode(e.target.value)}
+						value={eventCode ?? ''}
+						onValueChange={(value) => setEventCode(value)}
 					/>
 				</div>
 

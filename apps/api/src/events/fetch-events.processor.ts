@@ -31,8 +31,6 @@ export class FetchEventsProcessor extends WorkerHost {
 					{
 						repeat: {
 							every: FetchMatchResultsProcessor.getRepeatInterval(event).to('ms'),
-							// Prevent jobs for orphaned events from piling up
-							limit: 5,
 						},
 					},
 				),

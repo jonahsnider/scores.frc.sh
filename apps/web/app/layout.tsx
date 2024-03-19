@@ -30,7 +30,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<PlausibleProvider domain='scores.frc.sh' />
 			</head>
 			<body
-				className={clsx('container mx-auto bg-neutral-900 dark p-4 text-white', inter.className, firaMono.variable)}
+				className={clsx(
+					'container mx-auto p-4 dark text-dark-tremor-content-strong bg-gray-950',
+					inter.className,
+					firaMono.variable,
+				)}
 			>
 				<TrpcProvider>{children}</TrpcProvider>
 
