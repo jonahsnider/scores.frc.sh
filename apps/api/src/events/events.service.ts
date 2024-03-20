@@ -1,7 +1,7 @@
-import assert from 'node:assert';
 import { partition } from '@jonahsnider/util';
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, notInArray } from 'drizzle-orm';
+import assert from 'node:assert';
 import { Schema } from '../db/index';
 import type { Db } from '../db/interfaces/db.interface';
 import { DB_PROVIDER } from '../db/providers';
@@ -9,6 +9,7 @@ import { FrcAlliance } from '../first/enums/alliance.enum';
 import { MatchLevel } from '../first/enums/match-level.enum';
 import { FirstService } from '../first/first.service';
 import type { FrcEventMatchScore } from '../first/interfaces/frc-event-scores.interface';
+import type { FrcEvent } from '../first/interfaces/frc-events.interface';
 import type { FrcSchedule, FrcScheduleMatch } from '../first/interfaces/frc-schedule.interface';
 import type { Match } from './interfaces/match.interface';
 
@@ -82,8 +83,15 @@ export class EventsService {
 		return [...qualMatches, ...playoffMatches];
 	}
 
+	async listEvents(year: number): Promise<FrcEvent[]> {
+		const rawEvents = await this.firstService.listEvents(year);
+
+		// Only allow week 0 and official events
+		return rawEvents.Events.filter((event) => event.code === 'WEEK0' || event.weekNumber !== 0);
+	}
+
 	async purgeOrphanedEvents(year: number): Promise<string[]> {
-		const events = await this.firstService.listEvents(year);
+		const events = await this.listEvents(year);
 
 		const deleted = await this.db
 			.delete(Schema.topScores)
