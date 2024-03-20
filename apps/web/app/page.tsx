@@ -19,7 +19,7 @@ export default function HomePage() {
 				<div className='flex gap-4'>
 					<YearInput onValueChange={setYear} />
 
-					<EventInput onValueChange={setEventCode} />
+					<EventInput onValueChange={setEventCode} year={year} />
 				</div>
 
 				<ScoreChart year={year} eventCode={eventCode} />
