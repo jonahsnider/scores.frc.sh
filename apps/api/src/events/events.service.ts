@@ -92,7 +92,7 @@ export class EventsService {
 					eq(Schema.topScores.year, year),
 					notInArray(
 						Schema.topScores.eventCode,
-						events.Events.map((event) => event.code),
+						events.map((event) => event.code),
 					),
 				),
 			)
@@ -100,7 +100,7 @@ export class EventsService {
 				eventCode: Schema.topScores.eventCode,
 			});
 
-		return deleted.map((score) => score.eventCode);
+		return [...new Set(deleted.map((score) => score.eventCode))];
 	}
 
 	async eventExists(year: number, code: string): Promise<boolean> {
