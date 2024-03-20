@@ -1,7 +1,7 @@
+import assert from 'node:assert';
 import { partition } from '@jonahsnider/util';
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, notInArray } from 'drizzle-orm';
-import assert from 'node:assert';
 import { Schema } from '../db/index';
 import type { Db } from '../db/interfaces/db.interface';
 import { DB_PROVIDER } from '../db/providers';
