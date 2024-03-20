@@ -140,7 +140,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 					minValue={0}
 					onValueChange={(value) => {
 						// Open new tab with TBA match page
-						if (!value) {
+						if (!(value?.eventCode && value.matchNumber && value.matchLevel)) {
 							return;
 						}
 
