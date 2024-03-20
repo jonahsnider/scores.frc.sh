@@ -12,6 +12,7 @@
 		"@headlessui/react": "1.7.18",
 		"@headlessui/tailwindcss": "0.2.0",
 		"@jonahsnider/util": "10.3.0",
+		"@remixicon/react": "4.2.0",
 		"@tailwindcss/forms": "0.5.7",
 		"@tremor/react": "3.14.1",
 		"@trpc/client": "next",
