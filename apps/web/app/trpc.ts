@@ -1,4 +1,4 @@
-import { transformer } from '@frc-colors/api/src/trpc/transformer';
+import { transformer } from '@scores.frc.sh/api/src/trpc/transformer';
 import type { AppRouterType } from '@scores.frc.sh/api/src/trpc/app.router';
 import { httpBatchLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';

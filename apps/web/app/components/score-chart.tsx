@@ -1,4 +1,4 @@
-import { MatchLevel } from '@frc-colors/api/src/first/enums/match-level.enum';
+import { MatchLevel } from '@scores.frc.sh/api/src/first/enums/match-level.enum';
 import { AreaChart, Card, type CustomTooltipProps } from '@tremor/react';
 import clsx from 'clsx';
 import { trpc } from '../trpc';
