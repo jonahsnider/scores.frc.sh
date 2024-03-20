@@ -20,6 +20,7 @@ const config: Config = {
 						faint: colors.blue[50],
 						muted: colors.blue[200],
 						subtle: colors.blue[400],
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						DEFAULT: colors.blue[500],
 						emphasis: colors.blue[700],
 						inverted: colors.white,
@@ -27,17 +28,21 @@ const config: Config = {
 					background: {
 						muted: colors.gray[50],
 						subtle: colors.gray[100],
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						DEFAULT: colors.white,
 						emphasis: colors.gray[700],
 					},
 					border: {
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						DEFAULT: colors.gray[200],
 					},
 					ring: {
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						DEFAULT: colors.gray[200],
 					},
 					content: {
 						subtle: colors.gray[400],
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						DEFAULT: colors.gray[500],
 						emphasis: colors.gray[700],
 						strong: colors.gray[900],
@@ -50,6 +55,7 @@ const config: Config = {
 						faint: '#0B1229',
 						muted: colors.blue[950],
 						subtle: colors.blue[800],
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						DEFAULT: colors.blue[500],
 						emphasis: colors.blue[400],
 						inverted: colors.blue[950],
@@ -57,17 +63,21 @@ const config: Config = {
 					background: {
 						muted: '#131A2B',
 						subtle: colors.gray[800],
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						DEFAULT: colors.gray[900],
 						emphasis: colors.gray[300],
 					},
 					border: {
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						DEFAULT: colors.gray[800],
 					},
 					ring: {
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						DEFAULT: colors.gray[800],
 					},
 					content: {
 						subtle: colors.gray[600],
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						DEFAULT: colors.gray[500],
 						emphasis: colors.gray[200],
 						strong: colors.gray[50],
@@ -130,4 +140,5 @@ const config: Config = {
 	plugins: [require('@headlessui/tailwindcss'), require('@tailwindcss/forms')],
 };
 
+// biome-ignore lint/style/noDefaultExport: This must be a default export
 export default config;
