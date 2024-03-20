@@ -139,6 +139,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 				animationDuration={500}
 				showAnimation={true}
 				minValue={0}
+				enableLegendSlider={true}
 				onValueChange={(value) => {
 					// Open new tab with TBA match page
 					if (!(value?.eventCode && value.matchNumber && value.matchLevel)) {
