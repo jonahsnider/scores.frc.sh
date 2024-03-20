@@ -1,8 +1,6 @@
 import { Inject, Injectable, Logger, type OnApplicationBootstrap } from '@nestjs/common';
 import convert from 'convert';
-import { eq } from 'drizzle-orm';
 import { ConfigService } from '../config/config.service';
-import { Schema } from '../db/index';
 import type { Db } from '../db/interfaces/db.interface';
 import { DB_PROVIDER } from '../db/providers';
 import type { QueueType } from '../events/interfaces/fetch-events-queue.interface';
