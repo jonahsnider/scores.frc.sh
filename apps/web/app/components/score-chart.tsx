@@ -90,17 +90,11 @@ export function ScoreChart({ year, eventCode }: Props) {
 			winningTeams: match.winningTeams,
 		};
 
-		if (eventCode) {
-			return {
-				...base,
-				// biome-ignore lint/style/useNamingConvention: This has to be named like this since it's rendered directly
-				Score: match.score,
-			};
-		}
-
 		return {
 			...base,
-			[match.event.code]: match.score,
+			// biome-ignore lint/style/useNamingConvention: This has to be named like this since it's rendered directly
+			Score: match.score,
+			[`Week ${match.event.weekNumber}`]: match.score,
 		};
 	});
 
@@ -117,7 +111,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 	}
 
 	return (
-		<Card className='flex flex-col gap-4 h-96 p-2 sm:p-4 md:p-6 max-w-5xl'>
+		<Card className='flex flex-col gap-4 p-2 sm:p-4 md:p-6 max-w-5xl'>
 			<h3 className='text-lg font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong'>
 				{!eventCode && <>Global high scores for {year}</>}
 				{eventCode && (
@@ -132,7 +126,16 @@ export function ScoreChart({ year, eventCode }: Props) {
 				index='match'
 				noDataText={noDataText}
 				yAxisWidth={90}
-				categories={eventCode ? ['Score'] : [...new Set((matches.data ?? []).map((match) => match.event.code))]}
+				className='h-96'
+				categories={
+					eventCode
+						? ['Score']
+						: [
+								...new Set(
+									(matches.data ?? []).map((match) => match.event.weekNumber).map((weekNumber) => `Week ${weekNumber}`),
+								),
+						  ]
+				}
 				valueFormatter={(x) => `${x.toLocaleString()} points`}
 				customTooltip={Tooltip}
 				intervalType='preserveStartEnd'
