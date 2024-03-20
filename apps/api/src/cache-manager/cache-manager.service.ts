@@ -48,11 +48,6 @@ export class CacheManagerService implements OnApplicationBootstrap {
 				},
 			);
 			this.logger.verbose(`Scheduled cache refresh for year ${year}`);
-
-			if (await this.shouldRefreshNow(year)) {
-				this.logger.log(`No data found for ${year}, scheduling a one-off refresh now`);
-				await this.fetchEventsQueue.add(`fetch-events-${year}`, { year });
-			}
 		}
 
 		if (CacheManagerService.FORCE_REFRESH_IN_DEV && this.configService.nodeEnv === 'development') {
@@ -63,12 +58,5 @@ export class CacheManagerService implements OnApplicationBootstrap {
 		}
 
 		this.logger.log('Cache refreshes scheduled');
-	}
-
-	private async shouldRefreshNow(year: number): Promise<boolean> {
-		// If we have 0 matches in the database, we should do a refresh
-		const row = await this.db.query.topScores.findFirst({ where: eq(Schema.topScores.year, year) });
-
-		return !row;
 	}
 }
