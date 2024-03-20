@@ -115,7 +115,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 	}
 
 	return (
-		<Card className='flex flex-col gap-4 h-96'>
+		<Card className='flex flex-col gap-4 h-96 p-2 sm:p-4 md:p-6'>
 			<h3 className='text-lg font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong'>
 				{!eventCode && <>Global high scores for {year}</>}
 				{eventCode && (
