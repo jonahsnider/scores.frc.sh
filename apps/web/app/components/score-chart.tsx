@@ -131,7 +131,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 				data={chartData}
 				index='match'
 				noDataText={noDataText}
-				yAxisWidth={80}
+				yAxisWidth={90}
 				categories={eventCode ? ['Score'] : [...new Set((matches.data ?? []).map((match) => match.event.code))]}
 				valueFormatter={(x) => `${x.toLocaleString()} points`}
 				customTooltip={Tooltip}
