@@ -110,6 +110,8 @@ export function ScoreChart({ year, eventCode }: Props) {
 		noDataText = 'Loading data...';
 	} else if (matches.isSuccess && eventCode) {
 		noDataText = 'No event found';
+	} else if (matches.isError) {
+		noDataText = 'Error loading data';
 	} else {
 		noDataText = undefined;
 	}
@@ -124,37 +126,35 @@ export function ScoreChart({ year, eventCode }: Props) {
 					</>
 				)}
 			</h3>
-			{matches.isError && <p>Error loading data</p>}
-			{(matches.isPending || matches.isSuccess) && (
-				<AreaChart
-					data={chartData}
-					index='match'
-					noDataText={noDataText}
-					yAxisWidth={80}
-					categories={eventCode ? ['Score'] : [...new Set((matches.data ?? []).map((match) => match.event.code))]}
-					valueFormatter={(x) => `${x.toLocaleString()} points`}
-					customTooltip={Tooltip}
-					intervalType='preserveStartEnd'
-					animationDuration={500}
-					showAnimation={true}
-					minValue={0}
-					onValueChange={(value) => {
-						// Open new tab with TBA match page
-						if (!(value?.eventCode && value.matchNumber && value.matchLevel)) {
-							return;
-						}
 
-						const url = tbaUrl(
-							year,
-							value.eventCode as string,
-							value.matchNumber as number,
-							value.matchLevel as MatchLevel,
-						);
+			<AreaChart
+				data={chartData}
+				index='match'
+				noDataText={noDataText}
+				yAxisWidth={80}
+				categories={eventCode ? ['Score'] : [...new Set((matches.data ?? []).map((match) => match.event.code))]}
+				valueFormatter={(x) => `${x.toLocaleString()} points`}
+				customTooltip={Tooltip}
+				intervalType='preserveStartEnd'
+				animationDuration={500}
+				showAnimation={true}
+				minValue={0}
+				onValueChange={(value) => {
+					// Open new tab with TBA match page
+					if (!(value?.eventCode && value.matchNumber && value.matchLevel)) {
+						return;
+					}
 
-						window.open(url, '_blank');
-					}}
-				/>
-			)}
+					const url = tbaUrl(
+						year,
+						value.eventCode as string,
+						value.matchNumber as number,
+						value.matchLevel as MatchLevel,
+					);
+
+					window.open(url, '_blank');
+				}}
+			/>
 		</Card>
 	);
 }
