@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { EventInput } from './components/event-input';
 import { ScoreChart } from './components/score-chart';
 import { TrackQuery } from './components/track-query';
@@ -17,9 +17,13 @@ export default function HomePage() {
 
 			<div className='flex flex-col gap-4 justify-center items-center w-full'>
 				<div className='flex gap-4'>
-					<YearInput onValueChange={setYear} />
+					<Suspense>
+						<YearInput onValueChange={setYear} />
+					</Suspense>
 
-					<EventInput onValueChange={setEventCode} year={year} />
+					<Suspense>
+						<EventInput onValueChange={setEventCode} year={year} />
+					</Suspense>
 				</div>
 
 				<ScoreChart year={year} eventCode={eventCode} />
