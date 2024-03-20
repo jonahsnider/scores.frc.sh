@@ -5,6 +5,9 @@ import { Select, SelectItem, TextInput } from '@tremor/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ScoreChart } from './components/score-chart';
+import { usePlausible } from './hooks/plausible';
+import { useDebounce } from '@uidotdev/usehooks';
+import { track } from '@vercel/analytics';
 
 const MIN_YEAR = 2023;
 const MAX_YEAR = new Date().getFullYear();
@@ -21,6 +24,21 @@ export default function HomePage() {
 
 	const setYear = (value: string) => setYearRaw(Number(value));
 	const setEventCode = (value: string) => setEventCodeRaw(value === '' ? undefined : value.toUpperCase());
+
+	const plausible = usePlausible();
+
+	const debouncedYear = useDebounce(year, 750);
+	const debouncedEventCode = useDebounce(eventCode, 750);
+
+	useEffect(() => {
+		if (debouncedEventCode) {
+			plausible('View event stats', { props: { year: debouncedYear, eventCode: debouncedEventCode } });
+			track('View event stats', { year: debouncedYear, eventCode: debouncedEventCode });
+		} else {
+			plausible('View global stats', { props: { year: debouncedYear } });
+			track('View global stats', { year: debouncedYear });
+		}
+	}, [debouncedYear, debouncedEventCode, plausible]);
 
 	useEffect(() => {
 		const url = new URL(window.location.href);
