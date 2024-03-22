@@ -11,6 +11,7 @@ import { MatchResultsModule } from './match-results/match-results.module';
 import { QueuesModule } from './queues/queues.module';
 
 import { SentryModule } from '@ntegral/nestjs-sentry';
+import { AuthModule } from './auth/auth.module';
 import { ConfigService } from './config/config.service';
 import { RedisModule } from './redis/redis.module';
 import { TrpcModule } from './trpc/trpc.module';
@@ -47,6 +48,7 @@ import { TrpcModule } from './trpc/trpc.module';
 		TrpcModule,
 		CacheManagerModule,
 		HealthModule,
+		AuthModule,
 	],
 })
 export class AppModule {}
