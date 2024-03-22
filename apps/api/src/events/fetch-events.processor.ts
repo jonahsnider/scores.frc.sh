@@ -1,16 +1,15 @@
-import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Inject, Logger } from '@nestjs/common';
+import { Processor } from '@nestjs/bullmq';
+import { Inject } from '@nestjs/common';
 import { EventsService } from '../events/events.service';
 import { FetchMatchResultsProcessor } from '../match-results/fetch-match-results.processor';
 import type { QueueType } from '../match-results/interfaces/fetch-match-results.queue.interface';
+import { BaseProcessor } from '../queues/base.processor';
 import { QueueNames } from '../queues/enums/queue-names.enum';
 import { QueuesService } from '../queues/queues.service';
 import type { JobType, ReturnType } from './interfaces/fetch-events-queue.interface';
 
 @Processor(QueueNames.FetchEvents, { concurrency: 3 })
-export class FetchEventsProcessor extends WorkerHost {
-	private readonly logger = new Logger(FetchEventsProcessor.name);
-
+export class FetchEventsProcessor extends BaseProcessor {
 	override async process(job: JobType): Promise<ReturnType> {
 		this.logger.debug(`Processing events for year ${job.data.year}`);
 		const events = await this.events.listEvents(job.data.year);

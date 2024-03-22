@@ -1,14 +1,15 @@
-import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Inject, Logger } from '@nestjs/common';
+import { Processor } from '@nestjs/bullmq';
+import { Inject } from '@nestjs/common';
 import convert from 'convert';
 import { EventsService } from '../events/events.service';
 import type { FrcEvent } from '../first/interfaces/frc-events.interface';
+import { BaseProcessor } from '../queues/base.processor';
 import { QueueNames } from '../queues/enums/queue-names.enum';
 import type { JobType, ReturnType } from './interfaces/fetch-match-results.queue.interface';
 import { MatchResultsService } from './match-results.service';
 
 @Processor(QueueNames.FetchMatchResults, { concurrency: 3 })
-export class FetchMatchResultsProcessor extends WorkerHost {
+export class FetchMatchResultsProcessor extends BaseProcessor {
 	private static readonly REPEAT_UPCOMING_EVENT_INTERVAL = convert(6, 'hour');
 	private static readonly REPEAT_FINISHED_EVENT_INTERVAL = convert(1, 'day');
 	private static readonly REPEAT_IN_PROGRESS_EVENT_INTERVAL = convert(5, 'minutes');
@@ -28,8 +29,6 @@ export class FetchMatchResultsProcessor extends WorkerHost {
 
 		return FetchMatchResultsProcessor.REPEAT_IN_PROGRESS_EVENT_INTERVAL;
 	}
-
-	private readonly logger = new Logger(FetchMatchResultsProcessor.name);
 
 	override async process(job: JobType): Promise<ReturnType> {
 		const eventName = `${job.data.year} ${job.data.eventCode}`;
