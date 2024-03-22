@@ -35,7 +35,7 @@ export function YearInput({ onValueChange }: Props) {
 
 	return (
 		<Select value={year.toString()} onValueChange={(value) => setYear(value)}>
-			{mapFill((index) => MIN_YEAR + index, MAX_YEAR - MIN_YEAR + 1).map((year) => (
+			{mapFill((index) => MAX_YEAR - index, MAX_YEAR - MIN_YEAR + 1).map((year) => (
 				<SelectItem key={year} value={year.toString()}>
 					{year}
 				</SelectItem>
