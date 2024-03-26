@@ -2,6 +2,7 @@ import assert from 'node:assert';
 import { partition } from '@jonahsnider/util';
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, notInArray, sql } from 'drizzle-orm';
+import { HTTPError } from 'ky';
 import { Schema } from '../db/index';
 import type { Db } from '../db/interfaces/db.interface';
 import { DB_PROVIDER } from '../db/providers';
@@ -93,9 +94,39 @@ export class EventsService {
 		assert(event, `Event ${year} ${eventCode} not found in DB`);
 
 		const [qualScores, playoffScores, schedule] = await Promise.all([
-			this.firstService.listEventScores(event.year, event.firstCode, MatchLevel.Qualification),
-			this.firstService.listEventScores(event.year, event.firstCode, MatchLevel.Playoff),
-			this.firstService.getSchedule(event.year, event.firstCode),
+			this.firstService.listEventScores(event.year, event.firstCode, MatchLevel.Qualification).catch((error) => {
+				if (error instanceof HTTPError && error.response.status === 404) {
+					// TBA is often wrong about FIRST event codes for district events, causing these requests to 404
+					return {
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
+						MatchScores: [],
+					};
+				}
+
+				throw error;
+			}),
+			this.firstService.listEventScores(event.year, event.firstCode, MatchLevel.Playoff).catch((error) => {
+				if (error instanceof HTTPError && error.response.status === 404) {
+					// TBA is often wrong about FIRST event codes for district events, causing these requests to 404
+					return {
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
+						MatchScores: [],
+					};
+				}
+
+				throw error;
+			}),
+			this.firstService.getSchedule(event.year, event.firstCode).catch((error) => {
+				if (error instanceof HTTPError && error.response.status === 404) {
+					// TBA is often wrong about FIRST event codes for district events, causing these requests to 404
+					return {
+						// biome-ignore lint/style/useNamingConvention: This can't be renamed
+						Schedule: [],
+					};
+				}
+
+				throw error;
+			}),
 		]);
 
 		const lookup = EventsService.createScheduleLookup(schedule);
