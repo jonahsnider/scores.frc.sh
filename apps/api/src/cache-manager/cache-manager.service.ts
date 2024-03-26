@@ -1,8 +1,6 @@
 import { Inject, Injectable, Logger, type OnApplicationBootstrap } from '@nestjs/common';
 import convert from 'convert';
 import { ConfigService } from '../config/config.service';
-import type { Db } from '../db/interfaces/db.interface';
-import { DB_PROVIDER } from '../db/providers';
 import type { QueueType } from '../events/interfaces/fetch-events-queue.interface';
 import { QueueNames } from '../queues/enums/queue-names.enum';
 import { QueuesService } from '../queues/queues.service';
@@ -24,7 +22,6 @@ export class CacheManagerService implements OnApplicationBootstrap {
 	constructor(
 		@Inject(ConfigService) private readonly configService: ConfigService,
 		@Inject(QueuesService) queuesService: QueuesService,
-		@Inject(DB_PROVIDER) private readonly db: Db,
 	) {
 		this.fetchEventsQueue = queuesService.getQueue(QueueNames.FetchEvents);
 	}
