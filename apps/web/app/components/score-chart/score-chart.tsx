@@ -64,7 +64,6 @@ export function ScoreChart({ year, eventCode }: Props) {
 				data={chartData}
 				index='matchWithEvent'
 				noDataText={noDataText}
-				yAxisWidth={90}
 				className='h-96'
 				categories={
 					eventCode
@@ -75,7 +74,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 								),
 						  ]
 				}
-				valueFormatter={(x) => `${x.toLocaleString()} points`}
+				valueFormatter={(x) => `${x.toLocaleString()} pts`}
 				customTooltip={Tooltip}
 				intervalType='preserveStartEnd'
 				animationDuration={500}
