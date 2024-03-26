@@ -12,7 +12,9 @@ export function EventInput({ onValueChange, year }: Props) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
-	const [eventCode, setEventCodeRaw] = useState<string | undefined>(searchParams.get('eventCode') ?? undefined);
+	const [eventCode, setEventCodeRaw] = useState<string | undefined>(
+		searchParams.get('eventCode')?.toUpperCase() ?? undefined,
+	);
 
 	const setEventCode = (value: string) => setEventCodeRaw(value === '' ? undefined : value.toUpperCase());
 
@@ -25,9 +27,9 @@ export function EventInput({ onValueChange, year }: Props) {
 		const url = new URL(window.location.href);
 
 		if (eventCode) {
-			url.searchParams.set('eventCode', eventCode);
+			url.searchParams.set('event_code', eventCode.toLowerCase());
 		} else {
-			url.searchParams.delete('eventCode');
+			url.searchParams.delete('event_code');
 		}
 
 		router.replace(url.href);
