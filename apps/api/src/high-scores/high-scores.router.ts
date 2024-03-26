@@ -8,7 +8,7 @@ import { publicProcedure, router } from '../trpc/trpc';
 import { HighScoresService } from './high-scores.service';
 
 const EventYear = z.number().int().min(CacheManagerService.YEAR_OLDEST).max(CacheManagerService.YEAR_NEWEST);
-const EventCode = z.string().min(1).toUpperCase();
+const EventCode = z.string().min(1).toLowerCase();
 
 const EventMatch = z.object({
 	event: z.object({
