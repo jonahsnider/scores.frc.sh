@@ -8,18 +8,23 @@ import type { TopScoreMatch } from '../match-results/interfaces/top-score-match.
 
 @Injectable()
 export class HighScoresService {
-	private static dbTopScoreToTopScoreMatch(row: typeof Schema.topScores.$inferSelect): TopScoreMatch {
+	private static dbTopScoreToTopScoreMatch(row: {
+		topScores: typeof Schema.topScores.$inferSelect;
+		events: typeof Schema.events.$inferSelect;
+	}): TopScoreMatch {
 		return {
 			event: {
-				code: row.eventCode,
-				year: row.year,
-				weekNumber: row.eventWeekNumber,
+				code: row.events.code,
+				year: row.events.year,
+				weekNumber: row.events.weekNumber,
+				firstCode: row.events.firstCode,
+				name: row.events.name,
 			},
-			number: row.matchNumber,
-			timestamp: row.timestamp,
-			topScore: row.score,
-			winningTeams: row.winningTeams as number[],
-			level: matchLevelFromDb(row.matchLevel),
+			number: row.topScores.matchNumber,
+			timestamp: row.topScores.timestamp,
+			topScore: row.topScores.score,
+			winningTeams: row.topScores.winningTeams as number[],
+			level: matchLevelFromDb(row.topScores.matchLevel),
 		};
 	}
 
@@ -30,29 +35,42 @@ export class HighScoresService {
 		const topScoringMatches = await this.db
 			.select()
 			.from(Schema.topScores)
-			.where(eq(Schema.topScores.year, year))
+			.innerJoin(Schema.events, eq(Schema.topScores.eventInternalId, Schema.events.internalId))
+			.where(eq(Schema.events.year, year))
 			.orderBy(asc(Schema.topScores.timestamp));
 
 		// Filter any matches that aren't the world record
-		const worldRecords: (typeof Schema.topScores.$inferSelect)[] = [];
+		const worldRecords: {
+			topScores: typeof Schema.topScores.$inferSelect;
+			events: typeof Schema.events.$inferSelect;
+		}[] = [];
 		let record = Number.NEGATIVE_INFINITY;
 
 		for (const match of topScoringMatches) {
-			if (match.score > record) {
-				record = match.score;
-				worldRecords.push(match);
+			if (match.top_scores.score > record) {
+				record = match.top_scores.score;
+				worldRecords.push({
+					events: match.events,
+					topScores: match.top_scores,
+				});
 			}
 		}
 
-		return worldRecords.map(HighScoresService.dbTopScoreToTopScoreMatch);
+		return worldRecords.map((rows) => HighScoresService.dbTopScoreToTopScoreMatch(rows));
 	}
 
 	async getEventHighScores(year: number, eventCode: string): Promise<TopScoreMatch[]> {
 		const eventTopScores = await this.db
 			.select()
 			.from(Schema.topScores)
-			.where(and(eq(Schema.topScores.eventCode, eventCode), eq(Schema.topScores.year, year)));
+			.innerJoin(Schema.events, eq(Schema.topScores.eventInternalId, Schema.events.internalId))
+			.where(and(eq(Schema.events.code, eventCode), eq(Schema.events.year, year)));
 
-		return eventTopScores.map(HighScoresService.dbTopScoreToTopScoreMatch);
+		return eventTopScores.map((rows) =>
+			HighScoresService.dbTopScoreToTopScoreMatch({
+				events: rows.events,
+				topScores: rows.top_scores,
+			}),
+		);
 	}
 }

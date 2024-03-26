@@ -1,5 +1,6 @@
+import assert from 'node:assert';
 import { Inject, Injectable } from '@nestjs/common';
-import { and, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { Schema } from '../db/index';
 import type { Db } from '../db/interfaces/db.interface';
 import { DB_PROVIDER } from '../db/providers';
@@ -10,16 +11,14 @@ import type { TopScoreMatch } from './interfaces/top-score-match.interface';
 
 @Injectable()
 export class MatchResultsService {
-	private static matchToDbMatch(match: TopScoreMatch): typeof Schema.topScores.$inferSelect {
+	private static matchToDbMatch(match: TopScoreMatch, eventInternalId: number): typeof Schema.topScores.$inferInsert {
 		return {
-			eventCode: match.event.code,
-			eventWeekNumber: match.event.weekNumber,
 			matchNumber: match.number,
 			matchLevel: matchLevelToDb(match.level),
 			score: match.topScore,
 			timestamp: match.timestamp,
 			winningTeams: match.winningTeams,
-			year: match.event.year,
+			eventInternalId,
 		};
 	}
 
@@ -73,19 +72,45 @@ export class MatchResultsService {
 		const [firstMatch] = matches;
 
 		if (firstMatch) {
-			const values = matches.map(MatchResultsService.matchToDbMatch);
+			if (
+				matches.some(
+					(match) => match.event.year !== firstMatch.event.year || match.event.code !== firstMatch.event.code,
+				)
+			) {
+				throw new RangeError('All matches must be for the same event');
+			}
 
 			await this.db.transaction(async (tx) => {
-				// Clear out all matches for this event, in case there are any orphaned matches
-				await tx
-					.delete(Schema.topScores)
-					.where(
-						and(
-							eq(Schema.topScores.year, firstMatch.event.year),
-							eq(Schema.topScores.eventCode, firstMatch.event.code),
-							eq(Schema.topScores.matchLevel, matchLevelToDb(firstMatch.level)),
-						),
-					);
+				// Upsert event
+				const [event] = await tx
+					.insert(Schema.events)
+					.values([
+						{
+							code: firstMatch.event.code,
+							name: firstMatch.event.name,
+							weekNumber: firstMatch.event.weekNumber,
+							year: firstMatch.event.year,
+							firstCode: firstMatch.event.firstCode,
+						},
+					])
+					.onConflictDoUpdate({
+						target: [Schema.events.code, Schema.events.year],
+						set: {
+							name: firstMatch.event.name,
+							weekNumber: firstMatch.event.weekNumber,
+							firstCode: firstMatch.event.firstCode,
+						},
+					})
+					.returning({
+						internalId: Schema.events.internalId,
+					});
+
+				assert(event, 'Event not returned from query');
+
+				// Delete all matches for the event
+				await tx.delete(Schema.topScores).where(eq(Schema.topScores.eventInternalId, event.internalId));
+
+				const values = matches.map((match) => MatchResultsService.matchToDbMatch(match, event.internalId));
 
 				await tx.insert(Schema.topScores).values(values);
 			});

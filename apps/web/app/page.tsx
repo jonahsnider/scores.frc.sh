@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from 'react';
 import { EventInput } from './components/event-input';
-import { ScoreChart } from './components/score-chart';
+import { ScoreChart } from './components/score-chart/score-chart';
 import { TrackQuery } from './components/track-query';
 import { DEFAULT_YEAR, YearInput } from './components/year-input';
 

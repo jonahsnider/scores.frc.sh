@@ -20,6 +20,7 @@ export class ConfigService {
 	public readonly adminUsername: string;
 	public readonly adminApiToken: string;
 	public readonly websiteUrl: string;
+	public readonly tbaApiKey: string;
 
 	constructor() {
 		const env = cleanEnv(process.env, {
@@ -43,6 +44,8 @@ export class ConfigService {
 			ADMIN_API_TOKEN: str({ desc: 'Admin API token' }),
 			// biome-ignore lint/style/useNamingConvention: This is an environment variable
 			WEBSITE_URL: url({ desc: 'Website URL' }),
+			// biome-ignore lint/style/useNamingConvention: This is an environment variable
+			TBA_API_KEY: str({ desc: 'The Blue Alliance API key' }),
 		});
 
 		this.nodeEnv = env.NODE_ENV;
@@ -56,6 +59,7 @@ export class ConfigService {
 		this.adminUsername = env.ADMIN_USERNAME;
 		this.adminApiToken = env.ADMIN_API_TOKEN;
 		this.websiteUrl = env.WEBSITE_URL;
+		this.tbaApiKey = env.TBA_API_KEY;
 
 		const redisUrl = new URL(env.REDIS_URL);
 
