@@ -19,7 +19,7 @@ export function tbaUrl(year: number, eventCode: string, matchNumber: number, mat
 			case 14:
 			case 15:
 			case 16: {
-				urlMatchNumber = `f${matchNumber - 13}`;
+				urlMatchNumber = `f1m${matchNumber - 13}`;
 				break;
 			}
 			default: {
