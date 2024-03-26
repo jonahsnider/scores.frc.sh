@@ -40,8 +40,8 @@ export class MatchResultsService {
 		const topScores: TopScoreMatch[] = [];
 		let topScore = Number.NEGATIVE_INFINITY;
 
-		for (const match of sortedMatches) {
-			const topScoreMatch = MatchResultsService.highestScoreForMatch(match);
+		for (const [index, match] of sortedMatches.entries()) {
+			const topScoreMatch = MatchResultsService.highestScoreForMatch(match, sortedMatches[index + 1]);
 
 			if (topScoreMatch.topScore > topScore) {
 				topScores.push(topScoreMatch);
@@ -52,7 +52,7 @@ export class MatchResultsService {
 		return topScores;
 	}
 
-	private static highestScoreForMatch(match: Match): TopScoreMatch {
+	private static highestScoreForMatch(match: Match, nextMatch?: Match): TopScoreMatch {
 		// Note that this assumes a tie doesn't ever happen
 		const blueWon = match.scores.blue > match.scores.red;
 
@@ -63,6 +63,7 @@ export class MatchResultsService {
 			timestamp: match.timestamp,
 			topScore: Math.max(match.scores.blue, match.scores.red),
 			winningTeams: blueWon ? match.teams.blue : match.teams.red,
+			recordHeldFor: nextMatch ? nextMatch.timestamp.getTime() - match.timestamp.getTime() : 'forever',
 		};
 	}
 
