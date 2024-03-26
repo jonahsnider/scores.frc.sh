@@ -1,5 +1,5 @@
 import { MatchLevel } from '@scores.frc.sh/api/src/first/enums/match-level.enum';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistance } from 'date-fns';
 
 export function weekName(weekNumber: number) {
 	if (weekNumber === 8) {
@@ -55,5 +55,5 @@ export function formatRecordHeldFor(duration: number | 'forever', eventCode?: st
 		return `held until ${eventCode ? 'event' : 'season'} end`;
 	}
 
-	return `held for ${formatDistanceToNow(new Date(Date.now() + duration))}`;
+	return `held for ${formatDistance(0, duration)}`;
 }
