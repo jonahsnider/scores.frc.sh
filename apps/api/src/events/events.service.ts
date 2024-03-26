@@ -23,6 +23,7 @@ export class EventsService {
 	private static readonly IGNORED_EVENT_TYPES: ReadonlySet<TbaEventType> = new Set([
 		TbaEventType.Offseason,
 		TbaEventType.Unlabeled,
+		TbaEventType.Preseason,
 	]);
 
 	private static getWeekNumber(event: TbaEvent): number {
@@ -36,9 +37,6 @@ export class EventsService {
 			case TbaEventType.CmpFinals:
 				// Champs is week 0
 				return 8;
-			case TbaEventType.Preseason:
-				// Lump all pre-season offseason events into week 0
-				return 0;
 			default:
 				throw new RangeError(`Event ${event.year} ${event.event_code} is missing a week number`);
 		}
@@ -113,11 +111,8 @@ export class EventsService {
 	async listEvents(year: number): Promise<TbaEvent[]> {
 		const rawEvents = await this.tbaService.listEvents(year);
 
-		// Only allow week 0 and official events
 		const filtered = rawEvents.filter(
-			(event) =>
-				event.first_event_code &&
-				(event.first_event_code === 'WEEK0' || !EventsService.IGNORED_EVENT_TYPES.has(event.event_type)),
+			(event) => event.first_event_code && !EventsService.IGNORED_EVENT_TYPES.has(event.event_type),
 		);
 
 		await this.saveEvents(filtered);
@@ -189,7 +184,7 @@ export class EventsService {
 		const [row] = await this.db
 			.select()
 			.from(Schema.events)
-			.where(and(eq(Schema.events.year, year), eq(Schema.events.code, code)))
+			.where(and(eq(Schema.events.year, year), eq(Schema.events.code, code.toLowerCase())))
 			.limit(1);
 
 		return Boolean(row);

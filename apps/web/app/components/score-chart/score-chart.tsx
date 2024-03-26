@@ -2,7 +2,7 @@ import type { MatchLevel } from '@scores.frc.sh/api/src/first/enums/match-level.
 import { AreaChart, Card } from '@tremor/react';
 import { trpc } from '../../trpc';
 import { Tooltip } from './tooltip';
-import { formatMatch, tbaUrl, weekName } from './util';
+import { formatMatch, formatRecordHeldFor, tbaUrl, weekName } from './util';
 
 type Props = {
 	year: number;
@@ -20,11 +20,14 @@ export function ScoreChart({ year, eventCode }: Props) {
 	const chartData = (matches.data ?? []).map((match) => {
 		const base = {
 			time: match.timestamp.toLocaleString(),
-			match: formatMatch(match.match.level, match.match.number, eventCode ? undefined : match.event.code),
+			match: formatMatch(match.match.level, match.match.number),
+			matchWithEvent: (eventCode ? '' : `${match.event.code} `) + formatMatch(match.match.level, match.match.number),
 			eventCode: match.event.code,
 			matchNumber: match.match.number,
 			matchLevel: match.match.level,
 			winningTeams: match.winningTeams,
+			eventName: match.event.name,
+			recordHeldFor: formatRecordHeldFor(match.recordHeldFor, eventCode),
 		};
 
 		return {
@@ -59,7 +62,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 
 			<AreaChart
 				data={chartData}
-				index='match'
+				index='matchWithEvent'
 				noDataText={noDataText}
 				yAxisWidth={90}
 				className='h-96'

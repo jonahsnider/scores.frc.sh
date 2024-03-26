@@ -1,4 +1,5 @@
 import { MatchLevel } from '@scores.frc.sh/api/src/first/enums/match-level.enum';
+import { formatDistanceToNow } from 'date-fns';
 
 export function weekName(weekNumber: number) {
 	if (weekNumber === 8) {
@@ -34,19 +35,25 @@ export function tbaUrl(year: number, eventCode: string, matchNumber: number, mat
 }
 
 // Note: this assume 2023 double elims bracket
-export function formatMatch(level: MatchLevel, number: number, eventCode?: string) {
-	const prefix = eventCode ? `${eventCode} ` : '';
-
+export function formatMatch(level: MatchLevel, number: number) {
 	if (level === MatchLevel.Qualification) {
-		return `${prefix}Q${number}`;
+		return `Q${number}`;
 	}
 
 	switch (number) {
 		case 14:
 		case 15:
 		case 16:
-			return `${prefix}Finals ${number - 13}`;
+			return `Finals ${number - 13}`;
 		default:
-			return `${prefix}Elims match ${number}`;
+			return `Elims M${number}`;
 	}
+}
+
+export function formatRecordHeldFor(duration: number | 'forever', eventCode?: string) {
+	if (duration === 'forever') {
+		return `held until ${eventCode ? 'event' : 'season'} end`;
+	}
+
+	return `held for ${formatDistanceToNow(new Date(Date.now() + duration))}`;
 }

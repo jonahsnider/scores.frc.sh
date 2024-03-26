@@ -8,7 +8,7 @@ import { publicProcedure, router } from '../trpc/trpc';
 import { HighScoresService } from './high-scores.service';
 
 const EventYear = z.number().int().min(CacheManagerService.YEAR_OLDEST).max(CacheManagerService.YEAR_NEWEST);
-const EventCode = z.string().min(1).toLowerCase();
+const EventCode = z.string().min(1).toUpperCase();
 
 const EventMatch = z.object({
 	event: z.object({
@@ -21,6 +21,7 @@ const EventMatch = z.object({
 		level: z.nativeEnum(MatchLevel),
 	}),
 	score: z.number().int().nonnegative(),
+	recordHeldFor: z.union([z.literal('forever'), z.number().nonnegative()]),
 	timestamp: z.date(),
 	winningTeams: z.array(z.number().int().positive()),
 });
@@ -62,6 +63,7 @@ export class HighScoresRouter {
 						score: score.topScore,
 						timestamp: score.timestamp,
 						winningTeams: score.winningTeams,
+						recordHeldFor: score.recordHeldFor,
 					}));
 				}),
 		});

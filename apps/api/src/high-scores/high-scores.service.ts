@@ -8,10 +8,13 @@ import type { TopScoreMatch } from '../match-results/interfaces/top-score-match.
 
 @Injectable()
 export class HighScoresService {
-	private static dbTopScoreToTopScoreMatch(row: {
-		topScores: typeof Schema.topScores.$inferSelect;
-		events: typeof Schema.events.$inferSelect;
-	}): TopScoreMatch {
+	private static dbTopScoreToTopScoreMatch(
+		row: {
+			topScores: typeof Schema.topScores.$inferSelect;
+			events: typeof Schema.events.$inferSelect;
+		},
+		nextRow?: typeof Schema.topScores.$inferSelect,
+	): TopScoreMatch {
 		return {
 			event: {
 				code: row.events.code,
@@ -25,6 +28,7 @@ export class HighScoresService {
 			topScore: row.topScores.score,
 			winningTeams: row.topScores.winningTeams as number[],
 			level: matchLevelFromDb(row.topScores.matchLevel),
+			recordHeldFor: nextRow ? nextRow.timestamp.getTime() - row.topScores.timestamp.getTime() : 'forever',
 		};
 	}
 
@@ -56,7 +60,9 @@ export class HighScoresService {
 			}
 		}
 
-		return worldRecords.map((rows) => HighScoresService.dbTopScoreToTopScoreMatch(rows));
+		return worldRecords.map((rows, index) =>
+			HighScoresService.dbTopScoreToTopScoreMatch(rows, worldRecords[index + 1]?.topScores),
+		);
 	}
 
 	async getEventHighScores(year: number, eventCode: string): Promise<TopScoreMatch[]> {
@@ -64,13 +70,16 @@ export class HighScoresService {
 			.select()
 			.from(Schema.topScores)
 			.innerJoin(Schema.events, eq(Schema.topScores.eventInternalId, Schema.events.internalId))
-			.where(and(eq(Schema.events.code, eventCode), eq(Schema.events.year, year)));
+			.where(and(eq(Schema.events.code, eventCode.toLowerCase()), eq(Schema.events.year, year)));
 
-		return eventTopScores.map((rows) =>
-			HighScoresService.dbTopScoreToTopScoreMatch({
-				events: rows.events,
-				topScores: rows.top_scores,
-			}),
+		return eventTopScores.map((rows, index) =>
+			HighScoresService.dbTopScoreToTopScoreMatch(
+				{
+					events: rows.events,
+					topScores: rows.top_scores,
+				},
+				eventTopScores[index + 1]?.top_scores,
+			),
 		);
 	}
 }
