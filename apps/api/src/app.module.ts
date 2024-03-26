@@ -14,6 +14,7 @@ import { SentryModule } from '@ntegral/nestjs-sentry';
 import { AuthModule } from './auth/auth.module';
 import { ConfigService } from './config/config.service';
 import { RedisModule } from './redis/redis.module';
+import { TbaModule } from './tba/tba.module';
 import { TrpcModule } from './trpc/trpc.module';
 
 @Module({
@@ -49,6 +50,7 @@ import { TrpcModule } from './trpc/trpc.module';
 		CacheManagerModule,
 		HealthModule,
 		AuthModule,
+		TbaModule,
 	],
 })
 export class AppModule {}

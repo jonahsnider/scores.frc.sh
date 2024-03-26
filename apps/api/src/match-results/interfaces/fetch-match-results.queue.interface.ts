@@ -3,7 +3,6 @@ import type { Job, Queue, Worker } from 'bullmq';
 export type DataType = {
 	year: number;
 	eventCode: string;
-	eventWeekNumber: number;
 };
 
 export type ReturnType = undefined;

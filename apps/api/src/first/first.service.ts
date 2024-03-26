@@ -3,7 +3,6 @@ import ky, { type KyInstance } from 'ky';
 import { ConfigService } from '../config/config.service';
 import { MatchLevel } from './enums/match-level.enum';
 import type { FrcEventMatchScores } from './interfaces/frc-event-scores.interface';
-import type { FrcEvents } from './interfaces/frc-events.interface';
 import type { FrcSchedule } from './interfaces/frc-schedule.interface';
 
 @Injectable()
@@ -22,12 +21,6 @@ export class FirstService {
 			},
 			prefixUrl: 'https://frc-api.firstinspires.org/v3.0',
 		});
-	}
-
-	async listEvents(year: number): Promise<FrcEvents> {
-		const response = await this.http.get(`${encodeURIComponent(year)}/events`);
-
-		return response.json<FrcEvents>();
 	}
 
 	async listEventScores(year: number, eventCode: string, level: MatchLevel): Promise<FrcEventMatchScores> {

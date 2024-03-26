@@ -14,6 +14,7 @@ const EventMatch = z.object({
 	event: z.object({
 		code: EventCode,
 		weekNumber: z.number().int().nonnegative(),
+		name: z.string(),
 	}),
 	match: z.object({
 		number: z.number().int().positive(),
@@ -52,6 +53,7 @@ export class HighScoresRouter {
 						event: {
 							code: score.event.code,
 							weekNumber: score.event.weekNumber,
+							name: score.event.name,
 						},
 						match: {
 							number: score.number,

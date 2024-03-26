@@ -1,0 +1,152 @@
+{
+	"id": "d7daeb0c-8940-49c2-b8f3-d5bdb90f99f9",
+	"prevId": "49936e88-bd36-4a2a-9135-81b27eab94b5",
+	"version": "5",
+	"dialect": "pg",
+	"tables": {
+		"events": {
+			"name": "events",
+			"schema": "",
+			"columns": {
+				"internal_id": {
+					"name": "internal_id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"year": {
+					"name": "year",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"code": {
+					"name": "code",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"week_number": {
+					"name": "week_number",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"first_code": {
+					"name": "first_code",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {
+				"events_year_code_index": {
+					"name": "events_year_code_index",
+					"columns": ["year", "code"],
+					"isUnique": true
+				}
+			},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
+		"top_scores": {
+			"name": "top_scores",
+			"schema": "",
+			"columns": {
+				"match_number": {
+					"name": "match_number",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"match_level": {
+					"name": "match_level",
+					"type": "match_level",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"score": {
+					"name": "score",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"winning_teams": {
+					"name": "winning_teams",
+					"type": "jsonb",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp with time zone",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"event_internal_id": {
+					"name": "event_internal_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {
+				"top_scores_timestamp_index": {
+					"name": "top_scores_timestamp_index",
+					"columns": ["timestamp"],
+					"isUnique": false
+				},
+				"top_scores_score_index": {
+					"name": "top_scores_score_index",
+					"columns": ["score"],
+					"isUnique": false
+				},
+				"top_scores_event_internal_id_index": {
+					"name": "top_scores_event_internal_id_index",
+					"columns": ["event_internal_id"],
+					"isUnique": false
+				}
+			},
+			"foreignKeys": {
+				"top_scores_event_internal_id_events_internal_id_fk": {
+					"name": "top_scores_event_internal_id_events_internal_id_fk",
+					"tableFrom": "top_scores",
+					"tableTo": "events",
+					"columnsFrom": ["event_internal_id"],
+					"columnsTo": ["internal_id"],
+					"onDelete": "cascade",
+					"onUpdate": "cascade"
+				}
+			},
+			"compositePrimaryKeys": {
+				"top_scores_match_level_match_number_pk": {
+					"name": "top_scores_match_level_match_number_pk",
+					"columns": ["match_level", "match_number"]
+				}
+			},
+			"uniqueConstraints": {}
+		}
+	},
+	"enums": {
+		"match_level": {
+			"name": "match_level",
+			"values": {
+				"QUALIFICATION": "QUALIFICATION",
+				"PLAYOFF": "PLAYOFF"
+			}
+		}
+	},
+	"schemas": {},
+	"_meta": {
+		"columns": {},
+		"schemas": {},
+		"tables": {}
+	}
+}

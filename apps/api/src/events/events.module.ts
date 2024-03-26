@@ -5,12 +5,14 @@ import { ConfigService } from '../config/config.service';
 import { FirstModule } from '../first/first.module';
 import { QueueNames } from '../queues/enums/queue-names.enum';
 import { QueuesModule } from '../queues/queues.module';
+import { TbaModule } from '../tba/tba.module';
 import { EventsService } from './events.service';
 import { FetchEventsProcessor } from './fetch-events.processor';
 
 @Module({
 	imports: [
 		FirstModule,
+		TbaModule,
 		QueuesModule,
 		BullModule.registerQueueAsync({
 			inject: [ConfigService],

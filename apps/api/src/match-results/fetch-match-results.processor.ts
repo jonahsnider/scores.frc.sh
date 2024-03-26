@@ -2,9 +2,9 @@ import { Processor } from '@nestjs/bullmq';
 import { Inject } from '@nestjs/common';
 import convert from 'convert';
 import { EventsService } from '../events/events.service';
-import type { FrcEvent } from '../first/interfaces/frc-events.interface';
 import { BaseProcessor } from '../queues/base.processor';
 import { QueueNames } from '../queues/enums/queue-names.enum';
+import type { TbaEvent } from '../tba/interfaces/tba-event.interface';
 import type { JobType, ReturnType } from './interfaces/fetch-match-results.queue.interface';
 import { MatchResultsService } from './match-results.service';
 
@@ -14,9 +14,9 @@ export class FetchMatchResultsProcessor extends BaseProcessor {
 	private static readonly REPEAT_FINISHED_EVENT_INTERVAL = convert(1, 'day');
 	private static readonly REPEAT_IN_PROGRESS_EVENT_INTERVAL = convert(5, 'minutes');
 
-	static getRepeatInterval(event: FrcEvent) {
-		const start = new Date(event.dateStart);
-		const end = new Date(event.dateEnd);
+	static getRepeatInterval(event: TbaEvent) {
+		const start = new Date(event.start_date);
+		const end = new Date(event.end_date);
 		const now = new Date();
 
 		if (now < start) {
@@ -35,11 +35,7 @@ export class FetchMatchResultsProcessor extends BaseProcessor {
 		this.logger.debug(`Processing match results for ${eventName}`);
 
 		this.logger.verbose(`Fetching scores for ${eventName}`);
-		const matches = await this.events.getMatches({
-			code: job.data.eventCode,
-			weekNumber: job.data.eventWeekNumber,
-			year: job.data.year,
-		});
+		const matches = await this.events.getMatches(job.data.eventCode, job.data.year);
 		this.logger.verbose(`Fetched ${matches.length} matches for ${eventName}`);
 
 		const topScores = MatchResultsService.keepTopScores(matches);

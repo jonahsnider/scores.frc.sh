@@ -12,19 +12,18 @@ import type { JobType, ReturnType } from './interfaces/fetch-events-queue.interf
 export class FetchEventsProcessor extends BaseProcessor {
 	override async process(job: JobType): Promise<ReturnType> {
 		this.logger.debug(`Processing events for year ${job.data.year}`);
-		const events = await this.events.listEvents(job.data.year);
 
+		const events = await this.events.listEvents(job.data.year);
 		this.logger.verbose(`Fetched ${events.length} events for year ${job.data.year}`);
 
 		// Schedule processing for events
 		await Promise.all(
 			events.map((event) =>
 				this.fetchMatchResultsQueue.add(
-					`fetch-match-results-${job.data.year}-${event.code}`,
+					`fetch-match-results-${job.data.year}-${event.event_code}`,
 					{
 						year: job.data.year,
-						eventCode: event.code,
-						eventWeekNumber: event.weekNumber,
+						eventCode: event.event_code,
 					},
 					{
 						repeat: {
