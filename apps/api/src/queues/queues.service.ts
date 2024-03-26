@@ -1,11 +1,11 @@
+import { BullModule } from '@nestjs/bullmq';
 import { Inject, Injectable } from '@nestjs/common';
-import { Queue, type DefaultJobOptions } from 'bullmq';
+import { type DefaultJobOptions, Queue } from 'bullmq';
+import convert from 'convert';
 import type Ioredis from 'ioredis';
+import { ConfigService } from '../config/config.service';
 import { QUEUE_REDIS_PROVIDER } from '../redis/providers';
 import { QueueNames } from './enums/queue-names.enum';
-import { BullModule } from '@nestjs/bullmq';
-import { ConfigService } from '../config/config.service';
-import convert from 'convert';
 
 // biome-ignore lint/suspicious/noExplicitAny: This is required
 type AnyQueue = Queue<any, any, any>;
