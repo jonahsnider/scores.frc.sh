@@ -2,6 +2,7 @@ import { Container, Theme } from '@radix-ui/themes';
 import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
 import PlausibleProvider from 'next-plausible';
+import { Footer } from './components/footer';
 import { Header } from './components/header';
 import { TrpcProvider } from './components/trpc/trpc-provider';
 import './globals.css';
@@ -30,10 +31,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<Theme accentColor='red' grayColor='mauve' appearance='dark'>
 					<Container p='4'>
 						<TrpcProvider>
-							<div className='flex flex-col gap-1 justify-center items-center'>
+							<div className='flex flex-col gap-1 justify-start items-center'>
 								<Header />
 
 								<main className='w-full'>{children}</main>
+
+								<Footer />
 							</div>
 						</TrpcProvider>
 					</Container>

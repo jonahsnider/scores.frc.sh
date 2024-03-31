@@ -1,6 +1,5 @@
 'use client';
 
-import { Heading, Link, Text, Flex } from '@radix-ui/themes';
 import { Suspense, useState } from 'react';
 import { EventInput } from './components/event-input';
 import { ScoreChart } from './components/score-chart/score-chart';
