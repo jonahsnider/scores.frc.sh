@@ -1,5 +1,6 @@
+import { Card, Heading } from '@radix-ui/themes';
 import type { MatchLevel } from '@scores.frc.sh/api/src/first/enums/match-level.enum';
-import { AreaChart, Card } from '@tremor/react';
+import { AreaChart, type Color } from '@tremor/react';
 import { trpc } from '../../trpc';
 import { Tooltip } from './tooltip';
 import { formatMatch, formatRecordHeldFor, tbaUrl, weekName } from './util';
@@ -10,6 +11,8 @@ type Props = {
 };
 
 const CATEGORY_WHEN_EVENT_PROVIDED = 'Score';
+
+const GRAPH_COLORS: Color[] = ['red', 'rose', 'pink', 'fuchsia', 'purple', 'violet', 'indigo'];
 
 export function ScoreChart({ year, eventCode }: Props) {
 	const matches = trpc.highScores.getHighScores.useQuery({
@@ -50,15 +53,15 @@ export function ScoreChart({ year, eventCode }: Props) {
 	}
 
 	return (
-		<Card className='flex flex-col gap-4 p-2 sm:p-4 md:p-6 max-w-5xl'>
-			<h3 className='text-lg font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong'>
+		<Card className='flex flex-col gap-1 w-full max-w-5xl' size={{ initial: '1', xs: '2', sm: '3', md: '4' }}>
+			<Heading as='h3' size={{ initial: '4', xs: '5', sm: '6' }}>
 				{!eventCode && <>Global high scores for {year}</>}
 				{eventCode && (
 					<>
 						High scores for {eventCode} {year}
 					</>
 				)}
-			</h3>
+			</Heading>
 
 			<AreaChart
 				data={chartData}
@@ -81,6 +84,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 				showAnimation={true}
 				minValue={0}
 				enableLegendSlider={true}
+				colors={GRAPH_COLORS}
 				onValueChange={(value) => {
 					// Open new tab with TBA match page
 					if (!(value?.eventCode && value.matchNumber && value.matchLevel)) {

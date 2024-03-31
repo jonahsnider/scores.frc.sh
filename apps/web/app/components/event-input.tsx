@@ -1,4 +1,6 @@
-import { TextInput } from '@tremor/react';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import { TextField } from '@radix-ui/themes';
+import clsx from 'clsx';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { trpc } from '../trpc';
@@ -39,13 +41,25 @@ export function EventInput({ onValueChange, year }: Props) {
 		onValueChange(eventCode);
 	}, [eventCode, onValueChange]);
 
+	const isError = matches.isSuccess && matches.data === null;
+
 	return (
-		<TextInput
-			type='text'
+		<TextField.Root
+			size={{ initial: '2', xs: '3' }}
 			placeholder='Event code (optional)'
 			value={eventCode ?? ''}
-			onValueChange={(value) => setEventCode(value)}
-			error={matches.isSuccess && matches.data === null}
-		/>
+			onChange={(event) => setEventCode(event.target.value)}
+			type='text'
+		>
+			<TextField.Slot
+				color='red'
+				side='right'
+				className={clsx({
+					invisible: !isError,
+				})}
+			>
+				<ExclamationTriangleIcon height='16' width='16' />
+			</TextField.Slot>
+		</TextField.Root>
 	);
 }

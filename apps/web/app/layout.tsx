@@ -1,12 +1,10 @@
+import { Container, Theme } from '@radix-ui/themes';
 import { Analytics } from '@vercel/analytics/react';
-import clsx from 'clsx';
 import type { Metadata } from 'next';
 import PlausibleProvider from 'next-plausible';
-import { Inter } from 'next/font/google';
+import { Header } from './components/header';
 import { TrpcProvider } from './components/trpc/trpc-provider';
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
 	title: 'scores.frc.sh',
@@ -28,8 +26,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<head>
 				<PlausibleProvider domain='scores.frc.sh' />
 			</head>
-			<body className={clsx('container mx-auto p-4 dark text-dark-tremor-content-strong bg-gray-950', inter.className)}>
-				<TrpcProvider>{children}</TrpcProvider>
+			<body>
+				<Theme accentColor='red' grayColor='mauve' appearance='dark'>
+					<Container p='4'>
+						<TrpcProvider>
+							<div className='flex flex-col gap-1 justify-center items-center'>
+								<Header />
+
+								<main className='w-full'>{children}</main>
+							</div>
+						</TrpcProvider>
+					</Container>
+				</Theme>
 
 				<Analytics />
 			</body>

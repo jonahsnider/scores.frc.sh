@@ -1,7 +1,8 @@
 import { mapFill } from '@jonahsnider/util';
-import { Select, SelectItem } from '@tremor/react';
+import { Select } from '@radix-ui/themes';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
 type Props = {
 	onValueChange: (value: number) => void;
 };
@@ -34,12 +35,16 @@ export function YearInput({ onValueChange }: Props) {
 	}, [year, onValueChange]);
 
 	return (
-		<Select value={year.toString()} onValueChange={(value) => setYear(value)}>
-			{mapFill((index) => MAX_YEAR - index, MAX_YEAR - MIN_YEAR + 1).map((year) => (
-				<SelectItem key={year} value={year.toString()}>
-					{year}
-				</SelectItem>
-			))}
-		</Select>
+		<Select.Root value={year.toString()} onValueChange={(value) => setYear(value)} size={{ initial: '2', xs: '3' }}>
+			<Select.Trigger />
+
+			<Select.Content>
+				{mapFill((index) => MAX_YEAR - index, MAX_YEAR - MIN_YEAR + 1).map((year) => (
+					<Select.Item key={year} value={year.toString()}>
+						{year}
+					</Select.Item>
+				))}
+			</Select.Content>
+		</Select.Root>
 	);
 }
