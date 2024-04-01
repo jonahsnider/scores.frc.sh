@@ -1,6 +1,6 @@
 import { Container, Theme } from '@radix-ui/themes';
 import { Analytics } from '@vercel/analytics/react';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import PlausibleProvider from 'next-plausible';
 import { ThemeProvider } from 'next-themes';
 import { Footer } from './components/footer';
@@ -20,6 +20,13 @@ export const metadata: Metadata = {
 		siteName: 'scores.frc.sh',
 		description: 'View the progression of the world record & event high scores for FRC.',
 	},
+};
+
+export const viewport: Viewport = {
+	themeColor: {
+		color: '#29A383',
+	},
+	colorScheme: 'dark light',
 };
 
 // biome-ignore lint/style/noDefaultExport: This has to be a default export
