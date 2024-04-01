@@ -1,7 +1,7 @@
 import { mapFill } from '@jonahsnider/util';
 import { Select } from '@radix-ui/themes';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { parseAsInteger, useQueryState } from 'nuqs';
+import { useEffect } from 'react';
 
 type Props = {
 	onValueChange: (value: number) => void;
@@ -13,22 +13,8 @@ const MAX_YEAR = new Date().getFullYear();
 export const DEFAULT_YEAR = MAX_YEAR;
 
 export function YearInput({ onValueChange }: Props) {
-	const searchParams = useSearchParams();
-	const router = useRouter();
-
-	const [year, setYearRaw] = useState(Number(searchParams.get('year') ?? DEFAULT_YEAR));
-	const setYear = (value: string) => setYearRaw(Number(value));
-
-	useEffect(() => {
-		const url = new URL(window.location.href);
-
-		if (year === DEFAULT_YEAR) {
-			url.searchParams.delete('year');
-		} else {
-			url.searchParams.set('year', year.toString());
-		}
-		router.replace(url.href);
-	}, [year, router]);
+	const [year, setYearRaw] = useQueryState('year', parseAsInteger.withDefault(DEFAULT_YEAR));
+	const setYear = (value: string) => setYearRaw(Number(value) === DEFAULT_YEAR ? null : Number(value));
 
 	useEffect(() => {
 		onValueChange(year);

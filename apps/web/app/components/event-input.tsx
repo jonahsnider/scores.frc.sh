@@ -1,8 +1,8 @@
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { TextField } from '@radix-ui/themes';
 import clsx from 'clsx';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { parseAsString, useQueryState } from 'nuqs';
+import { useEffect } from 'react';
 import { trpc } from '../trpc';
 
 type Props = {
@@ -11,34 +11,17 @@ type Props = {
 };
 
 export function EventInput({ onValueChange, year }: Props) {
-	const router = useRouter();
-	const searchParams = useSearchParams();
+	const [eventCode, setEventCodeRaw] = useQueryState('event_code', parseAsString);
 
-	const [eventCode, setEventCodeRaw] = useState<string | undefined>(
-		searchParams.get('eventCode')?.toUpperCase() ?? undefined,
-	);
-
-	const setEventCode = (value: string) => setEventCodeRaw(value === '' ? undefined : value.toUpperCase());
+	const setEventCode = (value: string) => setEventCodeRaw(value === '' ? null : value.toUpperCase());
 
 	const matches = trpc.highScores.getHighScores.useQuery({
 		year,
-		eventCode,
+		eventCode: eventCode ?? undefined,
 	});
 
 	useEffect(() => {
-		const url = new URL(window.location.href);
-
-		if (eventCode) {
-			url.searchParams.set('event_code', eventCode.toLowerCase());
-		} else {
-			url.searchParams.delete('event_code');
-		}
-
-		router.replace(url.href);
-	}, [eventCode, router]);
-
-	useEffect(() => {
-		onValueChange(eventCode);
+		onValueChange(eventCode ?? undefined);
 	}, [eventCode, onValueChange]);
 
 	const isError = matches.data === null;
