@@ -12,7 +12,7 @@ type Props = {
 
 const CATEGORY_WHEN_EVENT_PROVIDED = 'Score';
 
-const GRAPH_COLORS: Color[] = ['red', 'rose', 'pink', 'fuchsia', 'purple', 'violet', 'indigo'];
+const GRAPH_COLORS: Color[] = ['emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet'];
 
 export function ScoreChart({ year, eventCode }: Props) {
 	const matches = trpc.highScores.getHighScores.useQuery({

@@ -41,7 +41,7 @@ export function EventInput({ onValueChange, year }: Props) {
 		onValueChange(eventCode);
 	}, [eventCode, onValueChange]);
 
-	const isError = matches.isSuccess && matches.data === null;
+	const isError = matches.data === null;
 
 	return (
 		<TextField.Root
@@ -50,6 +50,7 @@ export function EventInput({ onValueChange, year }: Props) {
 			value={eventCode ?? ''}
 			onChange={(event) => setEventCode(event.target.value)}
 			type='text'
+			color={isError ? 'red' : undefined}
 		>
 			<TextField.Slot
 				color='red'
