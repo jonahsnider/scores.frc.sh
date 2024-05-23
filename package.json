@@ -24,7 +24,7 @@
 		"drizzle-kit": "0.21.4",
 		"envalid": "8.0.0",
 		"pino": "9.1.0",
-		"pino-pretty": "11.0.0",
+		"pino-pretty": "11.1.0",
 		"prettier": "3.2.5",
 		"prettier-plugin-packagejson": "2.5.0",
 		"turbo": "1.13.3",
