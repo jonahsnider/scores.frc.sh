@@ -14,7 +14,7 @@ export function generateMetadata(props: {
 		},
 		openGraph: {
 			title: `${props.params.year} scores`,
-		}
+		},
 	};
 }
 
