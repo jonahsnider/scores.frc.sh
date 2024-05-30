@@ -24,8 +24,16 @@ export function EventInput() {
 	}, [eventCode]);
 
 	const onChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-		setValue(event.target.value);
-		router.replace(`/${year}/${encodeURIComponent(event.target.value.toLowerCase())}`);
+		const newValue = event.target.value;
+		setValue(newValue);
+
+		if (newValue) {
+			router.replace(`/${year}/${encodeURIComponent(newValue.toLowerCase())}`);
+		} else if (year === DEFAULT_YEAR) {
+			router.replace('/');
+		} else {
+			router.replace(`/${year}`);
+		}
 	};
 
 	const matches = trpc.highScores.getHighScores.useQuery({
