@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { EventInput } from './components/event-input';
 import { ScoreChart } from './components/score-chart/score-chart';
 import { TrackQuery } from './components/track-query';
 import { YearInput } from './components/year-input';
 import { QueryProvider } from './contexts/query/query-context';
 import { metadataBase } from './metadata';
-import { Suspense } from 'react';
 
 export const metadata: Metadata = {
 	metadataBase,
