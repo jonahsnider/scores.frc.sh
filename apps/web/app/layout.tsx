@@ -8,11 +8,12 @@ import { Header } from './components/header';
 import { TrpcProvider } from './components/trpc/trpc-provider';
 
 import './globals.css';
+import { metadataBase } from './metadata';
 
 export const metadata: Metadata = {
 	title: 'scores.frc.sh',
 	description: 'View the progression of the world record & event high scores for FRC.',
-	metadataBase: new URL('https://scores.frc.sh'),
+	metadataBase,
 	openGraph: {
 		url: 'https://scores.frc.sh',
 		type: 'website',
