@@ -1,14 +1,14 @@
+'use client';
+
 import { useDebounce } from '@uidotdev/usehooks';
 import { track } from '@vercel/analytics';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { QueryContext } from '../contexts/query/query-context';
 import { usePlausible } from '../hooks/plausible';
 
-type Props = {
-	year: number;
-	eventCode: string | undefined;
-};
+export function TrackQuery() {
+	const { year, eventCode } = useContext(QueryContext);
 
-export function TrackQuery({ eventCode, year }: Props) {
 	const plausible = usePlausible();
 
 	const debouncedYear = useDebounce(year, 750);

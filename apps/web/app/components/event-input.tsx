@@ -1,28 +1,19 @@
+'use client';
+
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { TextField } from '@radix-ui/themes';
 import clsx from 'clsx';
-import { parseAsString, useQueryState } from 'nuqs';
-import { useEffect } from 'react';
+import { useContext } from 'react';
+import { QueryContext } from '../contexts/query/query-context';
 import { trpc } from '../trpc';
 
-type Props = {
-	year: number;
-	onValueChange: (value: string | undefined) => void;
-};
-
-export function EventInput({ onValueChange, year }: Props) {
-	const [eventCode, setEventCodeRaw] = useQueryState('event_code', parseAsString);
-
-	const setEventCode = (value: string) => setEventCodeRaw(value === '' ? null : value.toUpperCase());
+export function EventInput() {
+	const { year, eventCode, setEventCode } = useContext(QueryContext);
 
 	const matches = trpc.highScores.getHighScores.useQuery({
 		year,
 		eventCode: eventCode ?? undefined,
 	});
-
-	useEffect(() => {
-		onValueChange(eventCode ?? undefined);
-	}, [eventCode, onValueChange]);
 
 	const isError = matches.data === null;
 

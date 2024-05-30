@@ -1,27 +1,21 @@
+'use client';
+
 import { mapFill } from '@jonahsnider/util';
 import { Select } from '@radix-ui/themes';
-import { parseAsInteger, useQueryState } from 'nuqs';
-import { useEffect } from 'react';
+import { useContext } from 'react';
+import { DEFAULT_YEAR, MAX_YEAR, MIN_YEAR } from '../contexts/query/constants';
+import { QueryContext } from '../contexts/query/query-context';
 
-type Props = {
-	onValueChange: (value: number) => void;
-};
-
-const MIN_YEAR = 2023;
-const MAX_YEAR = new Date().getFullYear();
-
-export const DEFAULT_YEAR = MAX_YEAR;
-
-export function YearInput({ onValueChange }: Props) {
-	const [year, setYearRaw] = useQueryState('year', parseAsInteger.withDefault(DEFAULT_YEAR));
-	const setYear = (value: string) => setYearRaw(Number(value) === DEFAULT_YEAR ? null : Number(value));
-
-	useEffect(() => {
-		onValueChange(year);
-	}, [year, onValueChange]);
+export function YearInput() {
+	const { year, setYear } = useContext(QueryContext);
 
 	return (
-		<Select.Root value={year.toString()} onValueChange={(value) => setYear(value)} size={{ initial: '2', xs: '3' }}>
+		<Select.Root
+			value={year.toString()}
+			onValueChange={(value) => setYear(Number(value))}
+			size={{ initial: '2', xs: '3' }}
+			defaultValue={DEFAULT_YEAR.toString()}
+		>
 			<Select.Trigger />
 
 			<Select.Content>
