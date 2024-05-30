@@ -1,18 +1,25 @@
 import { ScoreChart } from '@/app/components/score-chart/score-chart';
 import { DEFAULT_YEAR } from '@/app/constants';
-import type { Metadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 import { RedirectType, redirect } from 'next/navigation';
 
-export function generateMetadata(props: {
-	params: { year: string };
-}): Metadata {
+export async function generateMetadata(
+	props: {
+		params: { year: string };
+	},
+	resolvingParent: ResolvingMetadata,
+): Promise<Metadata> {
+	const parent = await resolvingParent;
+
 	return {
 		title: `${props.params.year}`,
 		description: `View the progression of the world record & event high scores for FRC in ${props.params.year}.`,
 		alternates: {
 			canonical: `/${encodeURIComponent(props.params.year)}`,
 		},
+		// @ts-expect-error Evil Next types
 		openGraph: {
+			...(parent.openGraph ?? {}),
 			title: `${props.params.year} scores`,
 		},
 	};
