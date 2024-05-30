@@ -19,7 +19,6 @@ export const metadata: Metadata = {
 		type: 'website',
 		title: 'scores.frc.sh',
 		siteName: 'scores.frc.sh',
-		description: 'View the progression of the world record & event high scores for FRC.',
 	},
 };
 

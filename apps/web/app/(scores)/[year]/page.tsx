@@ -12,6 +12,9 @@ export function generateMetadata(props: {
 		alternates: {
 			canonical: `/${encodeURIComponent(props.params.year)}`,
 		},
+		openGraph: {
+			title: `${props.params.year} scores`,
+		}
 	};
 }
 

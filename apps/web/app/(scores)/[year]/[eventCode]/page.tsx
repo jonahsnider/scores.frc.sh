@@ -14,6 +14,9 @@ export function generateMetadata(props: {
 				props.params.eventCode.toLowerCase(),
 			)}`,
 		},
+		openGraph: {
+			title: `${eventCode} ${props.params.year} scores`,
+		},
 	};
 }
 
