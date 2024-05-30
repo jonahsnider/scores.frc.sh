@@ -4,12 +4,10 @@ import { ConfigService } from '../config/config.service';
 import type { QueueType } from '../events/interfaces/fetch-events-queue.interface';
 import { QueueNames } from '../queues/enums/queue-names.enum';
 import { QueuesService } from '../queues/queues.service';
+import { YEAR_NEWEST, YEAR_OLDEST } from './cache-manager.constants';
 
 @Injectable()
 export class CacheManagerService implements OnApplicationBootstrap {
-	static readonly YEAR_OLDEST = 2023;
-	static readonly YEAR_NEWEST = new Date().getFullYear();
-
 	private static readonly FORCE_REFRESH_IN_DEV = false;
 
 	private static readonly CACHE_REFRESH_INTERVAL_CURRENT_YEAR = convert(1, 'hour');
@@ -27,9 +25,9 @@ export class CacheManagerService implements OnApplicationBootstrap {
 	}
 
 	async onApplicationBootstrap(): Promise<void> {
-		for (let year = CacheManagerService.YEAR_OLDEST; year <= CacheManagerService.YEAR_NEWEST; year++) {
+		for (let year = YEAR_OLDEST; year <= YEAR_NEWEST; year++) {
 			const repeatInterval =
-				year === CacheManagerService.YEAR_NEWEST
+				year === YEAR_NEWEST
 					? CacheManagerService.CACHE_REFRESH_INTERVAL_CURRENT_YEAR
 					: CacheManagerService.CACHE_REFRESH_INTERVAL_PAST_YEAR;
 
@@ -47,8 +45,8 @@ export class CacheManagerService implements OnApplicationBootstrap {
 
 		if (CacheManagerService.FORCE_REFRESH_IN_DEV && this.configService.nodeEnv === 'development') {
 			this.logger.log('Scheduling cache refresh right now');
-			await this.fetchEventsQueue.add(`fetch-events-${CacheManagerService.YEAR_NEWEST}`, {
-				year: CacheManagerService.YEAR_NEWEST,
+			await this.fetchEventsQueue.add(`fetch-events-${YEAR_NEWEST}`, {
+				year: YEAR_NEWEST,
 			});
 		}
 

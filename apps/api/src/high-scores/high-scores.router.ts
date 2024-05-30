@@ -1,14 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { z } from 'zod';
-import { CacheManagerService } from '../cache-manager/cache-manager.service';
 import { MatchLevel } from '../first/enums/match-level.enum';
 
 import { EventsService } from '../events/events.service';
 import { publicProcedure, router } from '../trpc/trpc';
+import { EventCode } from './dtos/event-code.dto';
+import { EventYear } from './dtos/event-year.dto';
 import { HighScoresService } from './high-scores.service';
-
-const EventYear = z.number().int().min(CacheManagerService.YEAR_OLDEST).max(CacheManagerService.YEAR_NEWEST);
-const EventCode = z.string().min(1).toUpperCase();
 
 const EventMatch = z.object({
 	event: z.object({

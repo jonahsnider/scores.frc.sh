@@ -11,7 +11,7 @@ import './globals.css';
 import { metadataBase } from './metadata';
 
 export const metadata: Metadata = {
-	title: 'scores.frc.sh',
+	title: { absolute: 'scores.frc.sh', template: '%s | scores.frc.sh' },
 	description: 'View the progression of the world record & event high scores for FRC.',
 	metadataBase,
 	openGraph: {
@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			</head>
 			<body>
 				<ThemeProvider enableSystem={true} attribute='class'>
-					<Theme accentColor='jade' grayColor='sage'>
+					<Theme accentColor='jade' grayColor='sage' scaling='110%'>
 						<Container p='4'>
 							<TrpcProvider>
 								<div className='flex flex-col gap-1 justify-start items-center'>

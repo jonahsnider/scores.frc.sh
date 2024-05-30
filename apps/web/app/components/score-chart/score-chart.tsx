@@ -1,10 +1,8 @@
 'use client';
 
-import { QueryContext } from '@/app/contexts/query/query-context';
 import { Card, Heading } from '@radix-ui/themes';
 import type { MatchLevel } from '@scores.frc.sh/api/src/first/enums/match-level.enum';
 import { AreaChart, type Color } from '@tremor/react';
-import { useContext } from 'react';
 import { trpc } from '../../trpc';
 import { Tooltip } from './tooltip';
 import { formatMatch, formatRecordHeldFor, tbaUrl, weekName } from './util';
@@ -13,9 +11,12 @@ const CATEGORY_WHEN_EVENT_PROVIDED = 'Score';
 
 const GRAPH_COLORS: Color[] = ['emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet'];
 
-export function ScoreChart() {
-	const { year, eventCode } = useContext(QueryContext);
+type Props = {
+	year: number;
+	eventCode?: string;
+};
 
+export function ScoreChart({ year, eventCode }: Props) {
 	const matches = trpc.highScores.getHighScores.useQuery({
 		year,
 		eventCode,
