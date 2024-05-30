@@ -5,6 +5,7 @@ import { TrackQuery } from './components/track-query';
 import { YearInput } from './components/year-input';
 import { QueryProvider } from './contexts/query/query-context';
 import { metadataBase } from './metadata';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
 	metadataBase,
@@ -16,18 +17,20 @@ export const metadata: Metadata = {
 // biome-ignore lint/style/noDefaultExport: This has to be a default export
 export default function HomePage() {
 	return (
-		<QueryProvider>
-			<div className='flex flex-col gap-4 justify-center items-center w-full pt-2'>
-				<div className='flex gap-4'>
-					<YearInput />
+		<Suspense>
+			<QueryProvider>
+				<div className='flex flex-col gap-4 justify-center items-center w-full pt-2'>
+					<div className='flex gap-4'>
+						<YearInput />
 
-					<EventInput />
+						<EventInput />
+					</div>
+
+					<ScoreChart />
 				</div>
 
-				<ScoreChart />
-			</div>
-
-			<TrackQuery />
-		</QueryProvider>
+				<TrackQuery />
+			</QueryProvider>
+		</Suspense>
 	);
 }
