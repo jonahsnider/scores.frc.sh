@@ -21,7 +21,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.6.1",
 		"@types/pg": "8.11.4",
-		"drizzle-kit": "0.23.0",
+		"drizzle-kit": "0.23.1",
 		"envalid": "8.0.0",
 		"pino": "9.3.2",
 		"pino-pretty": "11.2.2",
