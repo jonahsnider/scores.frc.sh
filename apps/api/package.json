@@ -21,7 +21,7 @@
 		"@ntegral/nestjs-sentry": "4.0.1",
 		"@sentry/bun": "7.107.0",
 		"@trpc/server": "next",
-		"bullmq": "5.4.2",
+		"bullmq": "5.12.2",
 		"cors": "2.8.5",
 		"devalue": "4.3.2",
 		"drizzle-orm": "0.30.2",
