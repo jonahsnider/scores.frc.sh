@@ -19,7 +19,7 @@ export class QueuesService {
 			attempts: 5,
 			backoff: {
 				type: 'exponential',
-				delay: convert(30, 'seconds').to('ms'),
+				delay: convert(15, 'minutes').to('ms'),
 			},
 		},
 		[QueueNames.FetchMatchResults]: {
@@ -28,7 +28,7 @@ export class QueuesService {
 			attempts: 5,
 			backoff: {
 				type: 'exponential',
-				delay: convert(15, 'seconds').to('ms'),
+				delay: convert(5, 'minute').to('ms'),
 			},
 		},
 	};
