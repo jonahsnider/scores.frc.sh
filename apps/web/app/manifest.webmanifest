@@ -1,0 +1,73 @@
+{
+	"$schema": "https://json.schemastore.org/web-manifest-combined.json",
+	"background_color": "#101211",
+	"description": "View the progression of the world record & event high scores for FRC.",
+	"display": "standalone",
+	"icons": [
+		{
+			"purpose": "maskable",
+			"sizes": "64x64",
+			"src": "/icons/maskable-64x64.png",
+			"type": "image/png"
+		},
+		{
+			"purpose": "maskable",
+			"sizes": "144x144",
+			"src": "/icons/maskable-144x144.png",
+			"type": "image/png"
+		},
+		{
+			"purpose": "maskable",
+			"sizes": "192x192",
+			"src": "/icons/maskable-192x192.png",
+			"type": "image/png"
+		},
+		{
+			"purpose": "maskable",
+			"sizes": "256x256",
+			"src": "/icons/maskable-256x256.png",
+			"type": "image/png"
+		},
+		{
+			"purpose": "maskable",
+			"sizes": "512x512",
+			"src": "/icons/maskable-512x512.png",
+			"type": "image/png"
+		},
+		{
+			"purpose": "any",
+			"sizes": "64x64",
+			"src": "/icons/transparent-64x64.png",
+			"type": "image/png"
+		},
+		{
+			"purpose": "any",
+			"sizes": "144x144",
+			"src": "/icons/transparent-144x144.png",
+			"type": "image/png"
+		},
+		{
+			"purpose": "any",
+			"sizes": "192x192",
+			"src": "/icons/transparent-192x192.png",
+			"type": "image/png"
+		},
+		{
+			"purpose": "any",
+			"sizes": "256x256",
+			"src": "/icons/transparent-256x256.png",
+			"type": "image/png"
+		},
+		{
+			"purpose": "any",
+			"sizes": "512x512",
+			"src": "/icons/transparent-512x512.png",
+			"type": "image/png"
+		}
+	],
+	"id": "/",
+	"name": "scores.frc.sh",
+	"short_name": "scores.frc.sh",
+	"start_url": "/",
+	"theme_color": "#101211"
+}
