@@ -20,7 +20,7 @@
 		"@trpc/client": "11.0.0-rc.502",
 		"@trpc/next": "11.0.0-rc.502",
 		"@trpc/react-query": "11.0.0-rc.502",
-		"@types/node": "20.11.28",
+		"@types/node": "22.10.2",
 		"@types/react": "18.2.66",
 		"@types/react-dom": "18.2.22",
 		"@uidotdev/usehooks": "2.4.1",
