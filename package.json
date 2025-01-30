@@ -35,5 +35,6 @@
 	},
 	"trustedDependencies": [
 		"@biomejs/biome"
-	]
+	],
+	"packageManager": "bun@1.2.1"
 }
