@@ -45,7 +45,7 @@
 	},
 	"devDependencies": {
 		"dotenv": "16.4.5",
-		"type-fest": "4.12.0"
+		"type-fest": "4.35.0"
 	},
 	"packageManager": "bun@1.0.3"
 }
