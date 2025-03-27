@@ -20,7 +20,7 @@
 		"pg": "8.11.3"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.6.1",
+		"@biomejs/biome": "1.9.4",
 		"@types/pg": "8.11.4",
 		"@vite-pwa/assets-generator": "0.2.6",
 		"drizzle-kit": "0.30.6",
