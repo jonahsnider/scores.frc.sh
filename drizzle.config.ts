@@ -9,10 +9,10 @@ const env = cleanEnv(process.env, {
 // biome-ignore lint/style/noDefaultExport: This must be a default export
 export default {
 	schema: 'apps/api/src/db/schema.ts',
-	driver: 'pg',
+	dialect: 'postgresql',
 	dbCredentials: {
-		connectionString: env.DATABASE_URL,
+		url: env.DATABASE_URL,
 	},
-	tablesFilter: ['!_prisma_migrations'],
 	out: 'drizzle',
+	tablesFilter: ['!_prisma_migrations'],
 } satisfies Config;
