@@ -10,7 +10,7 @@ function getBaseApiUrl() {
 		return process.env.API_URL;
 	}
 
-	return 'http://localhost:3001';
+	throw new TypeError('No API URL found');
 }
 
 module.exports = getBaseApiUrl;
