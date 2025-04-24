@@ -22,7 +22,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.6.1",
 		"@vite-pwa/assets-generator": "0.2.6",
-		"drizzle-kit": "0.30.6",
+		"drizzle-kit": "0.31.0",
 		"prettier": "3.5.3",
 		"prettier-plugin-packagejson": "2.5.10",
 		"sharp": "0.34.1",
