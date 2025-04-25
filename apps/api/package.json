@@ -11,8 +11,8 @@
 		"type-check": "tsc"
 	},
 	"dependencies": {
-		"@bull-board/api": "5.15.1",
-		"@bull-board/express": "5.15.1",
+		"@bull-board/api": "5.23.0",
+		"@bull-board/express": "5.23.0",
 		"@jonahsnider/util": "11.0.0",
 		"@nestjs/bullmq": "11.0.2",
 		"@nestjs/common": "11.1.0",

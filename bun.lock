@@ -21,8 +21,8 @@
       "name": "@scores.frc.sh/api",
       "version": "0.0.1",
       "dependencies": {
-        "@bull-board/api": "5.15.1",
-        "@bull-board/express": "5.15.1",
+        "@bull-board/api": "5.23.0",
+        "@bull-board/express": "5.23.0",
         "@jonahsnider/util": "11.0.0",
         "@nestjs/bullmq": "11.0.2",
         "@nestjs/common": "11.1.0",
@@ -138,11 +138,11 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@1.6.1", "", { "os": "win32", "cpu": "x64" }, "sha512-5TUZbzBwnDLFxLVGEPsorNi6eC2Gt+z4Oei9Qvq0M/4c4/mjZ96ABgwao/tMxf4ZBr/qyy2YdvF+gX9Rc+xC0A=="],
 
-    "@bull-board/api": ["@bull-board/api@5.15.1", "", { "dependencies": { "redis-info": "^3.0.8" }, "peerDependencies": { "@bull-board/ui": "5.15.1" } }, "sha512-yJqv2uhMTC5BE2SwK/zG7kTloZyOFOujzPtP09OF9S8GvTalCwSTk7EsLQOUMHTUhyiVZ8JpUyJz8oytZ77+xQ=="],
+    "@bull-board/api": ["@bull-board/api@5.23.0", "", { "dependencies": { "redis-info": "^3.0.8" }, "peerDependencies": { "@bull-board/ui": "5.23.0" } }, "sha512-ZZGsWJ+XBG49GAlNgAL9tTEV6Ms7gMkQnZDbzwUhjGChCKWy62RWuPoZSefNXau9QH9+QzlzHRUeFvt4xr5wiw=="],
 
-    "@bull-board/express": ["@bull-board/express@5.15.1", "", { "dependencies": { "@bull-board/api": "5.15.1", "@bull-board/ui": "5.15.1", "ejs": "^3.1.7", "express": "^4.17.3" } }, "sha512-8NgBmS2VzS+fpajhrHd8Y84bS0Btno2cXVCVZOTdxp37rLS79a+Mx0ygOco8uGwV3UZ3sPujfP8OCWK15hYbyA=="],
+    "@bull-board/express": ["@bull-board/express@5.23.0", "", { "dependencies": { "@bull-board/api": "5.23.0", "@bull-board/ui": "5.23.0", "ejs": "^3.1.10", "express": "^4.19.2" } }, "sha512-t/mHzJMlZBtSKD8v81kbZoexOmtQxKVnHZfHJ0um5vrkHNJJuzKuwbR+n9nf1u89AGdyXoWxqDhBDslxv3zrrQ=="],
 
-    "@bull-board/ui": ["@bull-board/ui@5.15.1", "", { "dependencies": { "@bull-board/api": "5.15.1" } }, "sha512-+jpHdBTaqC2D9QDlix9j0EeqiJgN+RB8aH/A7J0VwVMLnbM820ZFPbrlXIN3Ph0hX2hgc+aHabZjs4Rjmwpqng=="],
+    "@bull-board/ui": ["@bull-board/ui@5.23.0", "", { "dependencies": { "@bull-board/api": "5.23.0" } }, "sha512-iI/Ssl8T5ZEn9s899Qz67m92M6RU8thf/aqD7cUHB2yHmkCjqbw7s7NaODTsyArAsnyu7DGJMWm7EhbfFXDNgQ=="],
 
     "@canvas/image-data": ["@canvas/image-data@1.0.0", "", {}, "sha512-BxOqI5LgsIQP1odU5KMwV9yoijleOPzHL18/YvNqF9KFSGF2K/DLlYAbDQsWqd/1nbaFuSkYD/191dpMtNh4vw=="],
 
