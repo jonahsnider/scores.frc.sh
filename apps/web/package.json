@@ -44,7 +44,7 @@
 		"zod": "3.24.3"
 	},
 	"devDependencies": {
-		"dotenv": "16.4.5",
+		"dotenv": "16.5.0",
 		"type-fest": "4.40.1"
 	},
 	"packageManager": "bun@1.0.3"
