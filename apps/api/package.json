@@ -19,13 +19,13 @@
 		"@nestjs/core": "11.1.0",
 		"@nestjs/platform-express": "11.1.0",
 		"@ntegral/nestjs-sentry": "4.0.1",
-		"@sentry/bun": "7.120.3",
+		"@sentry/bun": "9.14.0",
 		"@trpc/server": "11.1.1",
 		"bullmq": "5.51.1",
 		"cors": "2.8.5",
 		"devalue": "5.1.1",
 		"drizzle-orm": "0.43.1",
-		"ioredis": "5.3.2",
+		"ioredis": "5.6.1",
 		"ky": "1.8.1",
 		"pg": "8.15.6",
 		"reflect-metadata": "0.2.2",
@@ -36,12 +36,12 @@
 	"devDependencies": {
 		"@nestjs/cli": "^11.0.0",
 		"@nestjs/schematics": "^11.0.0",
-		"@tsconfig/bun": "1.0.4",
-		"@tsconfig/strictest": "2.0.3",
+		"@tsconfig/bun": "1.0.7",
+		"@tsconfig/strictest": "2.0.5",
 		"@types/cors": "2.8.17",
 		"@types/express": "^5.0.0",
 		"@types/pg": "8.11.14",
 		"prettier": "^3.0.0",
-		"typescript": "5.4.2"
+		"typescript": "5.8.3"
 	}
 }
