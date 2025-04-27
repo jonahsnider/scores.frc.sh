@@ -26,7 +26,7 @@
 		"@uidotdev/usehooks": "2.4.1",
 		"@vercel/analytics": "1.2.2",
 		"autoprefixer": "10.4.21",
-		"clsx": "2.1.0",
+		"clsx": "2.1.1",
 		"convert": "5.11.0",
 		"date-fns": "4.1.0",
 		"devalue": "4.3.3",
