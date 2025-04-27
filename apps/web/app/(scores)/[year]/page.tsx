@@ -5,27 +5,30 @@ import { RedirectType, redirect } from 'next/navigation';
 
 export async function generateMetadata(
 	props: {
-		params: { year: string };
+		params: Promise<{ year: string }>;
 	},
 	resolvingParent: ResolvingMetadata,
 ): Promise<Metadata> {
 	const parent = await resolvingParent;
 
+	const params = await props.params;
+
 	return {
-		title: `${props.params.year}`,
-		description: `View the progression of the world record & event high scores for FRC in ${props.params.year}.`,
+		title: `${params.year}`,
+		description: `View the progression of the world record & event high scores for FRC in ${params.year}.`,
 		alternates: {
-			canonical: `/${encodeURIComponent(props.params.year)}`,
+			canonical: `/${encodeURIComponent(params.year)}`,
 		},
 		// @ts-expect-error Evil Next types
 		openGraph: {
 			...(parent.openGraph ?? {}),
-			title: `${props.params.year} scores`,
+			title: `${params.year} scores`,
 		},
 	};
 }
 
-export default function YearPage({ params }: { params: { year: string } }) {
+export default async function YearPage(props: { params: Promise<{ year: string }> }) {
+	const params = await props.params;
 	const year = Number(params.year);
 
 	if (year === DEFAULT_YEAR) {

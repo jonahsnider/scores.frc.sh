@@ -2,10 +2,13 @@ import { EventCode } from '@scores.frc.sh/api/src/high-scores/dtos/event-code.dt
 import { RedirectType, redirect } from 'next/navigation';
 import type { PropsWithChildren } from 'react';
 
-export default function YearEventLayout({
-	params,
-	children,
-}: PropsWithChildren<{ params: { year: string; eventCode: string } }>) {
+export default async function YearEventLayout(
+	props: PropsWithChildren<{ params: Promise<{ year: string; eventCode: string }> }>,
+) {
+	const params = await props.params;
+
+	const { children } = props;
+
 	if (!EventCode.safeParse(params.eventCode).success) {
 		redirect(`/${params.year}`, RedirectType.push);
 	}

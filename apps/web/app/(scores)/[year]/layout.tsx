@@ -2,7 +2,11 @@ import { EventYear } from '@scores.frc.sh/api/src/high-scores/dtos/event-year.dt
 import { RedirectType, redirect } from 'next/navigation';
 import type { PropsWithChildren } from 'react';
 
-export default function YearLayout({ params, children }: PropsWithChildren<{ params: { year: string } }>) {
+export default async function YearLayout(props: PropsWithChildren<{ params: Promise<{ year: string }> }>) {
+	const params = await props.params;
+
+	const { children } = props;
+
 	const parsed = EventYear.safeParse(params.year);
 
 	if (!parsed.success) {
