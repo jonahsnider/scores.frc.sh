@@ -24,7 +24,7 @@
 		"@types/react": "18.3.20",
 		"@types/react-dom": "18.3.6",
 		"@uidotdev/usehooks": "2.4.1",
-		"@vercel/analytics": "1.2.2",
+		"@vercel/analytics": "1.5.0",
 		"autoprefixer": "10.4.21",
 		"clsx": "2.1.1",
 		"convert": "5.11.0",
