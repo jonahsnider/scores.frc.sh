@@ -30,7 +30,7 @@
 		"pg": "8.15.6",
 		"reflect-metadata": "0.2.2",
 		"rxjs": "7.8.2",
-		"superjson": "2.2.1",
+		"superjson": "2.2.2",
 		"zod": "3.24.3"
 	},
 	"devDependencies": {
