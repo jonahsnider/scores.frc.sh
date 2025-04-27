@@ -33,7 +33,7 @@
         "@trpc/server": "11.1.1",
         "bullmq": "5.4.2",
         "cors": "2.8.5",
-        "devalue": "4.3.2",
+        "devalue": "4.3.3",
         "drizzle-orm": "0.43.1",
         "ioredis": "5.3.2",
         "ky": "1.2.2",
@@ -78,7 +78,7 @@
         "clsx": "2.1.0",
         "convert": "5.11.0",
         "date-fns": "4.1.0",
-        "devalue": "4.3.2",
+        "devalue": "4.3.3",
         "next": "14.2.28",
         "next-plausible": "3.12.0",
         "next-themes": "0.3.0",
@@ -952,7 +952,7 @@
 
     "detect-node-es": ["detect-node-es@1.1.0", "", {}, "sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ=="],
 
-    "devalue": ["devalue@4.3.2", "", {}, "sha512-KqFl6pOgOW+Y6wJgu80rHpo2/3H07vr8ntR9rkkFIRETewbf5GaYYcakYfiKz89K+sLsuPkQIZaXDMjUObZwWg=="],
+    "devalue": ["devalue@4.3.3", "", {}, "sha512-UH8EL6H2ifcY8TbD2QsxwCC/pr5xSwPvv85LrLXVihmHVC3T3YqTCIwnR5ak0yO1KYqlxrPVOA/JVZJYPy2ATg=="],
 
     "didyoumean": ["didyoumean@1.2.2", "", {}, "sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw=="],
 
