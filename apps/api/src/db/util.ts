@@ -7,6 +7,8 @@ export function matchLevelToDb(level: MatchLevel): Schema.MatchLevel {
 			return Schema.MatchLevel.Playoff;
 		case MatchLevel.Qualification:
 			return Schema.MatchLevel.Qualification;
+		default:
+			throw new RangeError(`Invalid match level: ${level}`);
 	}
 }
 
@@ -16,5 +18,7 @@ export function matchLevelFromDb(level: Schema.MatchLevel): MatchLevel {
 			return MatchLevel.Playoff;
 		case Schema.MatchLevel.Qualification:
 			return MatchLevel.Qualification;
+		default:
+			throw new RangeError(`Invalid match level: ${level}`);
 	}
 }

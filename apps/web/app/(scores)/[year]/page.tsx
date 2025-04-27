@@ -25,7 +25,6 @@ export async function generateMetadata(
 	};
 }
 
-// biome-ignore lint/style/noDefaultExport: This has to be a default export
 export default function YearPage({ params }: { params: { year: string } }) {
 	const year = Number(params.year);
 

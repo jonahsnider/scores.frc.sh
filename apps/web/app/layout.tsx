@@ -36,7 +36,6 @@ export const viewport: Viewport = {
 	colorScheme: 'dark light',
 };
 
-// biome-ignore lint/style/noDefaultExport: This has to be a default export
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang='en'>

@@ -1,4 +1,4 @@
-import assert from 'node:assert';
+import assert from 'node:assert/strict';
 import { partition } from '@jonahsnider/util';
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, notInArray, sql } from 'drizzle-orm';
@@ -98,7 +98,6 @@ export class EventsService {
 				if (error instanceof HTTPError && error.response.status === 404) {
 					// TBA is often wrong about FIRST event codes for district events, causing these requests to 404
 					return {
-						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						MatchScores: [],
 					};
 				}
@@ -109,7 +108,6 @@ export class EventsService {
 				if (error instanceof HTTPError && error.response.status === 404) {
 					// TBA is often wrong about FIRST event codes for district events, causing these requests to 404
 					return {
-						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						MatchScores: [],
 					};
 				}
@@ -120,7 +118,6 @@ export class EventsService {
 				if (error instanceof HTTPError && error.response.status === 404) {
 					// TBA is often wrong about FIRST event codes for district events, causing these requests to 404
 					return {
-						// biome-ignore lint/style/useNamingConvention: This can't be renamed
 						Schedule: [],
 					};
 				}

@@ -8,7 +8,6 @@ export const metadata: Metadata = {
 	},
 };
 
-// biome-ignore lint/style/noDefaultExport: This has to be a default export
 export default function HomePage() {
 	return <ScoreChart year={DEFAULT_YEAR} />;
 }

@@ -2,7 +2,6 @@ import type { FrcAlliance } from '../enums/alliance.enum';
 import type { MatchLevel } from '../enums/match-level.enum';
 
 export type FrcEventMatchScores = {
-	// biome-ignore lint/style/useNamingConvention: This is an external API
 	MatchScores: FrcEventMatchScore[];
 };
 

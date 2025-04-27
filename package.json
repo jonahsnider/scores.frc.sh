@@ -10,7 +10,7 @@
 		"format:write": "bun run format --write",
 		"generate-icons": "pwa-assets-generator",
 		"lint": "biome check .",
-		"lint:fix": "biome check . --apply-unsafe",
+		"lint:fix": "biome check . --write --unsafe",
 		"migrate": "drizzle-kit migrate",
 		"migrate:create": "drizzle-kit generate:pg",
 		"test": "bun run lint && bun run format && turbo run build type-check",
@@ -20,7 +20,7 @@
 		"envalid": "8.0.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.6.1",
+		"@biomejs/biome": "1.9.4",
 		"@vite-pwa/assets-generator": "1.0.0",
 		"drizzle-kit": "0.31.0",
 		"prettier": "3.5.3",

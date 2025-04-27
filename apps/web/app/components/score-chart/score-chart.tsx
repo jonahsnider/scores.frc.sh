@@ -77,7 +77,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 								...new Set(
 									(matches.data ?? []).map((match) => match.event.weekNumber).map((weekNumber) => weekName(weekNumber)),
 								),
-						  ]
+							]
 				}
 				valueFormatter={(x) => `${x.toLocaleString()} pts`}
 				customTooltip={Tooltip}

@@ -2,7 +2,6 @@ import { EventCode } from '@scores.frc.sh/api/src/high-scores/dtos/event-code.dt
 import { RedirectType, redirect } from 'next/navigation';
 import type { PropsWithChildren } from 'react';
 
-// biome-ignore lint/style/noDefaultExport: This has to be a default export
 export default function YearEventLayout({
 	params,
 	children,

@@ -27,7 +27,6 @@ export async function generateMetadata(
 	};
 }
 
-// biome-ignore lint/style/noDefaultExport: This has to be a default export
 export default function YearEventPage({ params }: { params: { year: string; eventCode: string } }) {
 	return <ScoreChart year={Number(params.year)} eventCode={params.eventCode.toUpperCase()} />;
 }

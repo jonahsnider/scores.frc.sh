@@ -43,7 +43,6 @@ export class FirstService {
 		const [qual, playoff] = await Promise.all([qualResponse.json<FrcSchedule>(), playoffResponse.json<FrcSchedule>()]);
 
 		return {
-			// biome-ignore lint/style/useNamingConvention: This is an external API
 			Schedule: [...qual.Schedule, ...playoff.Schedule],
 		};
 	}

@@ -24,21 +24,14 @@
 	},
 	"linter": {
 		"rules": {
-			"all": true,
 			"complexity": {
-				"all": true,
 				"noStaticOnlyClass": "off",
 				"useLiteralKeys": "off"
 			},
-			"nursery": {
-				"all": false
-			},
 			"style": {
-				"all": true,
 				"noParameterProperties": "off"
 			},
 			"suspicious": {
-				"all": true,
 				"noEmptyBlockStatements": "off"
 			}
 		}
