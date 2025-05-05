@@ -1,1 +1,0 @@
-export const QUEUE_REDIS_PROVIDER = Symbol('REDIS_QUEUE_PROVIDER');
