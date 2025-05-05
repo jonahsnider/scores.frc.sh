@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
-from enum import Enum
 from typing import Annotated
 
 from fastapi import FastAPI, Path
 from pydantic import BaseModel
+
+from models.models import MatchLevel
+
 
 app = FastAPI(title="scores.frc.sh API", version="2.0.0")
 
@@ -11,11 +13,6 @@ app = FastAPI(title="scores.frc.sh API", version="2.0.0")
 year_path_param = Path(
     title="The year to get the high scores for", example=2025, ge=2023
 )
-
-
-class MatchLevel(Enum):
-    QUALIFICATION = "Qualification"
-    PLAYOFF = "Playoff"
 
 
 class Event(BaseModel):

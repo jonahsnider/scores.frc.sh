@@ -1,2 +1,11 @@
 [tools]
-python = "latest"
+atlas = "0.32.0"
+python = "3.13.0"
+
+[tasks."dev:api"]
+run = "uv run -- fastapi dev __init__.py"
+dir = "apps/api"
+
+[tasks."migrate:create"]
+run = "atlas migrate diff --env sqlalchemy"
+dir = "apps/api"
