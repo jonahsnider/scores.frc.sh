@@ -17,17 +17,21 @@
 	"[typescriptreact]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[python]": {
+		"editor.defaultFormatter": "charliermarsh.ruff"
+	},
+	"editor.defaultFormatter": "biomejs.biome",
+	"python.analysis.typeCheckingMode": "strict",
 	"search.exclude": {
 		"**/*.code-search": true,
 		"**/bower_components": true,
 		"**/node_modules": true
 	},
 	"tailwindCSS.experimental.classRegex": [["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]],
+	"typescript.inlayHints.functionLikeReturnTypes.enabled": false,
+	"typescript.inlayHints.parameterTypes.enabled": false,
+	"typescript.inlayHints.variableTypes.enabled": false,
 	"typescript.preferences.importModuleSpecifier": "shortest",
 	"typescript.preferences.importModuleSpecifierEnding": "index",
-	"typescript.tsdk": "node_modules/typescript/lib",
-	"typescript.inlayHints.parameterTypes.enabled": false,
-	"typescript.inlayHints.functionLikeReturnTypes.enabled": false,
-	"typescript.inlayHints.variableTypes.enabled": false
+	"typescript.tsdk": "node_modules/typescript/lib"
 }
