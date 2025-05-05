@@ -1,9 +1,9 @@
 {
-  "recommendations": [
-    "biomejs.biome",
-    "editorconfig.editorconfig",
-    "charliermarsh.ruff",
-    "ms-python.vscode-pylance",
-    "ariga.atlas-hcl"
-  ]
+	"recommendations": [
+		"biomejs.biome",
+		"editorconfig.editorconfig",
+		"charliermarsh.ruff",
+		"ms-python.vscode-pylance",
+		"ariga.atlas-hcl"
+	]
 }

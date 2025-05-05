@@ -33,5 +33,8 @@
 	"typescript.inlayHints.variableTypes.enabled": false,
 	"typescript.preferences.importModuleSpecifier": "shortest",
 	"typescript.preferences.importModuleSpecifierEnding": "index",
-	"typescript.tsdk": "node_modules/typescript/lib"
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"[atlas-config]": {
+		"editor.defaultFormatter": "Ariga.atlas-hcl"
+	}
 }
