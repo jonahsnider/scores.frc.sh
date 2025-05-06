@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from app.scores_service import EventMatch, ScoresService
 from app.event_service import EventService
+from app.tba_service import TbaService
 
 logging.basicConfig(level=logging.INFO)
 
@@ -26,8 +27,9 @@ class HighScoresResponse(BaseModel):
     high_scores: list[EventMatch]
 
 
+tba_service = TbaService()
 scores_service = ScoresService()
-event_service = EventService()
+event_service = EventService(tba_service)
 
 
 @app.get(
