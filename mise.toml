@@ -9,3 +9,7 @@ dir = "apps/api"
 [tasks."migrate:create"]
 run = "atlas migrate diff --env sqlalchemy"
 dir = "apps/api"
+
+[tasks."migrate:apply"]
+run = "atlas migrate apply --env sqlalchemy"
+dir = "apps/api"
