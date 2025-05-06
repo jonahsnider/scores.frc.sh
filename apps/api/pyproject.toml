@@ -5,9 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "atlas-provider-sqlalchemy>=0.2.4",
+    "alembic>=1.15.2",
     "fastapi[standard]>=0.115.12",
+    "psycopg>=3.2.7",
     "pydantic>=2.11.4",
+    "python-dotenv>=1.1.0",
     "sqlalchemy>=2.0.40",
 ]
 

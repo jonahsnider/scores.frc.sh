@@ -1,15 +1,30 @@
 [tools]
-atlas = "0.32.0"
 python = "3.13.0"
 
-[tasks."dev:api"]
-run = "uv run -- fastapi dev __init__.py"
+[tasks.dev]
+run = "uv run fastapi dev __init__.py"
+dir = "apps/api/app"
+
+[tasks.lint]
+run = "uvx ruff check"
+dir = "apps/api"
+
+[tasks."lint:fix"]
+run = "uvx ruff check --fix"
+dir = "apps/api"
+
+[tasks.format]
+run = "uvx ruff format --check"
+dir = "apps/api"
+
+[tasks."format:fix"]
+run = "uvx ruff format"
 dir = "apps/api"
 
 [tasks."migrate:create"]
-run = "atlas migrate diff --env sqlalchemy"
+run = "uv run alembic revision --autogenerate -m"
 dir = "apps/api"
 
 [tasks."migrate:apply"]
-run = "atlas migrate apply --env sqlalchemy"
+run = "uv run alembic upgrade head"
 dir = "apps/api"

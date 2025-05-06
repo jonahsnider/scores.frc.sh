@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import FastAPI, Path
 from pydantic import BaseModel
 
-from models.models import MatchLevel
+from app.models.models import MatchLevel
 
 
 app = FastAPI(title="scores.frc.sh API", version="2.0.0")
