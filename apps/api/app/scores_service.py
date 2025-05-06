@@ -51,31 +51,14 @@ class ScoreRecord(BaseModel):
 
 
 class ScoresService:
-    async def get_global_high_scores(
-        self, session: Session, year: int
+    def _score_records_from_matches(
+        self, matches: list[TopScoreModel]
     ) -> list[ScoreRecord]:
-        result = session.execute(
-            select(TopScoreModel, EventModel)
-            .join(TopScoreModel.event)
-            .where(EventModel.year == year)
-            .order_by(TopScoreModel.timestamp.asc())
-        )
-
-        world_records: list[TopScoreModel] = []
-        record: int = -1
-
-        for row in result:
-            match = row.tuple()[0]
-
-            if match.score > record:
-                record = match.score
-                world_records.append(match)
-
         score_records: list[ScoreRecord] = []
-        for idx, match in enumerate(world_records):
-            if idx + 1 < len(world_records):
-                next_timestamp = world_records[idx + 1].timestamp
-                record_held_for = next_timestamp - match.timestamp
+        for idx, match in enumerate(matches):
+            if idx + 1 < len(matches):
+                next_match = matches[idx + 1]
+                record_held_for = next_match.timestamp - match.timestamp
             else:
                 record_held_for = timedelta.max
 
@@ -86,10 +69,28 @@ class ScoresService:
                     record_held_for=record_held_for,
                 )
             )
-
         return score_records
 
-    async def get_event_high_scores(
-        self, year: int, event_code: str
+    async def get_high_scores(
+        self, session: Session, year: int, event_code: str | None = None
     ) -> list[ScoreRecord]:
-        return []
+        query = (
+            select(TopScoreModel)
+            .join(TopScoreModel.event)
+            .where(EventModel.year == year)
+        )
+        if event_code:
+            query = query.where(EventModel.code == event_code.lower())
+        query = query.order_by(TopScoreModel.timestamp.asc())
+
+        result = session.scalars(query)
+
+        records: list[TopScoreModel] = []
+        record: int = -1
+
+        for match in result:
+            if match.score > record:
+                record = match.score
+                records.append(match)
+
+        return self._score_records_from_matches(records)

@@ -40,7 +40,7 @@ async def global_high_scores(
     session: SessionDep,
 ) -> HighScoresResponse:
     return HighScoresResponse(
-        high_scores=await scores_service.get_global_high_scores(session, year)
+        high_scores=await scores_service.get_high_scores(session, year)
     )
 
 
@@ -64,8 +64,11 @@ async def event_high_scores(
             max_length=64,
         ),
     ],
+    session: SessionDep,
 ) -> HighScoresResponse:
-    return HighScoresResponse(high_scores=[])
+    return HighScoresResponse(
+        high_scores=await scores_service.get_high_scores(session, year, event)
+    )
 
 
 if __name__ == "__main__":
