@@ -7,23 +7,23 @@ from app.models import EventModel
 from app.tba_service import TbaService, TbaEvent, TbaEventType
 from pydantic import BaseModel
 
-logger = base_logger.getChild("event_service")
-
-
-def _normalize_tba_week(event: TbaEvent) -> int:
-    if event.week is not None:
-        return event.week + 1
-
-    if (
-        event.event_type == TbaEventType.CmpDivision
-        or event.event_type == TbaEventType.CmpFinals
-    ):
-        return 8
-
-    raise ValueError(f"Event {event.year} {event.event_code} is missing a week number")
-
 
 class Event(BaseModel):
+    @staticmethod
+    def _normalize_tba_week(event: TbaEvent) -> int:
+        if event.week is not None:
+            return event.week + 1
+
+        if (
+            event.event_type == TbaEventType.CmpDivision
+            or event.event_type == TbaEventType.CmpFinals
+        ):
+            return 8
+
+        raise ValueError(
+            f"Event {event.year} {event.event_code} is missing a week number"
+        )
+
     def __init__(self, event: EventModel | TbaEvent):
         if isinstance(event, EventModel):
             super().__init__(
@@ -39,7 +39,7 @@ class Event(BaseModel):
                 first_code=event.first_event_code.upper(),
                 code=event.event_code.upper(),
                 name=event.short_name or event.name,
-                week_number=_normalize_tba_week(event),
+                week_number=self._normalize_tba_week(event),
                 year=event.year,
             )
 
@@ -59,6 +59,8 @@ IGNORED_EVENT_TYPES = {
 
 class EventService:
     """Pulls in event data from the TBA API and stores it in the DB"""
+
+    logger = base_logger.getChild("event_service")
 
     def __init__(self, tba_service: TbaService):
         self.tba_service = tba_service
@@ -96,7 +98,7 @@ class EventService:
             )
 
             await session.execute(upsert_stmt)
-            logger.info(f"Inserted {len(events)} events for {year}")
+            self.logger.info(f"Inserted {len(events)} events for {year}")
 
             # Then delete any events in the DB that aren't in the list from TBA
             orphaned_events = await session.execute(
@@ -112,7 +114,7 @@ class EventService:
                 )
             )
 
-            logger.info(
+            self.logger.info(
                 f"Deleted {orphaned_events.rowcount} orphaned events for {year}"
             )
 
