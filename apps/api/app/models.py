@@ -27,22 +27,35 @@ class EventModel(Base):
     name: Mapped[str] = mapped_column(TEXT)
     first_code: Mapped[str] = mapped_column(TEXT)
 
-    top_scores: Mapped[List["TopScoreModel"]] = relationship(back_populates="event")
+    matches: Mapped[List["MatchModel"]] = relationship(back_populates="event")
 
 
-class TopScoreModel(Base):
-    __tablename__ = "top_scores"
+class MatchModel(Base):
+    __tablename__ = "matches"
     __table_args__ = (
         PrimaryKeyConstraint("event_internal_id", "match_level", "match_number"),
     )
 
     match_number: Mapped[int]
-    score: Mapped[int] = mapped_column(index=True)
-    winning_teams: Mapped[List[int]] = mapped_column(JSONB)
-    timestamp: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), index=True)
     match_level: Mapped[MatchLevel] = mapped_column(
         ENUM(MatchLevel, name="match_level")
     )
-    event_internal_id: Mapped[int] = mapped_column(ForeignKey("events.internal_id"))
 
-    event: Mapped["EventModel"] = relationship(back_populates="top_scores")
+    event_internal_id: Mapped[int] = mapped_column(ForeignKey("events.internal_id"))
+    event: Mapped["EventModel"] = relationship(back_populates="matches")
+
+    result_internal_id: Mapped[int] = mapped_column(
+        ForeignKey("match_results.internal_id")
+    )
+    result: Mapped["MatchResultModel"] = relationship(back_populates="match")
+
+
+class MatchResultModel(Base):
+    __tablename__ = "match_results"
+
+    internal_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    score: Mapped[int] = mapped_column(index=True)
+    winning_teams: Mapped[List[int]] = mapped_column(JSONB)
+    timestamp: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), index=True)
+
+    match: Mapped["MatchModel"] = relationship(back_populates="result")

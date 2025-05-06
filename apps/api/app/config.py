@@ -19,3 +19,7 @@ database_url = urlunparse(
         _parsed_url.fragment,
     )
 )
+
+_raw_tba_api_key = os.getenv("TBA_API_KEY")
+assert _raw_tba_api_key is not None, "TBA_API_KEY env var is not set"
+tba_api_key = _raw_tba_api_key

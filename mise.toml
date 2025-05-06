@@ -5,6 +5,10 @@ python = "3.13.0"
 run = "uv run fastapi dev app/main.py"
 dir = "apps/api"
 
+[tasks.start]
+run = "uv run fastapi run app/main.py"
+dir = "apps/api"
+
 [tasks.lint]
 run = "uv run ruff check"
 dir = "apps/api"
