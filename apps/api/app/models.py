@@ -16,7 +16,7 @@ class MatchLevel(PyEnum):
     PLAYOFF = "Playoff"
 
 
-class Event(Base):
+class EventModel(Base):
     __tablename__ = "events"
     __table_args__ = (Index(None, "year", "code", unique=True),)
 
@@ -27,10 +27,10 @@ class Event(Base):
     name: Mapped[str] = mapped_column(TEXT)
     first_code: Mapped[str] = mapped_column(TEXT)
 
-    top_scores: Mapped[List["TopScore"]] = relationship(back_populates="event")
+    top_scores: Mapped[List["TopScoreModel"]] = relationship(back_populates="event")
 
 
-class TopScore(Base):
+class TopScoreModel(Base):
     __tablename__ = "top_scores"
     __table_args__ = (
         PrimaryKeyConstraint("event_internal_id", "match_level", "match_number"),
@@ -45,4 +45,4 @@ class TopScore(Base):
     )
     event_internal_id: Mapped[int] = mapped_column(ForeignKey("events.internal_id"))
 
-    event: Mapped["Event"] = relationship(back_populates="top_scores")
+    event: Mapped["EventModel"] = relationship(back_populates="top_scores")

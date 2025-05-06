@@ -2,23 +2,23 @@
 python = "3.13.0"
 
 [tasks.dev]
-run = "uv run fastapi dev __init__.py"
-dir = "apps/api/app"
+run = "uv run fastapi dev app/main.py"
+dir = "apps/api"
 
 [tasks.lint]
-run = "uvx ruff check"
+run = "uv run ruff check"
 dir = "apps/api"
 
 [tasks."lint:fix"]
-run = "uvx ruff check --fix"
+run = "uv run ruff check --fix"
 dir = "apps/api"
 
 [tasks.format]
-run = "uvx ruff format --check"
+run = "uv run ruff format --check"
 dir = "apps/api"
 
 [tasks."format:fix"]
-run = "uvx ruff format"
+run = "uv run ruff format"
 dir = "apps/api"
 
 [tasks."migrate:create"]
