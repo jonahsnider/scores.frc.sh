@@ -1,14 +1,13 @@
-import logging
-
 from sqlalchemy import delete
 from sqlalchemy.dialects.postgresql import insert
 
 from app.db import engine
+from app.logger import base_logger
 from app.models import EventModel
 from app.tba_service import TbaService, TbaEvent, TbaEventType
 from pydantic import BaseModel
 
-logger = logging.getLogger("app.EventService")
+logger = base_logger.getChild("event_service")
 
 
 def _normalize_tba_week(event: TbaEvent) -> int:

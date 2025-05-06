@@ -1,16 +1,14 @@
-import logging
-import uvicorn
 from datetime import datetime
 from typing import Annotated
 
+import uvicorn
 from fastapi import FastAPI, Path
 from pydantic import BaseModel
 
-from app.scores_service import EventMatch, ScoresService
 from app.event_service import EventService
+from app.scores_service import EventMatch, ScoresService
 from app.tba_service import TbaService
 
-logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(title="scores.frc.sh API", version="2.0.0")
 
@@ -44,6 +42,7 @@ event_service = EventService(tba_service)
 async def global_high_scores(
     year: Annotated[int, year_path_param],
 ) -> HighScoresResponse:
+    await event_service.refresh_saved_events(year)
     return HighScoresResponse(high_scores=await scores_service.get_high_scores(year))
 
 
