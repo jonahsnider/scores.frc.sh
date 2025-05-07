@@ -1,5 +1,5 @@
 from enum import Enum, StrEnum
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Literal
 
 
@@ -16,32 +16,32 @@ class FrcEventMatchWinningAlliance(Enum):
 
 class FrcEventMatchAlliance(BaseModel):
     alliance: Literal["Red", "Blue"]
-    totalPoints: int
-    foulPoints: int
+    total_points: int = Field(alias="totalPoints")
+    foul_points: int = Field(alias="foulPoints")
 
 
 class FrcEventMatchScore(BaseModel):
-    matchLevel: FrcMatchLevel
-    matchNumber: int
-    winningAlliance: FrcEventMatchWinningAlliance
+    match_level: FrcMatchLevel = Field(alias="matchLevel")
+    match_number: int = Field(alias="matchNumber")
+    winning_alliance: FrcEventMatchWinningAlliance = Field(alias="winningAlliance")
     alliances: tuple[FrcEventMatchAlliance, FrcEventMatchAlliance]
 
 
 class FrcEventMatchScores(BaseModel):
-    MatchScores: list[FrcEventMatchScore]
+    match_scores: list[FrcEventMatchScore] = Field(alias="MatchScores")
 
 
 class FrcScheduleMatchTeam(BaseModel):
-    teamNumber: int
+    team_number: int = Field(alias="teamNumber")
     station: Literal["Red1", "Red2", "Red3", "Blue1", "Blue2", "Blue3"]
 
 
 class FrcScheduleMatch(BaseModel):
-    matchNumber: int
-    tournamentLevel: FrcMatchLevel
+    match_number: int = Field(alias="matchNumber")
+    tournament_level: FrcMatchLevel = Field(alias="tournamentLevel")
     teams: list[FrcScheduleMatchTeam]
-    startTime: str
+    start_time: str = Field(alias="startTime")
 
 
 class FrcSchedule(BaseModel):
-    Schedule: list[FrcScheduleMatch]
+    schedule: list[FrcScheduleMatch] = Field(alias="Schedule")

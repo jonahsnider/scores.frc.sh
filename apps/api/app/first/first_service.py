@@ -50,5 +50,5 @@ class FirstService:
             playoff_schedule = FrcSchedule.model_validate_json(playoff_response.text)
 
             return FrcSchedule(
-                Schedule=qual_schedule.Schedule + playoff_schedule.Schedule
+                Schedule=qual_schedule.schedule + playoff_schedule.schedule
             )

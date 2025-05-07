@@ -29,7 +29,7 @@ class MatchService:
         # Find the winning alliance color
         winning_alliance_color = (
             "Red"
-            if score.winningAlliance == FrcEventMatchWinningAlliance.RED
+            if score.winning_alliance == FrcEventMatchWinningAlliance.RED
             else "Blue"
         )
         # Get the winning alliance object
@@ -44,14 +44,14 @@ class MatchService:
         else:
             winning_stations = {"Blue1", "Blue2", "Blue3"}
         winning_teams = [
-            team.teamNumber
+            team.team_number
             for team in schedule_match.teams
             if team.station in winning_stations
         ]
         # Parse timestamp
-        timestamp = datetime.fromisoformat(schedule_match.startTime)
+        timestamp = datetime.fromisoformat(schedule_match.start_time)
         # Use totalPoints as score
-        score_value = winning_alliance.totalPoints - winning_alliance.foulPoints
+        score_value = winning_alliance.total_points - winning_alliance.foul_points
         # record_held_for is not available, set to 0
         record_held_for = timedelta()
 
@@ -79,31 +79,31 @@ class MatchService:
         # Build hash map: (level, number) -> FrcEventMatchScore
         score_map: dict[tuple[FrcMatchLevel, int], FrcEventMatchScore] = {}
         for match_score in (
-            quals_match_results.MatchScores + playoffs_match_results.MatchScores
+            quals_match_results.match_scores + playoffs_match_results.match_scores
         ):
             key: tuple[FrcMatchLevel, int] = (
-                match_score.matchLevel,
-                match_score.matchNumber,
+                match_score.match_level,
+                match_score.match_number,
             )
             score_map[key] = match_score
 
         finished_matches = [
             match
-            for match in schedule.Schedule
-            if (match.tournamentLevel, match.matchNumber) in score_map
+            for match in schedule.schedule
+            if (match.tournament_level, match.match_number) in score_map
         ]
 
         return [
             EventMatch(
-                number=match.matchNumber,
+                number=match.match_number,
                 level=(
                     "quals"
-                    if match.tournamentLevel == FrcMatchLevel.QUALIFICATION
+                    if match.tournament_level == FrcMatchLevel.QUALIFICATION
                     else "playoffs"
                 ),
                 event=event,
                 result=self._frc_score_to_match_result(
-                    score_map[(match.tournamentLevel, match.matchNumber)], match
+                    score_map[(match.tournament_level, match.match_number)], match
                 ),
             )
             for match in finished_matches

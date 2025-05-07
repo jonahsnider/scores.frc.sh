@@ -3,7 +3,7 @@ from typing import Annotated
 
 import uvicorn
 from fastapi import FastAPI, Path
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.event.event_service import EventService
 from app.first.first_service import FirstService
@@ -34,7 +34,7 @@ year_path_param = Path(
 
 
 class HighScoresResponse(BaseModel):
-    high_scores: list[EventMatch] | None
+    high_scores: list[EventMatch] | None = Field(serialization_alias="highScores")
 
 
 @app.get(
@@ -73,6 +73,7 @@ async def event_high_scores(
         ),
     ],
 ) -> HighScoresResponse:
+    await match_service.refresh_match_results(year, event)
     return HighScoresResponse(
         high_scores=await scores_service.get_high_scores(year, event)
     )
