@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Annotated
 
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from fastapi import FastAPI, Path
 from pydantic import BaseModel, Field
@@ -24,6 +25,19 @@ app = FastAPI(
     title="scores.frc.sh API", version="2.0.0", lifespan=jobs_service.lifespan
 )
 
+
+origins = [
+    "https://scores.frc.sh",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 year_path_param = Path(
     title="The year to get the high scores for",
