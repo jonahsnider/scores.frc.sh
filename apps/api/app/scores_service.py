@@ -1,7 +1,7 @@
 from datetime import timedelta
 from sqlalchemy import select
 from app.db.models import EventModel, MatchModel, MatchResultModel
-from app.db.db import engine
+from app.db.db import Session
 from .match.types import EventMatch, MatchResult
 
 
@@ -12,7 +12,6 @@ class ScoresService:
         for idx, match in enumerate(matches):
             if match.result is None:
                 continue
-
             record_held_for = timedelta.max
             if idx + 1 < len(matches):
                 next_match = matches[idx + 1]
@@ -39,9 +38,9 @@ class ScoresService:
     async def get_high_scores(
         self, year: int, event_code: str | None = None
     ) -> list[EventMatch]:
-        async with engine.begin() as session:
+        async with Session() as session:
             query = (
-                select(MatchModel, MatchResultModel)
+                select(MatchModel, MatchResultModel, EventModel)
                 .join(MatchModel.result)
                 .join(MatchModel.event)
                 .where(EventModel.year == year)
@@ -53,10 +52,11 @@ class ScoresService:
             records: list[MatchModel] = []
             record: int = -1
 
-            # TODO: This is throwing with ValueError: too many values to unpack (expected 2) because the result tuple is typed wrong
-            for match, result in await session.execute(query):
+            for match, result, event in await session.execute(query):
                 if result.score > record:
                     record = result.score
+                    match.result = result
+                    match.event = event
                     records.append(match)
 
             return self._match_models_to_event_matches(records)

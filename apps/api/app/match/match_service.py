@@ -1,7 +1,7 @@
 import asyncio
 from datetime import datetime, timedelta
 
-from app.db.db import engine
+from app.db.db import Session
 from app.db.models import EventModel, MatchModel, MatchResultModel
 from app.event.types import Event
 from app.first.first_service import FirstService
@@ -124,7 +124,7 @@ class MatchService:
             ),
         )
 
-        async with engine.begin() as session:
+        async with Session() as session:
             # Create the event if for whatever reason it doesn't exist in the DB
             await session.execute(
                 insert(EventModel)

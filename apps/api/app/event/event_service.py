@@ -1,7 +1,7 @@
 from sqlalchemy import delete
 from sqlalchemy.dialects.postgresql import insert
 
-from app.db.db import engine
+from app.db.db import Session
 from app.logger import base_logger
 from app.db.models import EventModel
 from app.tba.types import TbaEventType
@@ -29,7 +29,7 @@ class EventService:
         # Get the events for the year
         events = await self.get_events_for_year(year)
 
-        async with engine.begin() as session:
+        async with Session() as session:
             # Insert or update the events in the DB
             upsert_stmt = (
                 insert(EventModel)
