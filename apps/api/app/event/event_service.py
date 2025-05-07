@@ -8,9 +8,9 @@ from app.tba_service import TbaService, TbaEventType
 from app.event.types import Event
 
 IGNORED_EVENT_TYPES = {
-    TbaEventType.Offseason,
-    TbaEventType.Unlabeled,
-    TbaEventType.Preseason,
+    TbaEventType.OFFSEASON,
+    TbaEventType.UNLABELED,
+    TbaEventType.PRESEASON,
 }
 
 

@@ -6,17 +6,17 @@ from app.event.types import Event
 
 
 class TbaEventType(Enum):
-    Regional = 0
-    District = 1
-    DistrictCmp = 2
-    CmpDivision = 3
-    CmpFinals = 4
-    DistrictCmpDivision = 5
-    Foc = 6
-    Remote = 7
-    Offseason = 99
-    Preseason = 100
-    Unlabeled = -1
+    REGIONAL = 0
+    DISTRICT = 1
+    DISTRICT_CMP = 2
+    CMP_DIVISION = 3
+    CMP_FINALS = 4
+    DISTRICT_CMP_DIVISION = 5
+    FOC = 6
+    REMOTE = 7
+    OFFSEASON = 99
+    PRESEASON = 100
+    UNLABELED = -1
 
 
 class TbaEvent(BaseModel):
@@ -33,8 +33,8 @@ class TbaEvent(BaseModel):
             return self.week + 1
 
         if (
-            self.event_type == TbaEventType.CmpDivision
-            or self.event_type == TbaEventType.CmpFinals
+            self.event_type == TbaEventType.CMP_DIVISION
+            or self.event_type == TbaEventType.CMP_FINALS
         ):
             return 8
 
