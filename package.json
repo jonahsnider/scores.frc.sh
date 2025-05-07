@@ -11,8 +11,6 @@
 		"generate-icons": "pwa-assets-generator",
 		"lint": "biome check .",
 		"lint:fix": "biome check . --write --unsafe",
-		"migrate": "drizzle-kit migrate",
-		"migrate:create": "drizzle-kit generate:pg",
 		"test": "bun run lint && bun run format && turbo run build type-check",
 		"type-check": "turbo run type-check"
 	},
@@ -22,7 +20,6 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@vite-pwa/assets-generator": "1.0.0",
-		"drizzle-kit": "0.31.1",
 		"prettier": "3.5.3",
 		"prettier-plugin-packagejson": "2.5.11",
 		"sharp": "0.34.1",
