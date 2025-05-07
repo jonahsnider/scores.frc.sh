@@ -18,9 +18,9 @@ class Event(BaseModel):
 
 
 IGNORED_EVENT_TYPES = {
-    TbaEventType.Offseason,
-    TbaEventType.Unlabeled,
-    TbaEventType.Preseason,
+    TbaEventType.OFFSEASON,
+    TbaEventType.UNLABELED,
+    TbaEventType.PRESEASON,
 }
 
 
