@@ -5,9 +5,9 @@ import PlausibleProvider from 'next-plausible';
 import { ThemeProvider } from 'next-themes';
 import { Footer } from './components/footer';
 import { Header } from './components/header';
-import { TrpcProvider } from './components/trpc/trpc-provider';
 
 import './globals.css';
+import { QueryProvider } from './api/query-provider';
 import { metadataBase } from './metadata';
 
 export const metadata: Metadata = {
@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<ThemeProvider enableSystem={true} attribute='class'>
 					<Theme accentColor='jade' grayColor='sage' scaling='110%'>
 						<Container p='4'>
-							<TrpcProvider>
+							<QueryProvider>
 								<div className='flex flex-col gap-1 justify-start items-center'>
 									<Header />
 
@@ -54,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 									<Footer />
 								</div>
-							</TrpcProvider>
+							</QueryProvider>
 						</Container>
 					</Theme>
 				</ThemeProvider>
