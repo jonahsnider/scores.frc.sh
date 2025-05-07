@@ -27,7 +27,7 @@ IGNORED_EVENT_TYPES = {
 class EventService:
     """Pulls in event data from the TBA API and stores it in the DB"""
 
-    logger = base_logger.getChild("event_service")
+    _logger = base_logger.getChild("event_service")
 
     def __init__(self, tba_service: TbaService):
         self.tba_service = tba_service
@@ -65,7 +65,7 @@ class EventService:
             )
 
             await session.execute(upsert_stmt)
-            self.logger.info(f"Inserted {len(events)} events for {year}")
+            self._logger.info(f"Inserted {len(events)} events for {year}")
 
             # Then delete any events in the DB that aren't in the list from TBA
             orphaned_events = await session.execute(
@@ -81,7 +81,7 @@ class EventService:
                 )
             )
 
-            self.logger.info(
+            self._logger.info(
                 f"Deleted {orphaned_events.rowcount} orphaned events for {year}"
             )
 
