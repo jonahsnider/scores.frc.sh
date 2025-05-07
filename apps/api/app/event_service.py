@@ -5,7 +5,16 @@ from app.db.db import engine
 from app.logger import base_logger
 from app.db.models import EventModel
 from app.tba_service import TbaService, TbaEventType
-from app.event.types import Event
+from pydantic import BaseModel
+
+
+class Event(BaseModel):
+    first_code: str
+    code: str
+    name: str
+    week_number: int
+    year: int
+
 
 IGNORED_EVENT_TYPES = {
     TbaEventType.Offseason,

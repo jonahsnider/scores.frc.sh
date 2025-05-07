@@ -1,7 +1,7 @@
 from datetime import timedelta
 from sqlalchemy import select
-from app.models import EventModel, MatchModel, MatchResultModel
-from app.db import engine
+from app.db.models import EventModel, MatchModel, MatchResultModel
+from app.db.db import engine
 from .match.types import EventMatch, MatchResult
 
 
