@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 from app.event.event_service import EventService
 from app.scores_service import EventMatch, ScoresService
-from app.tba_service import TbaService
+from app.tba.tba_service import TbaService
 from app.first.first_service import FirstService
 from app.match.match_service import MatchService
 

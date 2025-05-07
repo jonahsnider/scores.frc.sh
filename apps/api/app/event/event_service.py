@@ -4,7 +4,8 @@ from sqlalchemy.dialects.postgresql import insert
 from app.db.db import engine
 from app.logger import base_logger
 from app.db.models import EventModel
-from app.tba_service import TbaService, TbaEventType
+from app.tba.types import TbaEventType
+from app.tba.tba_service import TbaService
 from app.event.types import Event
 
 IGNORED_EVENT_TYPES = {
