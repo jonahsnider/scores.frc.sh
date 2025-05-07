@@ -2,7 +2,14 @@ from datetime import datetime, timedelta
 from enum import StrEnum
 from typing import List
 
-from sqlalchemy import TEXT, TIMESTAMP, Enum, ForeignKey, Index, PrimaryKeyConstraint
+from sqlalchemy import (
+    TEXT,
+    TIMESTAMP,
+    Enum,
+    ForeignKey,
+    Index,
+    UniqueConstraint,
+)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -30,7 +37,9 @@ class EventModel(Base):
     name: Mapped[str] = mapped_column(TEXT)
     first_code: Mapped[str] = mapped_column(TEXT)
 
-    matches: Mapped[List["MatchModel"]] = relationship(back_populates="event")
+    matches: Mapped[List["MatchModel"]] = relationship(
+        back_populates=lambda: MatchModel.event
+    )
 
     def to_event(self) -> "Event":
         return Event(
@@ -45,21 +54,23 @@ class EventModel(Base):
 class MatchModel(Base):
     __tablename__ = "matches"
     __table_args__ = (
-        PrimaryKeyConstraint("event_internal_id", "match_level", "match_number"),
+        UniqueConstraint("event_internal_id", "match_level", "match_number"),
     )
 
+    internal_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     match_number: Mapped[int]
     match_level: Mapped[DbMatchLevel] = mapped_column(
         Enum(DbMatchLevel, name="match_level")
     )
 
-    event_internal_id: Mapped[int] = mapped_column(ForeignKey("events.internal_id"))
-    event: Mapped["EventModel"] = relationship(back_populates="matches")
-
-    result_internal_id: Mapped[int | None] = mapped_column(
-        ForeignKey("match_results.internal_id")
+    event_internal_id: Mapped[int] = mapped_column(
+        ForeignKey("events.internal_id", ondelete="CASCADE")
     )
-    result: Mapped["MatchResultModel | None"] = relationship(back_populates="match")
+    event: Mapped["EventModel"] = relationship(back_populates=EventModel.matches)
+
+    result: Mapped["MatchResultModel | None"] = relationship(
+        back_populates=lambda: MatchResultModel.match
+    )
 
     def to_event_match(self, result: MatchResult | None) -> EventMatch:
         return EventMatch(
@@ -73,12 +84,14 @@ class MatchModel(Base):
 class MatchResultModel(Base):
     __tablename__ = "match_results"
 
-    internal_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     score: Mapped[int] = mapped_column(index=True)
     winning_teams: Mapped[List[int]] = mapped_column(JSONB)
     timestamp: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), index=True)
 
-    match: Mapped["MatchModel"] = relationship(back_populates="result")
+    match_internal_id: Mapped[int] = mapped_column(
+        ForeignKey("matches.internal_id", ondelete="CASCADE"), primary_key=True
+    )
+    match: Mapped["MatchModel"] = relationship(back_populates=MatchModel.result)
 
     def to_match_result(self, record_held_for: timedelta) -> MatchResult:
         return MatchResult(

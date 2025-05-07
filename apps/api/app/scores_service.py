@@ -41,26 +41,22 @@ class ScoresService:
     ) -> list[EventMatch]:
         async with engine.begin() as session:
             query = (
-                select(MatchModel)
+                select(MatchModel, MatchResultModel)
+                .join(MatchModel.result)
                 .join(MatchModel.event)
                 .where(EventModel.year == year)
-                .join(MatchModel.result)
             )
             if event_code:
                 query = query.where(EventModel.code == event_code.upper())
             query = query.order_by(MatchResultModel.timestamp.asc())
 
-            result = await session.scalars(query)
-
             records: list[MatchModel] = []
             record: int = -1
 
-            for match in result:
-                if match.result is None:
-                    continue
-
-                if match.result.score > record:
-                    record = match.result.score
+            # TODO: This is throwing with ValueError: too many values to unpack (expected 2) because the result tuple is typed wrong
+            for match, result in await session.execute(query):
+                if result.score > record:
+                    record = result.score
                     records.append(match)
 
             return self._match_models_to_event_matches(records)

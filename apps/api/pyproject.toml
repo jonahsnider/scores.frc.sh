@@ -13,10 +13,13 @@ dependencies = [
     "pydantic>=2.11.4",
     "python-dotenv>=1.1.0",
     "pytz>=2025.2",
-    "sqlalchemy[asyncio]>=2.0.40",
+    "sqlalchemy[asyncio]",
 ]
 
 [dependency-groups]
 dev = [
     "ruff>=0.11.8",
 ]
+
+[tool.uv.sources]
+sqlalchemy = { git = "https://github.com/sqlalchemy/sqlalchemy" }

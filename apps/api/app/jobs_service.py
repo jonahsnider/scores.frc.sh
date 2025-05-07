@@ -1,8 +1,8 @@
 from contextlib import asynccontextmanager
 from datetime import datetime
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.interval import IntervalTrigger
+from apscheduler.schedulers.asyncio import AsyncIOScheduler  # type: ignore
+from apscheduler.triggers.interval import IntervalTrigger  # type: ignore
 from fastapi import FastAPI
 from pytz import utc
 
@@ -20,19 +20,19 @@ class JobsService:
     def __init__(self, event_service: EventService):
         self.event_service = event_service
 
-        self._scheduler.add_job(
-            self._refresh_events_job,
-            IntervalTrigger(days=1),
-            id="refresh_events",
-        )
+        self._scheduler.add_job(self._refresh_events_job, IntervalTrigger(days=1))  # type: ignore
 
-    async def _refresh_events_job(self):
+    async def _refresh_events_job(self) -> None:
         self._logger.info("Refreshing events")
         for year in range(MIN_YEAR, MAX_YEAR + 1):
             self._logger.info(f"Refreshing events for {year}")
             await self.event_service.refresh_saved_events(year)
             self._logger.info(f"Refreshed events for {year}")
         self._logger.info("Refreshed all events")
+
+    async def _refresh_match_results_job(self) -> None:
+        # TODO: Implement
+        pass
 
     @asynccontextmanager
     async def lifespan(self, app: FastAPI):

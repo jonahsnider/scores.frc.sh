@@ -1,14 +1,20 @@
-from app.logger import base_logger
+import asyncio
 from datetime import datetime, timedelta
+
+from app.db.db import engine
+from app.db.models import EventModel, MatchModel, MatchResultModel
 from app.event.types import Event
 from app.first.first_service import FirstService
 from app.first.types import (
+    FrcEventMatchScore,
     FrcEventMatchWinningAlliance,
     FrcMatchLevel,
     FrcScheduleMatch,
-    FrcEventMatchScore,
 )
-import asyncio
+from app.logger import base_logger
+from sqlalchemy import delete, select
+from sqlalchemy.dialects.postgresql import insert
+
 from .types import EventMatch, MatchResult
 
 
@@ -102,3 +108,87 @@ class MatchService:
             )
             for match in finished_matches
         ]
+
+    async def refresh_match_results(self, year: int, event_code: str) -> None:
+        """Refresh the match results for an event and save them to the DB"""
+        matches = await self.get_matches(
+            year,
+            event_code,
+            # Stubbed out since we don't need the full event data for this
+            Event(
+                code=event_code,
+                first_code=event_code,
+                name=event_code,
+                week_number=0,
+                year=year,
+            ),
+        )
+
+        async with engine.begin() as session:
+            # Create the event if for whatever reason it doesn't exist in the DB
+            await session.execute(
+                insert(EventModel)
+                .values(
+                    {
+                        "year": year,
+                        "code": event_code,
+                        "week_number": 1,
+                        "name": event_code,
+                        "first_code": event_code,
+                    }
+                )
+                .on_conflict_do_nothing()
+            )
+
+            # Delete all matches for the event
+            event_internal_id_stmt = select(EventModel.internal_id).where(
+                EventModel.year == year, EventModel.code == event_code
+            )
+
+            await session.execute(
+                delete(MatchModel).where(
+                    MatchModel.event_internal_id.in_(event_internal_id_stmt)
+                )
+            )
+
+            # Insert the new matches
+            await session.execute(
+                insert(MatchModel).values(
+                    [
+                        {
+                            "event_internal_id": event_internal_id_stmt,
+                            "match_number": match.number,
+                            "match_level": match.level,
+                        }
+                        for match in matches
+                    ]
+                )
+            )
+
+            # Insert the match results for finished matches
+            await session.execute(
+                insert(MatchResultModel)
+                .values(
+                    [
+                        {
+                            "match_internal_id": select(MatchModel.internal_id).where(
+                                MatchModel.match_number == match.number,
+                                MatchModel.match_level == match.level,
+                            ),
+                            "score": match.result.score,
+                            "winning_teams": match.result.winning_teams,
+                            "timestamp": match.result.timestamp,
+                        }
+                        for match in matches
+                        if match.result is not None
+                    ]
+                )
+                .on_conflict_do_update(
+                    index_elements=[MatchResultModel.match_internal_id],
+                    set_={
+                        "score": MatchResultModel.score,
+                        "winning_teams": MatchResultModel.winning_teams,
+                        "timestamp": MatchResultModel.timestamp,
+                    },
+                )
+            )

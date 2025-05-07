@@ -73,6 +73,8 @@ async def event_high_scores(
         ),
     ],
 ) -> HighScoresResponse:
+    # TODO: Don't do this on every request
+    await match_service.refresh_match_results(year, event)
     return HighScoresResponse(
         high_scores=await scores_service.get_high_scores(year, event)
     )
