@@ -5,13 +5,21 @@ import uvicorn
 from fastapi import FastAPI, Path
 from pydantic import BaseModel
 
-from app.event_service import EventService
+from app.event.event_service import EventService
 from app.scores_service import EventMatch, ScoresService
 from app.tba_service import TbaService
+from app.first.first_service import FirstService
+from app.match.match_service import MatchService
 
 
 app = FastAPI(title="scores.frc.sh API", version="2.0.0")
 
+
+tba_service = TbaService()
+first_service = FirstService()
+scores_service = ScoresService()
+event_service = EventService(tba_service)
+match_service = MatchService(first_service)
 
 year_path_param = Path(
     title="The year to get the high scores for",
@@ -23,11 +31,6 @@ year_path_param = Path(
 
 class HighScoresResponse(BaseModel):
     high_scores: list[EventMatch]
-
-
-tba_service = TbaService()
-scores_service = ScoresService()
-event_service = EventService(tba_service)
 
 
 @app.get(
@@ -42,7 +45,6 @@ event_service = EventService(tba_service)
 async def global_high_scores(
     year: Annotated[int, year_path_param],
 ) -> HighScoresResponse:
-    await event_service.refresh_saved_events(year)
     return HighScoresResponse(high_scores=await scores_service.get_high_scores(year))
 
 

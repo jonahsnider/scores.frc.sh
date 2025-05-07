@@ -23,3 +23,11 @@ database_url = urlunparse(
 _raw_tba_api_key = os.getenv("TBA_API_KEY")
 assert _raw_tba_api_key is not None, "TBA_API_KEY env var is not set"
 tba_api_key = _raw_tba_api_key
+
+_raw_frc_events_api_key = os.getenv("FRC_EVENTS_API_KEY")
+assert _raw_frc_events_api_key is not None, "FRC_EVENTS_API_KEY env var is not set"
+frc_events_api_key = _raw_frc_events_api_key
+
+_raw_frc_events_username = os.getenv("FRC_EVENTS_USERNAME")
+assert _raw_frc_events_username is not None, "FRC_EVENTS_USERNAME env var is not set"
+frc_events_username = _raw_frc_events_username

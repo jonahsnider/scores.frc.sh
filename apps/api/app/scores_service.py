@@ -1,57 +1,37 @@
-from datetime import datetime, timedelta
-from pydantic import BaseModel
+from datetime import timedelta
 from sqlalchemy import select
-from app.models import MatchLevel, EventModel, MatchModel, MatchResultModel
-from app.event_service import Event
+from app.models import EventModel, MatchModel, MatchResultModel
 from app.db import engine
-
-
-class MatchResult(BaseModel):
-    def __init__(self, match_result: MatchResultModel, record_held_for: timedelta):
-        super().__init__(
-            score=match_result.score,
-            timestamp=match_result.timestamp,
-            winning_teams=match_result.winning_teams,
-            record_held_for=record_held_for,
-        )
-
-    record_held_for: timedelta
-    score: int
-    timestamp: datetime
-    winning_teams: list[int]
-
-
-class EventMatch(BaseModel):
-    def __init__(self, match: MatchModel, result: MatchResult | None):
-        super().__init__(
-            number=match.match_number,
-            level=match.match_level,
-            event=Event(match.event),
-            result=result,
-        )
-
-    number: int
-    level: MatchLevel
-    event: Event
-    result: MatchResult | None
+from .match.types import EventMatch, MatchResult
 
 
 class ScoresService:
-    def _score_records_from_matches(
-        self, matches: list[MatchModel]
-    ) -> list[EventMatch]:
+    @staticmethod
+    def _match_models_to_event_matches(matches: list[MatchModel]) -> list[EventMatch]:
         score_records: list[EventMatch] = []
         for idx, match in enumerate(matches):
+            if match.result is None:
+                continue
+
+            record_held_for = timedelta.max
             if idx + 1 < len(matches):
                 next_match = matches[idx + 1]
-                record_held_for = next_match.result.timestamp - match.result.timestamp
-            else:
-                record_held_for = timedelta.max
+                if next_match.result is not None:
+                    record_held_for = (
+                        next_match.result.timestamp - match.result.timestamp
+                    )
 
             score_records.append(
                 EventMatch(
-                    match=match,
-                    result=MatchResult(match.result, record_held_for),
+                    number=match.match_number,
+                    level=match.match_level.value,
+                    event=match.event.to_event(),
+                    result=MatchResult(
+                        score=match.result.score,
+                        timestamp=match.result.timestamp,
+                        winning_teams=match.result.winning_teams,
+                        record_held_for=record_held_for,
+                    ),
                 )
             )
         return score_records
@@ -67,7 +47,7 @@ class ScoresService:
                 .join(MatchModel.result)
             )
             if event_code:
-                query = query.where(EventModel.code == event_code.lower())
+                query = query.where(EventModel.code == event_code.upper())
             query = query.order_by(MatchResultModel.timestamp.asc())
 
             result = await session.scalars(query)
@@ -76,8 +56,11 @@ class ScoresService:
             record: int = -1
 
             for match in result:
+                if match.result is None:
+                    continue
+
                 if match.result.score > record:
                     record = match.result.score
                     records.append(match)
 
-            return self._score_records_from_matches(records)
+            return self._match_models_to_event_matches(records)

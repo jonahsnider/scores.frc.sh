@@ -2,6 +2,7 @@ import httpx
 from app.config import tba_api_key
 from pydantic import BaseModel
 from enum import Enum
+from app.event.types import Event
 
 
 class TbaEventType(Enum):
@@ -27,6 +28,30 @@ class TbaEvent(BaseModel):
     event_type: TbaEventType
     year: int
 
+    def _normalize_tba_week(self) -> int:
+        if self.week is not None:
+            return self.week + 1
+
+        if (
+            self.event_type == TbaEventType.CmpDivision
+            or self.event_type == TbaEventType.CmpFinals
+        ):
+            return 8
+
+        raise ValueError(
+            f"Event {self.year} {self.event_code} is missing a week number"
+        )
+
+    def to_event(self) -> Event:
+        assert self.first_event_code is not None
+        return Event(
+            year=self.year,
+            code=self.event_code.upper(),
+            name=self.name,
+            first_code=self.first_event_code.upper(),
+            week_number=self._normalize_tba_week(),
+        )
+
 
 class TbaService:
     """Handles communication with The Blue Alliance (TBA) API."""
@@ -42,6 +67,7 @@ class TbaService:
             base_url=self.BASE_URL,
         ) as tba_client:
             response = await tba_client.get(f"/events/{year}")
+            response.raise_for_status()
             return [
                 TbaEvent.model_validate(event_json) for event_json in response.json()
             ]

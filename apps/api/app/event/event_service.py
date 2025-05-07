@@ -4,51 +4,8 @@ from sqlalchemy.dialects.postgresql import insert
 from app.db import engine
 from app.logger import base_logger
 from app.models import EventModel
-from app.tba_service import TbaService, TbaEvent, TbaEventType
-from pydantic import BaseModel
-
-
-class Event(BaseModel):
-    @staticmethod
-    def _normalize_tba_week(event: TbaEvent) -> int:
-        if event.week is not None:
-            return event.week + 1
-
-        if (
-            event.event_type == TbaEventType.CmpDivision
-            or event.event_type == TbaEventType.CmpFinals
-        ):
-            return 8
-
-        raise ValueError(
-            f"Event {event.year} {event.event_code} is missing a week number"
-        )
-
-    def __init__(self, event: EventModel | TbaEvent):
-        if isinstance(event, EventModel):
-            super().__init__(
-                first_code=event.first_code.upper(),
-                code=event.code.upper(),
-                name=event.name,
-                week_number=event.week_number,
-                year=event.year,
-            )
-        else:
-            assert event.first_event_code is not None
-            super().__init__(
-                first_code=event.first_event_code.upper(),
-                code=event.event_code.upper(),
-                name=event.short_name or event.name,
-                week_number=self._normalize_tba_week(event),
-                year=event.year,
-            )
-
-    first_code: str
-    code: str
-    name: str
-    week_number: int
-    year: int
-
+from app.tba_service import TbaService, TbaEventType
+from app.event.types import Event
 
 IGNORED_EVENT_TYPES = {
     TbaEventType.Offseason,
@@ -122,15 +79,11 @@ class EventService:
         """Query events from TBA for a given year"""
         tba_events = await self.tba_service.get_events_for_year(year)
 
-        filtered_events = filter(
-            lambda e: e.first_event_code is not None
-            and e.event_type not in IGNORED_EVENT_TYPES,
-            tba_events,
-        )
+        filtered_events = [
+            e
+            for e in tba_events
+            if e.first_event_code is not None
+            and e.event_type not in IGNORED_EVENT_TYPES
+        ]
 
-        return list(
-            map(
-                lambda e: Event(e),
-                filtered_events,
-            ),
-        )
+        return [e.to_event() for e in filtered_events]
