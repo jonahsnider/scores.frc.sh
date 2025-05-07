@@ -7,7 +7,7 @@
 	"scripts": {
 		"build": "turbo run build",
 		"format": "prettier --check . && mise format",
-		"format:write": "bun run format --write && mise format:write",
+		"format:write": "prettier --check . --write && mise format:fix",
 		"generate-icons": "pwa-assets-generator",
 		"lint": "biome check . && mise lint",
 		"lint:fix": "biome check . --write --unsafe && mise lint:fix",
