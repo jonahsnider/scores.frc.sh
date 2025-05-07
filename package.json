@@ -6,11 +6,11 @@
 	],
 	"scripts": {
 		"build": "turbo run build",
-		"format": "prettier --check .",
-		"format:write": "bun run format --write",
+		"format": "prettier --check . && mise format",
+		"format:write": "bun run format --write && mise format:write",
 		"generate-icons": "pwa-assets-generator",
-		"lint": "biome check .",
-		"lint:fix": "biome check . --write --unsafe",
+		"lint": "biome check . && mise lint",
+		"lint:fix": "biome check . --write --unsafe && mise lint:fix",
 		"test": "bun run lint && bun run format && turbo run build type-check",
 		"type-check": "turbo run type-check"
 	},
@@ -26,7 +26,7 @@
 		"turbo": "2.5.2",
 		"vercel": "41.7.0"
 	},
-	"packageManager": "bun@1.2.1",
+	"packageManager": "bun@1.2.12",
 	"trustedDependencies": [
 		"@biomejs/biome"
 	]
