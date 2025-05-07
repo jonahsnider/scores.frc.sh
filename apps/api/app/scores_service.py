@@ -37,7 +37,7 @@ class ScoresService:
 
     async def get_high_scores(
         self, year: int, event_code: str | None = None
-    ) -> list[EventMatch]:
+    ) -> list[EventMatch] | None:
         async with Session() as session:
             query = (
                 select(MatchModel, MatchResultModel, EventModel)
@@ -58,5 +58,17 @@ class ScoresService:
                     match.result = result
                     match.event = event
                     records.append(match)
+
+            if len(records) == 0 and event_code:
+                # No results and an event_code was provided
+                event_exists = await session.scalar(
+                    select(EventModel).where(
+                        EventModel.year == year,
+                        EventModel.code == event_code.upper(),
+                    )
+                )
+                if not event_exists:
+                    # The event doesn't exist, hence no scores
+                    return None
 
             return self._match_models_to_event_matches(records)

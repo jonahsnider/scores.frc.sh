@@ -34,7 +34,7 @@ year_path_param = Path(
 
 
 class HighScoresResponse(BaseModel):
-    high_scores: list[EventMatch]
+    high_scores: list[EventMatch] | None
 
 
 @app.get(
