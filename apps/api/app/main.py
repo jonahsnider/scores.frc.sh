@@ -6,13 +6,11 @@ from fastapi import FastAPI, Path
 from pydantic import BaseModel
 
 from app.event.event_service import EventService
-from app.scores_service import EventMatch, ScoresService
-from app.tba.tba_service import TbaService
 from app.first.first_service import FirstService
 from app.match.match_service import MatchService
-
-
-app = FastAPI(title="scores.frc.sh API", version="2.0.0")
+from app.scores_service import EventMatch, ScoresService
+from app.tba.tba_service import TbaService
+from app.jobs_service import JobsService
 
 
 tba_service = TbaService()
@@ -20,6 +18,12 @@ first_service = FirstService()
 scores_service = ScoresService()
 event_service = EventService(tba_service)
 match_service = MatchService(first_service)
+jobs_service = JobsService(event_service)
+
+app = FastAPI(
+    title="scores.frc.sh API", version="2.0.0", lifespan=jobs_service.lifespan
+)
+
 
 year_path_param = Path(
     title="The year to get the high scores for",
