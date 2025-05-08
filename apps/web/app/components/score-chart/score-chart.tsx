@@ -1,9 +1,8 @@
 'use client';
 
+import { type MatchLevel, api } from '@/app/api/api';
 import { Card, Heading } from '@radix-ui/themes';
-import type { MatchLevel } from '@scores.frc.sh/api/src/first/enums/match-level.enum';
 import { AreaChart, type Color } from '@tremor/react';
-import { trpc } from '../../trpc';
 import { Tooltip } from './tooltip';
 import { formatMatch, formatRecordHeldFor, tbaUrl, weekName } from './util';
 
@@ -17,38 +16,55 @@ type Props = {
 };
 
 export function ScoreChart({ year, eventCode }: Props) {
-	const matches = trpc.highScores.getHighScores.useQuery({
-		year,
-		eventCode,
-	});
+	const globalMatches = api.useQuery(
+		'get',
+		'/scores/year/{year}',
+		{
+			params: { path: { year } },
+		},
+		{ enabled: eventCode === undefined },
+	);
+	const eventMatches = api.useQuery(
+		'get',
+		'/scores/year/{year}/event/{event}',
+		{
+			params: { path: { year, event: eventCode ?? '' } },
+		},
+		{ enabled: eventCode !== undefined },
+	);
+	const usedMatchesQuery = eventCode === undefined ? globalMatches : eventMatches;
 
-	const chartData = (matches.data ?? []).map((match) => {
+	const chartData = (usedMatchesQuery.data?.highScores ?? []).map((match) => {
+		if (!match.result) {
+			throw new TypeError('Match has no result');
+		}
+
 		const base = {
-			time: match.timestamp.toLocaleString(),
-			match: formatMatch(match.match.level, match.match.number),
-			matchWithEvent: (eventCode ? '' : `${match.event.code} `) + formatMatch(match.match.level, match.match.number),
+			time: match.result.timestamp.toLocaleString(),
+			match: formatMatch(match.level, match.number),
+			matchWithEvent: (eventCode ? '' : `${match.event.code} `) + formatMatch(match.level, match.number),
 			eventCode: match.event.code,
-			matchNumber: match.match.number,
-			matchLevel: match.match.level,
-			winningTeams: match.winningTeams,
+			matchNumber: match.number,
+			matchLevel: match.level,
+			winningTeams: match.result.winningTeams,
 			eventName: match.event.name,
-			recordHeldFor: formatRecordHeldFor(match.recordHeldFor, eventCode),
+			recordHeldFor: formatRecordHeldFor(match.result.recordHeldFor, eventCode),
 		};
 
 		return {
 			...base,
-			[CATEGORY_WHEN_EVENT_PROVIDED]: match.score,
-			[weekName(match.event.weekNumber)]: match.score,
+			[CATEGORY_WHEN_EVENT_PROVIDED]: match.result.score,
+			[weekName(match.event.weekNumber)]: match.result.score,
 		};
 	});
 
 	let noDataText: string | undefined;
 
-	if (matches.isPending) {
+	if (usedMatchesQuery.isPending) {
 		noDataText = 'Loading data...';
-	} else if (matches.isSuccess && eventCode) {
+	} else if (usedMatchesQuery.isSuccess && eventCode) {
 		noDataText = 'No event found';
-	} else if (matches.isError) {
+	} else if (usedMatchesQuery.isError) {
 		noDataText = 'Error loading data';
 	} else {
 		noDataText = undefined;
@@ -75,7 +91,9 @@ export function ScoreChart({ year, eventCode }: Props) {
 						? [CATEGORY_WHEN_EVENT_PROVIDED]
 						: [
 								...new Set(
-									(matches.data ?? []).map((match) => match.event.weekNumber).map((weekNumber) => weekName(weekNumber)),
+									(usedMatchesQuery.data?.highScores ?? [])
+										.map((match) => match.event.weekNumber)
+										.map((weekNumber) => weekName(weekNumber)),
 								),
 							]
 				}

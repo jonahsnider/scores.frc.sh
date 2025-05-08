@@ -5,6 +5,7 @@
 	"scripts": {
 		"build": "NODE_ENV=production next build",
 		"dev": "PORT=3000 next dev",
+		"openapi:generate": "openapi-typescript http://localhost:8000/openapi.json -o app/api/openapi.d.ts",
 		"start": "next start",
 		"type-check": "tsc"
 	},
@@ -16,10 +17,8 @@
 		"@radix-ui/themes": "3.2.1",
 		"@remixicon/react": "4.6.0",
 		"@tailwindcss/forms": "0.5.10",
+		"@tanstack/react-query": "5.75.5",
 		"@tremor/react": "3.18.7",
-		"@trpc/client": "11.1.2",
-		"@trpc/next": "11.1.2",
-		"@trpc/react-query": "11.1.2",
 		"@types/node": "22.15.16",
 		"@types/react": "19.1.3",
 		"@types/react-dom": "19.1.3",
@@ -34,18 +33,22 @@
 		"next-plausible": "3.12.4",
 		"next-themes": "0.4.6",
 		"nuqs": "2.4.3",
+		"openapi-fetch": "0.13.7",
+		"openapi-react-query": "0.4.1",
 		"postcss": "8.5.3",
 		"postcss-import": "16.1.0",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
 		"superjson": "2.2.2",
 		"tailwindcss": "3.4.17",
+		"temporal-polyfill": "0.3.0",
 		"typescript": "5.8.3",
 		"zod": "3.24.4"
 	},
 	"devDependencies": {
 		"dotenv": "16.5.0",
+		"openapi-typescript": "7.7.1",
 		"type-fest": "4.41.0"
 	},
-	"packageManager": "bun@1.0.3"
+	"packageManager": "bun@1.2.12"
 }

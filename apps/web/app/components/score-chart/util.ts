@@ -1,5 +1,6 @@
-import { MatchLevel } from '@scores.frc.sh/api/src/first/enums/match-level.enum';
+import type { MatchLevel } from '@/app/api/api';
 import { formatDistance } from 'date-fns';
+import { Temporal } from 'temporal-polyfill';
 
 export function weekName(weekNumber: number) {
 	if (weekNumber === 8) {
@@ -12,7 +13,7 @@ export function weekName(weekNumber: number) {
 export function tbaUrl(year: number, eventCode: string, matchNumber: number, matchLevel: MatchLevel) {
 	let urlMatchNumber: string;
 
-	if (matchLevel === MatchLevel.Qualification) {
+	if (matchLevel === 'quals') {
 		urlMatchNumber = `qm${matchNumber}`;
 	} else {
 		switch (matchNumber) {
@@ -36,7 +37,7 @@ export function tbaUrl(year: number, eventCode: string, matchNumber: number, mat
 
 // Note: this assume 2023 double elims bracket
 export function formatMatch(level: MatchLevel, number: number) {
-	if (level === MatchLevel.Qualification) {
+	if (level === 'quals') {
 		return `Q${number}`;
 	}
 
@@ -50,10 +51,12 @@ export function formatMatch(level: MatchLevel, number: number) {
 	}
 }
 
-export function formatRecordHeldFor(duration: number | 'forever', eventCode?: string) {
-	if (duration === 'forever') {
+export function formatRecordHeldFor(durationString: string, eventCode?: string) {
+	const duration = Temporal.Duration.from(durationString);
+
+	if (duration.years > 1) {
 		return `held until ${eventCode ? 'event' : 'season'} end`;
 	}
 
-	return `held for ${formatDistance(0, duration)}`;
+	return `held for ${formatDistance(0, duration.total({ unit: 'milliseconds' }))}`;
 }

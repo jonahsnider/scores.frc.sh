@@ -1,1 +1,0 @@
-ALTER TABLE "top_scores" ADD COLUMN "event_week_number" integer NOT NULL;

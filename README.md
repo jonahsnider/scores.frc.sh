@@ -10,8 +10,7 @@ A web app that displays the progression of the top scores in FRC games over time
 
 The frontend of scores.frc.sh was built with [Next.js](https://nextjs.org/) and uses [Radix Themes](https://www.radix-ui.com/) and [Tailwind CSS](https://tailwindcss.com/) for styling.
 
-The backend API is built in TypeScript using the [NestJS framework](https://nestjs.com/).
-[tRPC](https://trpc.io/) is used to facilitate RPC between the frontend and the backend.
+The backend API is built in Python using [FastAPI](https://fastapi.tiangolo.com/).
+An API client for the frontend is generated from an OpenAPI 3 schema via [openapi-fetch](https://openapi-fetch.pages.dev/).
 
-For storage, a PostgreSQL database is used via [Drizzle ORM](https://orm.drizzle.team/) for persisting data.
-A Redis instance is used as a job queue for [BullMQ](https://bullmq.io/) workers that fetch data from the FIRST and TBA APIs, process it, and then persist it in the database.
+For storage, a PostgreSQL database is used via [SQLAlchemy](https://www.sqlalchemy.org/) for persisting data.

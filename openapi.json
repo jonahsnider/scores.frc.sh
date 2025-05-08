@@ -1,0 +1,152 @@
+{
+	"openapi": "3.1.0",
+	"info": { "title": "scores.frc.sh API", "version": "2.0.0" },
+	"paths": {
+		"/scores/year/{year}": {
+			"get": {
+				"tags": ["scores"],
+				"summary": "Get global high scores",
+				"description": "Get the high scores for a specific year",
+				"operationId": "getGlobalHighScores",
+				"parameters": [
+					{
+						"name": "year",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"maximum": 2025,
+							"minimum": 2023,
+							"title": "The year to get the high scores for"
+						},
+						"example": 2025
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": { "$ref": "#/components/schemas/HighScoresResponse" } } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": { "application/json": { "schema": { "$ref": "#/components/schemas/HTTPValidationError" } } }
+					}
+				}
+			}
+		},
+		"/scores/year/{year}/event/{event}": {
+			"get": {
+				"tags": ["scores", "event"],
+				"summary": "Get event high scores",
+				"description": "Get the high scores for a specific event",
+				"operationId": "getEventHighScores",
+				"parameters": [
+					{
+						"name": "year",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"maximum": 2025,
+							"minimum": 2023,
+							"title": "The year to get the high scores for"
+						},
+						"example": 2025
+					},
+					{
+						"name": "event",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 64,
+							"title": "The event code to get the high scores for"
+						},
+						"example": "CASJ"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": { "$ref": "#/components/schemas/HighScoresResponse" } } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": { "application/json": { "schema": { "$ref": "#/components/schemas/HTTPValidationError" } } }
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"Event": {
+				"properties": {
+					"firstCode": { "type": "string", "title": "Firstcode" },
+					"code": { "type": "string", "title": "Code" },
+					"name": { "type": "string", "title": "Name" },
+					"weekNumber": { "type": "integer", "title": "Weeknumber" },
+					"year": { "type": "integer", "title": "Year" }
+				},
+				"type": "object",
+				"required": ["firstCode", "code", "name", "weekNumber", "year"],
+				"title": "Event"
+			},
+			"EventMatch": {
+				"properties": {
+					"number": { "type": "integer", "title": "Number" },
+					"level": { "type": "string", "enum": ["quals", "playoffs"], "title": "Level" },
+					"event": { "$ref": "#/components/schemas/Event" },
+					"result": { "anyOf": [{ "$ref": "#/components/schemas/MatchResult" }, { "type": "null" }] }
+				},
+				"type": "object",
+				"required": ["number", "level", "event", "result"],
+				"title": "EventMatch"
+			},
+			"HTTPValidationError": {
+				"properties": {
+					"detail": { "items": { "$ref": "#/components/schemas/ValidationError" }, "type": "array", "title": "Detail" }
+				},
+				"type": "object",
+				"title": "HTTPValidationError"
+			},
+			"HighScoresResponse": {
+				"properties": {
+					"highScores": {
+						"anyOf": [{ "items": { "$ref": "#/components/schemas/EventMatch" }, "type": "array" }, { "type": "null" }],
+						"title": "Highscores"
+					}
+				},
+				"type": "object",
+				"required": ["highScores"],
+				"title": "HighScoresResponse"
+			},
+			"MatchResult": {
+				"properties": {
+					"recordHeldFor": { "type": "string", "format": "duration", "title": "Recordheldfor" },
+					"score": { "type": "integer", "title": "Score" },
+					"timestamp": { "type": "string", "format": "date-time", "title": "Timestamp" },
+					"winningTeams": { "items": { "type": "integer" }, "type": "array", "title": "Winningteams" }
+				},
+				"type": "object",
+				"required": ["recordHeldFor", "score", "timestamp", "winningTeams"],
+				"title": "MatchResult"
+			},
+			"ValidationError": {
+				"properties": {
+					"loc": {
+						"items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+						"type": "array",
+						"title": "Location"
+					},
+					"msg": { "type": "string", "title": "Message" },
+					"type": { "type": "string", "title": "Error Type" }
+				},
+				"type": "object",
+				"required": ["loc", "msg", "type"],
+				"title": "ValidationError"
+			}
+		}
+	}
+}

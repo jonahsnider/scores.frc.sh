@@ -5,8 +5,8 @@ import { TextField } from '@radix-ui/themes';
 import clsx from 'clsx';
 import { useParams, useRouter } from 'next/navigation';
 import { type ChangeEventHandler, useEffect, useState } from 'react';
+import { api } from '../api/api';
 import { DEFAULT_YEAR } from '../constants';
-import { trpc } from '../trpc';
 
 export function EventInput() {
 	const router = useRouter();
@@ -36,12 +36,16 @@ export function EventInput() {
 		}
 	};
 
-	const matches = trpc.highScores.getHighScores.useQuery({
-		year,
-		eventCode: eventCode ?? undefined,
-	});
+	const matches = api.useQuery(
+		'get',
+		'/scores/year/{year}/event/{event}',
+		{
+			params: { path: { year, event: eventCode ?? '' } },
+		},
+		{ enabled: Boolean(eventCode) },
+	);
 
-	const isError = matches.data === null;
+	const isError = eventCode && matches.data && matches.data.highScores === null;
 
 	return (
 		<TextField.Root
