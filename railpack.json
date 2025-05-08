@@ -1,7 +1,0 @@
-{
-	"$schema": "https://schema.railpack.com",
-	"provider": "python",
-	"deploy": {
-		"startCommand": "cd apps/api && uv run alembic upgrade head && uv run fastapi run app/main.py"
-	}
-}
