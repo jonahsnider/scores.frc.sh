@@ -16,6 +16,8 @@ jobs:
         uses: oven-sh/setup-bun@v2
       - name: Setup Mise
         uses: jdx/mise-action@v2
+      - name: Install dependencies with uv
+        run: uv sync --locked --all-extras --dev
       - name: Install dependencies with Bun
         run: bun install --frozen-lockfile
       - name: Apply lint fixes
