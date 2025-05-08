@@ -7,14 +7,13 @@ from fastapi import FastAPI, Path
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+from app.config import sentry_dsn
 from app.event.event_service import EventService
 from app.first.first_service import FirstService
 from app.jobs_service import JobsService
 from app.match.match_service import MatchService
 from app.scores_service import EventMatch, ScoresService
 from app.tba.tba_service import TbaService
-
-from app.config import sentry_dsn
 
 sentry_sdk.init(
     dsn=sentry_dsn,
