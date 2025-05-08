@@ -29,8 +29,8 @@ class DbMatchLevel(StrEnum):
 class EventModel(Base):
     __tablename__ = "events"
     __table_args__ = (
-        Index(None, "year", "code", unique=True),
-        Index(None, "year", "first_code", unique=True),
+        Index("ix_events_year_code", "year", "code", unique=True),
+        Index("ix_events_year_first_code", "year", "first_code", unique=True),
     )
 
     internal_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
