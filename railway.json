@@ -1,0 +1,23 @@
+{
+	"$schema": "https://railway.com/railway.schema.json",
+	"build": {
+		"buildCommand": "exit 0",
+		"builder": "NIXPACKS",
+		"nixpacksPlan": {
+			"phases": {
+				"install": {
+					"cmds": ["uv sync --no-dev --frozen"],
+					"nixPkgs": ["uv"]
+				}
+			}
+		}
+	},
+	"deploy": {
+		"healthcheckPath": "/health",
+		"healthcheckTimeout": 30,
+		"runtime": "V2",
+		"startCommand": "cd apps/api && uv run fastapi run app/main.py",
+		"restartPolicyType": "ON_FAILURE",
+		"restartPolicyMaxRetries": 3
+	}
+}
