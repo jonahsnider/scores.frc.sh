@@ -2,7 +2,7 @@ FROM python:3-alpine
 
 WORKDIR /app
 
-RUN apk add --no-cache uv git
+RUN apk add --no-cache uv git gcc musl-dev libpq-dev
 
 COPY pyproject.toml uv.lock ./
 
