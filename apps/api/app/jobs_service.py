@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from datetime import datetime
 
+import sentry_sdk
 from apscheduler.schedulers.asyncio import AsyncIOScheduler  # type: ignore
 from apscheduler.triggers.interval import IntervalTrigger  # type: ignore
 from fastapi import FastAPI
@@ -39,6 +40,7 @@ class JobsService:
             self._logger.info("Refreshed all events")
         except Exception as e:
             self._logger.error("Error refreshing events", e)
+            sentry_sdk.capture_exception(e)
 
     async def _refresh_match_results_job(self) -> None:
         self._logger.info("Refreshing missing match results")
@@ -55,6 +57,7 @@ class JobsService:
                 self._logger.error(
                     f"Error refreshing match results for {year} {first_event_code}", e
                 )
+                sentry_sdk.capture_exception(e)
 
         self._logger.info("Refreshed all match results")
 
