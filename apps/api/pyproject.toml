@@ -13,6 +13,7 @@ dependencies = [
     "pydantic>=2.11.4",
     "python-dotenv>=1.1.0",
     "pytz>=2025.2",
+    "sentry-sdk[fastapi]>=2.27.0",
     "sqlalchemy[asyncio]",
 ]
 

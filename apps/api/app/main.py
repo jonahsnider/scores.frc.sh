@@ -1,17 +1,27 @@
 from datetime import datetime
 from typing import Annotated
 
-from fastapi.middleware.cors import CORSMiddleware
+import sentry_sdk
 import uvicorn
 from fastapi import FastAPI, Path
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from app.event.event_service import EventService
 from app.first.first_service import FirstService
+from app.jobs_service import JobsService
 from app.match.match_service import MatchService
 from app.scores_service import EventMatch, ScoresService
 from app.tba.tba_service import TbaService
-from app.jobs_service import JobsService
+
+from app.config import sentry_dsn
+
+sentry_sdk.init(
+    dsn=sentry_dsn,
+    # Add data like request headers and IP for users, if applicable;
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+)
 
 
 tba_service = TbaService()

@@ -31,3 +31,7 @@ frc_events_api_key = _raw_frc_events_api_key
 _raw_frc_events_username = os.getenv("FRC_EVENTS_USERNAME")
 assert _raw_frc_events_username is not None, "FRC_EVENTS_USERNAME env var is not set"
 frc_events_username = _raw_frc_events_username
+
+_raw_sentry_dsn = os.getenv("SENTRY_DSN")
+assert _raw_sentry_dsn is not None, "SENTRY_DSN env var is not set"
+sentry_dsn = _raw_sentry_dsn
