@@ -8,9 +8,9 @@ HEALTHCHECK --interval=15s --timeout=15s --start-period=5s --retries=3 CMD [ "cu
 
 COPY pyproject.toml uv.lock ./
 
-RUN uv tool install fastapi[standard]
-
 RUN uv sync --no-cache --frozen --no-dev --package app
+
+RUN uv tool install fastapi[standard]
 
 COPY apps/api/ ./apps/api/
 
