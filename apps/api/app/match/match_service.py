@@ -63,16 +63,18 @@ class MatchService:
         )
 
     async def get_matches(
-        self, year: int, event_code: str, event: Event
+        self, year: int, first_event_code: str, event: Event
     ) -> list[EventMatch]:
         """Get all matches for an event."""
         schedule, quals_match_results, playoffs_match_results = await asyncio.gather(
-            self.first_service.get_schedule(year, event_code),
+            self.first_service.get_schedule(year, first_event_code),
             self.first_service.list_event_scores(
-                year=year, event_code=event_code, level=FrcMatchLevel.QUALIFICATION
+                year=year,
+                event_code=first_event_code,
+                level=FrcMatchLevel.QUALIFICATION,
             ),
             self.first_service.list_event_scores(
-                year=year, event_code=event_code, level=FrcMatchLevel.PLAYOFF
+                year=year, event_code=first_event_code, level=FrcMatchLevel.PLAYOFF
             ),
         )
 
@@ -109,16 +111,28 @@ class MatchService:
             for match in finished_matches
         ]
 
-    async def refresh_match_results(self, year: int, event_code: str) -> None:
+    async def get_all_missing_matches(self) -> list[tuple[int, str]]:
+        """Returns a list of (year, first_event_code) tuples that have missing matches (no scores in DB)"""
+        async with Session() as session:
+            missing_events = await session.execute(
+                select(EventModel.year, EventModel.first_code)
+                .join(MatchModel)
+                .join(MatchResultModel, full=True)
+                .where(MatchResultModel.score.is_(None))
+            )
+
+            return list(missing_events)
+
+    async def refresh_match_results(self, year: int, first_event_code: str) -> None:
         """Refresh the match results for an event and save them to the DB"""
         matches = await self.get_matches(
             year,
-            event_code,
+            first_event_code,
             # Stubbed out since we don't need the full event data for this
             Event(
-                code=event_code,
-                first_code=event_code,
-                name=event_code,
+                code=first_event_code,
+                first_code=first_event_code,
+                name=first_event_code,
                 week_number=0,
                 year=year,
             ),
@@ -131,10 +145,10 @@ class MatchService:
                 .values(
                     {
                         "year": year,
-                        "code": event_code,
+                        "code": first_event_code,
                         "week_number": 1,
-                        "name": event_code,
-                        "first_code": event_code,
+                        "name": first_event_code,
+                        "first_code": first_event_code,
                     }
                 )
                 .on_conflict_do_nothing()
@@ -142,7 +156,7 @@ class MatchService:
 
             # Delete all matches for the event
             event_internal_id_stmt = select(EventModel.internal_id).where(
-                EventModel.year == year, EventModel.code == event_code
+                EventModel.year == year, EventModel.first_code == first_event_code
             )
 
             await session.execute(

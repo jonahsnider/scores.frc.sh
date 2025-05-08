@@ -19,7 +19,7 @@ first_service = FirstService()
 scores_service = ScoresService()
 event_service = EventService(tba_service)
 match_service = MatchService(first_service)
-jobs_service = JobsService(event_service)
+jobs_service = JobsService(event_service, match_service)
 
 app = FastAPI(
     title="scores.frc.sh API", version="2.0.0", lifespan=jobs_service.lifespan
