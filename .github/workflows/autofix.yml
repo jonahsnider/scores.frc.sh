@@ -23,6 +23,6 @@ jobs:
       - name: Apply formatter fixes
         run: mise run format:fix
       - name: Run autofix.ci
-        uses: autofix-ci/action
+        uses: autofix-ci/action@v1
         with:
           commit-message: 'refactor: apply automatic fixes'
