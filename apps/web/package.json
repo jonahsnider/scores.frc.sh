@@ -4,8 +4,8 @@
 	"private": true,
 	"scripts": {
 		"build": "NODE_ENV=production next build",
-		"openapi:generate": "openapi-typescript http://localhost:8000/openapi.json -o app/api/openapi.d.ts",
 		"dev": "PORT=3000 next dev",
+		"openapi:generate": "openapi-typescript http://localhost:8000/openapi.json -o app/api/openapi.d.ts",
 		"start": "next start",
 		"type-check": "tsc"
 	},
