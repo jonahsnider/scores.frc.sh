@@ -32,7 +32,8 @@ class FrcEventMatchScores(BaseModel):
 
 
 class FrcScheduleMatchTeam(BaseModel):
-    team_number: int = Field(alias="teamNumber")
+    # 2024 GAALB is an example of an event where inexplicably the team number is null
+    team_number: int | None = Field(alias="teamNumber")
     station: Literal["Red1", "Red2", "Red3", "Blue1", "Blue2", "Blue3"]
 
 
@@ -40,7 +41,7 @@ class FrcScheduleMatch(BaseModel):
     match_number: int = Field(alias="matchNumber")
     tournament_level: FrcMatchLevel = Field(alias="tournamentLevel")
     teams: list[FrcScheduleMatchTeam]
-    start_time: str = Field(alias="startTime")
+    start_time: str | None = Field(alias="startTime")
 
 
 class FrcSchedule(BaseModel):

@@ -22,18 +22,23 @@ class JobsService:
         self.event_service = event_service
         self.match_service = match_service
 
-        self._scheduler.add_job(self._refresh_events_job, IntervalTrigger(days=1))  # type: ignore
         self._scheduler.add_job(  # type: ignore
-            self._refresh_match_results_job, IntervalTrigger(minutes=5)
+            self._refresh_events_job, IntervalTrigger(days=1), max_instances=1
+        )
+        self._scheduler.add_job(  # type: ignore
+            self._refresh_match_results_job, IntervalTrigger(minutes=5), max_instances=1
         )
 
     async def _refresh_events_job(self) -> None:
         self._logger.info("Refreshing events")
-        for year in range(MIN_YEAR, MAX_YEAR + 1):
-            self._logger.info(f"Refreshing events for {year}")
-            await self.event_service.refresh_saved_events(year)
-            self._logger.info(f"Refreshed events for {year}")
-        self._logger.info("Refreshed all events")
+        try:
+            for year in range(MIN_YEAR, MAX_YEAR + 1):
+                self._logger.info(f"Refreshing events for {year}")
+                await self.event_service.refresh_saved_events(year)
+                self._logger.info(f"Refreshed events for {year}")
+            self._logger.info("Refreshed all events")
+        except Exception as e:
+            self._logger.error("Error refreshing events", e)
 
     async def _refresh_match_results_job(self) -> None:
         self._logger.info("Refreshing missing match results")
@@ -41,16 +46,22 @@ class JobsService:
         self._logger.info(f"Found {len(missing_events)} missing match results")
         for year, first_event_code in missing_events:
             self._logger.info(f"Refreshing match results for {year} {first_event_code}")
-            await self.match_service.refresh_match_results(year, first_event_code)
-            self._logger.info(f"Refreshed match results for {year} {first_event_code}")
+            try:
+                await self.match_service.refresh_match_results(year, first_event_code)
+                self._logger.info(
+                    f"Refreshed match results for {year} {first_event_code}"
+                )
+            except Exception as e:
+                self._logger.error(
+                    f"Error refreshing match results for {year} {first_event_code}", e
+                )
+
         self._logger.info("Refreshed all match results")
 
     @asynccontextmanager
     async def lifespan(self, app: FastAPI):
         self._logger.info("Starting scheduler")
         self._scheduler.start()
-        await self._refresh_events_job()
-        await self._refresh_match_results_job()
         yield
         self._logger.info("Shutting down scheduler")
         self._scheduler.shutdown()

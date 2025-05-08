@@ -31,34 +31,32 @@ class EventService:
 
         async with Session() as session:
             # Insert or update the events in the DB
-            upsert_stmt = (
-                insert(EventModel)
-                .values(
-                    [
-                        {
-                            "year": e.year,
-                            "code": e.code,
-                            "week_number": e.week_number,
-                            "name": e.name,
-                            "first_code": e.first_code,
-                        }
-                        for e in events
-                    ]
-                )
-                .on_conflict_do_update(
-                    index_elements=[EventModel.code, EventModel.year],
-                    set_=dict(
-                        week_number=EventModel.week_number,
-                        name=EventModel.name,
-                        first_code=EventModel.first_code,
-                    ),
-                )
+            stmt = insert(EventModel).values(
+                [
+                    {
+                        "year": e.year,
+                        "code": e.code,
+                        "week_number": e.week_number,
+                        "name": e.name,
+                        "first_code": e.first_code,
+                    }
+                    for e in events
+                ]
+            )
+
+            upsert_stmt = stmt.on_conflict_do_update(
+                index_elements=[EventModel.code, EventModel.year],
+                set_=dict(
+                    week_number=stmt.excluded.week_number,
+                    name=stmt.excluded.name,
+                    first_code=stmt.excluded.first_code,
+                ),
             )
 
             await session.execute(upsert_stmt)
             self.logger.info(f"Inserted {len(events)} events for {year}")
 
-            # Then delete any events in the DB that aren't in the list from TBA
+            # Then delete any events in the DB that aren't in the lis`t from TBA
             orphaned_events = await session.execute(
                 delete(EventModel)
                 .where(EventModel.year == year)
@@ -75,6 +73,8 @@ class EventService:
             self.logger.info(
                 f"Deleted {orphaned_events.rowcount} orphaned events for {year}"
             )
+
+            await session.commit()
 
     async def get_events_for_year(self, year: int) -> list[Event]:
         """Query events from TBA for a given year"""

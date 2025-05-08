@@ -44,11 +44,13 @@ class MatchService:
         else:
             winning_stations = {"Blue1", "Blue2", "Blue3"}
         winning_teams = [
-            team.team_number
+            # Handle cases where the team number is null
+            team.team_number or 0
             for team in schedule_match.teams
             if team.station in winning_stations
         ]
         # Parse timestamp
+        assert schedule_match.start_time is not None, "Match isn't scheduled"
         timestamp = datetime.fromisoformat(schedule_match.start_time)
         # Use totalPoints as score
         score_value = winning_alliance.total_points - winning_alliance.foul_points
@@ -114,14 +116,20 @@ class MatchService:
     async def get_all_missing_matches(self) -> list[tuple[int, str]]:
         """Returns a list of (year, first_event_code) tuples that have missing matches (no scores in DB)"""
         async with Session() as session:
-            missing_events = await session.execute(
+            incomplete_events = await session.execute(
                 select(EventModel.year, EventModel.first_code)
                 .join(MatchModel)
                 .join(MatchResultModel, full=True)
                 .where(MatchResultModel.score.is_(None))
             )
 
-            return list(missing_events)
+            missing_events = await session.execute(
+                select(EventModel.year, EventModel.first_code)
+                .join(MatchModel, full=True)
+                .where(MatchModel.internal_id.is_(None))
+            )
+
+            return list(incomplete_events.tuples()) + list(missing_events.tuples())
 
     async def refresh_match_results(self, year: int, first_event_code: str) -> None:
         """Refresh the match results for an event and save them to the DB"""
@@ -138,25 +146,20 @@ class MatchService:
             ),
         )
 
-        async with Session() as session:
-            # Create the event if for whatever reason it doesn't exist in the DB
-            await session.execute(
-                insert(EventModel)
-                .values(
-                    {
-                        "year": year,
-                        "code": first_event_code,
-                        "week_number": 1,
-                        "name": first_event_code,
-                        "first_code": first_event_code,
-                    }
-                )
-                .on_conflict_do_nothing()
-            )
+        if len(matches) == 0:
+            # If an event has 0 matches on the schedule, we can't insert anything into the DB
+            # An example of this is 2023TUIS3
+            return
 
+        async with Session() as session:
             # Delete all matches for the event
-            event_internal_id_stmt = select(EventModel.internal_id).where(
-                EventModel.year == year, EventModel.first_code == first_event_code
+            # If the event doesn't exist in the DB, this won't return an event ID
+            event_internal_id_stmt = (
+                select(EventModel.internal_id)
+                .where(
+                    EventModel.year == year, EventModel.first_code == first_event_code
+                )
+                .scalar_subquery()
             )
 
             await session.execute(
@@ -180,29 +183,32 @@ class MatchService:
             )
 
             # Insert the match results for finished matches
+            stmt = insert(MatchResultModel).values(
+                [
+                    {
+                        "match_internal_id": select(MatchModel.internal_id).where(
+                            MatchModel.match_number == match.number,
+                            MatchModel.match_level == match.level,
+                            MatchModel.event_internal_id == event_internal_id_stmt,
+                        ),
+                        "score": match.result.score,
+                        "winning_teams": match.result.winning_teams,
+                        "timestamp": match.result.timestamp,
+                    }
+                    for match in matches
+                    if match.result is not None
+                ]
+            )
+
             await session.execute(
-                insert(MatchResultModel)
-                .values(
-                    [
-                        {
-                            "match_internal_id": select(MatchModel.internal_id).where(
-                                MatchModel.match_number == match.number,
-                                MatchModel.match_level == match.level,
-                            ),
-                            "score": match.result.score,
-                            "winning_teams": match.result.winning_teams,
-                            "timestamp": match.result.timestamp,
-                        }
-                        for match in matches
-                        if match.result is not None
-                    ]
-                )
-                .on_conflict_do_update(
+                stmt.on_conflict_do_update(
                     index_elements=[MatchResultModel.match_internal_id],
                     set_={
-                        "score": MatchResultModel.score,
-                        "winning_teams": MatchResultModel.winning_teams,
-                        "timestamp": MatchResultModel.timestamp,
+                        "score": stmt.excluded.score,
+                        "winning_teams": stmt.excluded.winning_teams,
+                        "timestamp": stmt.excluded.timestamp,
                     },
                 )
             )
+
+            await session.commit()
