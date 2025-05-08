@@ -2,7 +2,9 @@ FROM python:3-alpine
 
 WORKDIR /app
 
-RUN apk add --no-cache uv git gcc musl-dev libpq-dev
+RUN apk add --no-cache uv git gcc musl-dev libpq-dev curl
+
+HEALTHCHECK --interval=15s --timeout=15s --start-period=5s --retries=3 CMD [ "curl", "-f", "http://localhost:8000/health" ]
 
 COPY pyproject.toml uv.lock ./
 
