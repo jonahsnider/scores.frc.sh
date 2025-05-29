@@ -53,7 +53,7 @@
         "tailwindcss": "3.4.17",
         "temporal-polyfill": "0.3.0",
         "typescript": "5.8.3",
-        "zod": "3.25.32",
+        "zod": "3.25.36",
       },
       "devDependencies": {
         "dotenv": "16.5.0",
@@ -1156,7 +1156,7 @@
 
     "yn": ["yn@3.1.1", "", {}, "sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q=="],
 
-    "zod": ["zod@3.25.32", "", {}, "sha512-OSm2xTIRfW8CV5/QKgngwmQW/8aPfGdaQFlrGoErlgg/Epm7cjb6K6VEyExfe65a3VybUOnu381edLb0dfJl0g=="],
+    "zod": ["zod@3.25.36", "", {}, "sha512-eRFS3i8T0IrpGdL8HQyqFAugGOn7jOjyGgGdtv5NY4Wkhi7lJDk732bNZ609YMIGFbLoaj6J69O1Mura23gfIw=="],
 
     "@cspotcode/source-map-support/@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.9", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.0.3", "@jridgewell/sourcemap-codec": "^1.4.10" } }, "sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ=="],
 
