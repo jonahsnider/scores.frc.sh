@@ -23,7 +23,7 @@
 		"prettier": "3.5.3",
 		"prettier-plugin-packagejson": "2.5.14",
 		"sharp": "0.34.2",
-		"turbo": "2.5.3",
+		"turbo": "2.5.4",
 		"vercel": "42.3.0"
 	},
 	"packageManager": "bun@1.2.12",
