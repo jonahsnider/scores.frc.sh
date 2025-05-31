@@ -21,7 +21,7 @@
 		"@biomejs/biome": "1.9.4",
 		"@vite-pwa/assets-generator": "1.0.0",
 		"prettier": "3.5.3",
-		"prettier-plugin-packagejson": "2.5.14",
+		"prettier-plugin-packagejson": "2.5.15",
 		"sharp": "0.34.2",
 		"turbo": "2.5.4",
 		"vercel": "42.3.0"
