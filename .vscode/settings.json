@@ -11,15 +11,16 @@
 	"[jsonc]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
+	"[python]": {
+		"editor.defaultFormatter": "charliermarsh.ruff"
+	},
 	"[typescript]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
 	"[typescriptreact]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
-	"[python]": {
-		"editor.defaultFormatter": "charliermarsh.ruff"
-	},
+	"cursorpyright.analysis.typeCheckingMode": "strict",
 	"editor.defaultFormatter": "biomejs.biome",
 	"python.analysis.typeCheckingMode": "strict",
 	"search.exclude": {
