@@ -1,5 +1,5 @@
 [tools]
-python = "3.13.3"
+python = "3.13.4"
 uv = "0.7.10"
 
 [tasks.dev]
