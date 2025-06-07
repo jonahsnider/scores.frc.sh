@@ -1,6 +1,6 @@
 [tools]
 python = "3.13.4"
-uv = "0.7.11"
+uv = "0.7.12"
 
 [tasks.dev]
 run = "uv run fastapi dev app/main.py"
