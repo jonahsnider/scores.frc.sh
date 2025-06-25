@@ -9,7 +9,7 @@
       "devDependencies": {
         "@biomejs/biome": "1.9.4",
         "@vite-pwa/assets-generator": "1.0.0",
-        "prettier": "3.6.0",
+        "prettier": "3.6.1",
         "prettier-plugin-packagejson": "2.5.15",
         "sharp": "0.34.2",
         "turbo": "2.5.4",
@@ -906,7 +906,7 @@
 
     "postcss-value-parser": ["postcss-value-parser@4.2.0", "", {}, "sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ=="],
 
-    "prettier": ["prettier@3.6.0", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-ujSB9uXHJKzM/2GBuE0hBOUgC77CN3Bnpqa+g80bkv3T3A93wL/xlzDATHhnhkzifz/UE2SNOvmbTz5hSkDlHw=="],
+    "prettier": ["prettier@3.6.1", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-5xGWRa90Sp2+x1dQtNpIpeOQpTDBs9cZDmA/qs2vDNN2i18PdapqY7CmBeyLlMuGqXJRIOPaCaVZTLNQRWUH/A=="],
 
     "prettier-plugin-packagejson": ["prettier-plugin-packagejson@2.5.15", "", { "dependencies": { "sort-package-json": "3.2.1", "synckit": "0.11.8" }, "peerDependencies": { "prettier": ">= 1.16.0" }, "optionalPeers": ["prettier"] }, "sha512-2QSx6y4IT6LTwXtCvXAopENW5IP/aujC8fobEM2pDbs0IGkiVjW/ipPuYAHuXigbNe64aGWF7vIetukuzM3CBw=="],
 
