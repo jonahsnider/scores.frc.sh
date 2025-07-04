@@ -43,7 +43,7 @@
 		"tailwindcss": "3.4.17",
 		"temporal-polyfill": "0.3.0",
 		"typescript": "5.8.3",
-		"zod": "3.25.73"
+		"zod": "3.25.74"
 	},
 	"devDependencies": {
 		"dotenv": "17.0.1",
