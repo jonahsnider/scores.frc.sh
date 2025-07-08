@@ -46,7 +46,7 @@
 		"zod": "3.25.75"
 	},
 	"devDependencies": {
-		"dotenv": "17.0.1",
+		"dotenv": "17.1.0",
 		"openapi-typescript": "7.8.0",
 		"type-fest": "4.41.0"
 	},
