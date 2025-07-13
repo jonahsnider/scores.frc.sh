@@ -15,7 +15,7 @@
 		"type-check": "turbo run type-check"
 	},
 	"dependencies": {
-		"envalid": "8.0.0"
+		"envalid": "8.1.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
