@@ -1,7 +1,16 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
 	"files": {
-		"includes": ["**", "!**/.next", "!**/node_modules", "!**/.vercel", "!**/package.json", "!**/.mypy_cache"]
+		"includes": [
+			"**",
+			"!**/.next",
+			"!**/node_modules",
+			"!**/.vercel",
+			"!**/package.json",
+			"!**/.mypy_cache",
+			"!.venv",
+			"!.turbo"
+		]
 	},
 	"formatter": {
 		"formatWithErrors": true,
