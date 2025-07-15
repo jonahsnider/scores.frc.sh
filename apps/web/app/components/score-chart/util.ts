@@ -1,6 +1,6 @@
-import type { MatchLevel } from '@/app/api/api';
 import { formatDistance } from 'date-fns';
 import { Temporal } from 'temporal-polyfill';
+import type { MatchLevel } from '@/app/api/api';
 
 export function weekName(weekNumber: number) {
 	if (weekNumber === 8) {

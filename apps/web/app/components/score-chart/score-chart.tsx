@@ -1,8 +1,8 @@
 'use client';
 
-import { type MatchLevel, api } from '@/app/api/api';
 import { Card, Heading } from '@radix-ui/themes';
 import { AreaChart, type Color } from '@tremor/react';
+import { api, type MatchLevel } from '@/app/api/api';
 import { Tooltip } from './tooltip';
 import { formatMatch, formatRecordHeldFor, tbaUrl, weekName } from './util';
 

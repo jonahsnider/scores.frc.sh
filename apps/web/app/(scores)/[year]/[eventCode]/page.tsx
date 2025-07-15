@@ -1,5 +1,5 @@
-import { ScoreChart } from '@/app/components/score-chart/score-chart';
 import type { Metadata, ResolvingMetadata } from 'next';
+import { ScoreChart } from '@/app/components/score-chart/score-chart';
 
 export async function generateMetadata(
 	props: {
