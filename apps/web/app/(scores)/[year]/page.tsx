@@ -1,7 +1,7 @@
-import { ScoreChart } from '@/app/components/score-chart/score-chart';
-import { DEFAULT_YEAR } from '@/app/constants';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { RedirectType, redirect } from 'next/navigation';
+import { ScoreChart } from '@/app/components/score-chart/score-chart';
+import { DEFAULT_YEAR } from '@/app/constants';
 
 export async function generateMetadata(
 	props: {
