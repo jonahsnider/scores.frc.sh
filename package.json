@@ -19,7 +19,7 @@
 		"migrate:apply": "turbo run migrate:apply",
 		"migrate:create": "turbo run migrate:create",
 		"start": "turbo run start",
-		"test": "bun run lint && bun run format && turbo run build type-check",
+		"test": "turbo run //#lint:root //#format:root lint format build type-check",
 		"type-check": "turbo run type-check"
 	},
 	"dependencies": {
