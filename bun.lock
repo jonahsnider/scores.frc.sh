@@ -16,6 +16,9 @@
         "vercel": "44.4.1",
       },
     },
+    "apps/api": {
+      "name": "@scores.frc.sh/api",
+    },
     "apps/web": {
       "name": "@scores.frc.sh/web",
       "version": "0.1.0",
@@ -363,6 +366,8 @@
     "@remixicon/react": ["@remixicon/react@4.6.0", "", { "peerDependencies": { "react": ">=18.2.0" } }, "sha512-bY56maEgT5IYUSRotqy9h03IAKJC85vlKtWFg2FKzfs8JPrkdBAYSa9dxoUSKFwGzup8Ux6vjShs9Aec3jvr2w=="],
 
     "@rollup/pluginutils": ["@rollup/pluginutils@5.1.4", "", { "dependencies": { "@types/estree": "^1.0.0", "estree-walker": "^2.0.2", "picomatch": "^4.0.2" }, "peerDependencies": { "rollup": "^1.20.0||^2.0.0||^3.0.0||^4.0.0" }, "optionalPeers": ["rollup"] }, "sha512-USm05zrsFxYLPdWWq+K3STlWiT/3ELn3RcV5hJMghpeAIhxfsUIg6mt12CBJBInWMV4VneoV7SfGv8xIwo2qNQ=="],
+
+    "@scores.frc.sh/api": ["@scores.frc.sh/api@workspace:apps/api"],
 
     "@scores.frc.sh/web": ["@scores.frc.sh/web@workspace:apps/web"],
 

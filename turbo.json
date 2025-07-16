@@ -2,9 +2,37 @@
 	"$schema": "https://turbo.build/schema.json",
 	"envMode": "loose",
 	"tasks": {
+		"//#format:root": {},
+		"//#format:root:write": {},
+		"//#lint:root": {},
+		"//#lint:root:fix": {},
 		"build": {
 			"dependsOn": ["^build"],
 			"outputs": [".next/**", "!.next/cache/**"]
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"format": {
+			"outputs": []
+		},
+		"format:fix": {},
+		"lint": {
+			"outputs": []
+		},
+		"lint:fix": {},
+		"migrate:apply": {
+			"cache": false,
+			"outputs": []
+		},
+		"migrate:create": {
+			"cache": false,
+			"outputs": []
+		},
+		"start": {
+			"cache": false,
+			"persistent": true
 		},
 		"type-check": {
 			"dependsOn": ["build", "^build"]

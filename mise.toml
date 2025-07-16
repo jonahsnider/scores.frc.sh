@@ -1,35 +1,3 @@
 [tools]
 python = "3.13.5"
 uv = "0.7.21"
-
-[tasks.dev]
-run = "uv run fastapi dev app/main.py"
-dir = "apps/api"
-
-[tasks.start]
-run = "uv run fastapi run app/main.py"
-dir = "apps/api"
-
-[tasks.lint]
-run = "uv run ruff check"
-dir = "apps/api"
-
-[tasks."lint:fix"]
-run = "uv run ruff check --fix"
-dir = "apps/api"
-
-[tasks.format]
-run = "uv run ruff format --check"
-dir = "apps/api"
-
-[tasks."format:fix"]
-run = "uv run ruff format"
-dir = "apps/api"
-
-[tasks."migrate:create"]
-run = "uv run alembic revision --autogenerate -m"
-dir = "apps/api"
-
-[tasks."migrate:apply"]
-run = "uv run alembic upgrade head"
-dir = "apps/api"

@@ -1,0 +1,14 @@
+{
+	"name": "@scores.frc.sh/api",
+	"private": true,
+	"scripts": {
+		"dev": "uv run fastapi dev app/main.py",
+		"format": "uv run ruff format --check",
+		"format:fix": "uv run ruff format",
+		"lint": "uv run ruff check",
+		"lint:fix": "uv run ruff check --fix",
+		"migrate:apply": "uv run alembic upgrade head",
+		"migrate:create": "uv run alembic revision --autogenerate -m",
+		"start": "uv run fastapi run app/main.py"
+	}
+}

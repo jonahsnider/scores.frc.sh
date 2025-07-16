@@ -21,9 +21,9 @@ jobs:
       - name: Install dependencies with Bun
         run: bun install --frozen-lockfile
       - name: Apply lint fixes
-        run: mise run lint:fix
+        run: bun run lint:fix
       - name: Apply formatter fixes
-        run: mise run format:fix
+        run: bun run format:write
       - name: Run autofix.ci
         uses: autofix-ci/action@v1
         with:
