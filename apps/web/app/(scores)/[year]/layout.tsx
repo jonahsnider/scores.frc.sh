@@ -2,7 +2,7 @@ import { RedirectType, redirect } from 'next/navigation';
 import type { PropsWithChildren } from 'react';
 import { z } from 'zod';
 
-const EventYear = z.number({ coerce: true }).min(2023).max(new Date().getFullYear());
+const EventYear = z.coerce.number().min(2023).max(new Date().getFullYear());
 
 export default async function YearLayout(props: PropsWithChildren<{ params: Promise<{ year: string }> }>) {
 	const params = await props.params;
