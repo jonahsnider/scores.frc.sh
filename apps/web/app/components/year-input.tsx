@@ -37,7 +37,7 @@ export function YearInput() {
 			<Select.Trigger />
 
 			<Select.Content>
-				{mapFill((index) => MAX_YEAR - index, MAX_YEAR - MIN_YEAR + 1).map((year) => (
+				{mapFill(MAX_YEAR - MIN_YEAR + 1, (index) => MAX_YEAR - index).map((year) => (
 					<Select.Item key={year} value={year.toString()}>
 						{year}
 					</Select.Item>
