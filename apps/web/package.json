@@ -47,7 +47,7 @@
 	},
 	"devDependencies": {
 		"dotenv": "17.2.3",
-		"openapi-typescript": "7.10.0",
+		"openapi-typescript": "7.10.1",
 		"type-fest": "5.1.0"
 	},
 	"packageManager": "bun@1.2.12"
