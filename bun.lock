@@ -13,7 +13,7 @@
         "prettier-plugin-packagejson": "2.5.19",
         "sharp": "0.34.4",
         "turbo": "2.5.8",
-        "vercel": "48.4.1",
+        "vercel": "48.5.0",
       },
     },
     "apps/api": {
@@ -1187,7 +1187,7 @@
 
     "v8-compile-cache-lib": ["v8-compile-cache-lib@3.0.1", "", {}, "sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg=="],
 
-    "vercel": ["vercel@48.4.1", "", { "dependencies": { "@vercel/blob": "1.0.2", "@vercel/build-utils": "12.1.3", "@vercel/detect-agent": "1.0.0", "@vercel/express": "0.0.26", "@vercel/fun": "1.1.6", "@vercel/go": "3.2.3", "@vercel/h3": "0.1.6", "@vercel/hono": "0.1.7", "@vercel/hydrogen": "1.2.4", "@vercel/next": "4.13.4", "@vercel/node": "5.4.1", "@vercel/python": "5.0.10", "@vercel/redwood": "2.3.6", "@vercel/remix-builder": "5.4.13", "@vercel/ruby": "2.2.1", "@vercel/static-build": "2.7.26", "chokidar": "4.0.0", "jose": "5.9.6" }, "bin": { "vc": "dist/vc.js", "vercel": "dist/vc.js" } }, "sha512-EzunA8iHf55CDM5CUQQYR2+xp+1n8AqJziuOJx19w8Io2aQK1NjsRhmsHsogw9zsQ3xpdofaCs4MTjPHFNhdtA=="],
+    "vercel": ["vercel@48.5.0", "", { "dependencies": { "@vercel/blob": "1.0.2", "@vercel/build-utils": "12.1.3", "@vercel/detect-agent": "1.0.0", "@vercel/express": "0.0.26", "@vercel/fun": "1.1.6", "@vercel/go": "3.2.3", "@vercel/h3": "0.1.6", "@vercel/hono": "0.1.7", "@vercel/hydrogen": "1.2.4", "@vercel/next": "4.13.4", "@vercel/node": "5.4.1", "@vercel/python": "5.0.10", "@vercel/redwood": "2.3.6", "@vercel/remix-builder": "5.4.13", "@vercel/ruby": "2.2.1", "@vercel/static-build": "2.7.26", "chokidar": "4.0.0", "jose": "5.9.6" }, "bin": { "vc": "dist/vc.js", "vercel": "dist/vc.js" } }, "sha512-RS1x1pzSOP1obiZzZE/IKwFalFNmRMpqVHxBNsri1o9ldtreknkM83tuyVmkQsY660VJOQhEq/Lo+Wl0jIRuRw=="],
 
     "victory-vendor": ["victory-vendor@36.9.2", "", { "dependencies": { "@types/d3-array": "^3.0.3", "@types/d3-ease": "^3.0.0", "@types/d3-interpolate": "^3.0.1", "@types/d3-scale": "^4.0.2", "@types/d3-shape": "^3.1.0", "@types/d3-time": "^3.0.0", "@types/d3-timer": "^3.0.0", "d3-array": "^3.1.6", "d3-ease": "^3.0.1", "d3-interpolate": "^3.0.1", "d3-scale": "^4.0.2", "d3-shape": "^3.1.0", "d3-time": "^3.0.0", "d3-timer": "^3.0.1" } }, "sha512-PnpQQMuxlwYdocC8fIJqVXvkeViHYzotI+NJrCuav0ZYFoq912ZHBk3mCeuj+5/VpodOjPe1z0Fk2ihgzlXqjQ=="],
 
