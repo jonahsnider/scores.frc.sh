@@ -9,7 +9,8 @@
 			"!**/package.json",
 			"!**/.mypy_cache",
 			"!.venv",
-			"!.turbo"
+			"!.turbo",
+			"!**/next-env.d.ts"
 		]
 	},
 	"formatter": {

@@ -421,3 +421,6 @@ service-account-key.json
 
 # Postgrestools
 postgrestools.jsonc
+
+# Next.js
+next-env.d.ts
