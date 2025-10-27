@@ -6,5 +6,6 @@
 
 * {
 	/* Evil side effect from tailwindcss/base.css, causes Radix Themes inputs to have an icky blue outline */
-	--tw-ring-color: transparent !important;
+	/* biome-ignore lint/complexity/noImportantStyles: This is fine */
+		--tw-ring-color: transparent !important;
 }
