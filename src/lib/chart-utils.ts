@@ -1,12 +1,22 @@
 import { formatDistance } from 'date-fns';
 import type { MatchLevel } from '../../convex/schema';
 
+/** Human-readable week name for display */
 export function weekName(weekNumber: number) {
 	if (weekNumber === 8) {
 		return 'Championship';
 	}
 
 	return `Week ${weekNumber}`;
+}
+
+/** CSS-safe key for chart config and data keys */
+export function weekKey(weekNumber: number) {
+	if (weekNumber === 8) {
+		return 'championship';
+	}
+
+	return `week-${weekNumber}`;
 }
 
 export function tbaUrl(year: number, eventCode: string, matchNumber: number, matchLevel: MatchLevel) {

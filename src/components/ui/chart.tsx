@@ -224,9 +224,10 @@ function ChartLegendContent({
 	hideIcon = false,
 	payload,
 	verticalAlign = 'bottom',
+	align = 'center',
 	nameKey,
 }: React.ComponentProps<'div'> &
-	Pick<RechartsPrimitive.LegendProps, 'payload' | 'verticalAlign'> & {
+	Pick<RechartsPrimitive.LegendProps, 'payload' | 'verticalAlign' | 'align'> & {
 		hideIcon?: boolean;
 		nameKey?: string;
 	}) {
@@ -237,7 +238,16 @@ function ChartLegendContent({
 	}
 
 	return (
-		<div className={cn('flex items-center justify-center gap-4', verticalAlign === 'top' ? 'pb-3' : 'pt-3', className)}>
+		<div
+			className={cn(
+				'flex items-center gap-4',
+				align === 'left' && 'justify-start',
+				align === 'center' && 'justify-center',
+				align === 'right' && 'justify-end',
+				verticalAlign === 'top' ? 'pb-3' : 'pt-3',
+				className,
+			)}
+		>
 			{payload
 				.filter((item) => item.type !== 'none')
 				.map((item) => {
@@ -253,13 +263,13 @@ function ChartLegendContent({
 								<itemConfig.icon />
 							) : (
 								<div
-									className="h-2 w-2 shrink-0 rounded-[2px]"
+									className="h-2 w-2 shrink-0 rounded-full"
 									style={{
 										backgroundColor: item.color,
 									}}
 								/>
 							)}
-							{itemConfig?.label}
+							<span className="text-muted-foreground">{itemConfig?.label}</span>
 						</div>
 					);
 				})}
