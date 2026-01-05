@@ -1,4 +1,7 @@
 {
+	"[css]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
 	"[javascript]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
@@ -11,28 +14,13 @@
 	"[jsonc]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
-	"[python]": {
-		"editor.defaultFormatter": "charliermarsh.ruff"
+	"[tailwindcss]": {
+		"editor.defaultFormatter": "biomejs.biome"
 	},
 	"[typescript]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
 	"[typescriptreact]": {
 		"editor.defaultFormatter": "biomejs.biome"
-	},
-	"cursorpyright.analysis.typeCheckingMode": "strict",
-	"editor.defaultFormatter": "biomejs.biome",
-	"python.analysis.typeCheckingMode": "strict",
-	"search.exclude": {
-		"**/*.code-search": true,
-		"**/bower_components": true,
-		"**/node_modules": true
-	},
-	"tailwindCSS.experimental.classRegex": [["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]],
-	"typescript.inlayHints.functionLikeReturnTypes.enabled": false,
-	"typescript.inlayHints.parameterTypes.enabled": false,
-	"typescript.inlayHints.variableTypes.enabled": false,
-	"typescript.preferences.importModuleSpecifier": "shortest",
-	"typescript.preferences.importModuleSpecifierEnding": "index",
-	"typescript.tsdk": "node_modules/typescript/lib"
+	}
 }
