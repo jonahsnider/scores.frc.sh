@@ -206,7 +206,13 @@ export function ScoreChart({ year, eventCode }: Props) {
 									stroke={`var(--color-${series})`}
 									strokeWidth={2}
 									fill={`url(#fill-${series})`}
-									dot={{ fill: `var(--color-${series})`, strokeWidth: 0, r: 4 }}
+									dot={{
+										fill: `var(--color-${series})`,
+										stroke: 'var(--background)',
+										strokeWidth: 2,
+										r: 4,
+										fillOpacity: 1,
+									}}
 									activeDot={{ fill: `var(--color-${series})`, stroke: 'var(--background)', strokeWidth: 2, r: 6 }}
 									isAnimationActive
 									animationDuration={500}
