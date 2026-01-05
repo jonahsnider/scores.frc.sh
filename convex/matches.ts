@@ -231,6 +231,39 @@ export const getEventsNeedingRefresh = internalQuery({
 });
 
 /**
+ * Internal action that refreshes matches for all events that need updating for a given year.
+ */
+export const refreshMatchResultsForYear = internalAction({
+	args: {
+		year: v.number(),
+	},
+	returns: v.null(),
+	handler: async (ctx, args) => {
+		console.info(`Refreshing match results for year ${args.year}`);
+
+		// Get events that need refresh
+		const eventsToRefresh = await ctx.runQuery(internal.matches.getEventsNeedingRefresh, { year: args.year });
+
+		console.info(`Found ${eventsToRefresh.length} events for year ${args.year} needing match refresh`);
+
+		for (const event of eventsToRefresh) {
+			try {
+				await ctx.runAction(internal.matches.refreshMatchesForEvent, {
+					year: args.year,
+					firstEventCode: event,
+				});
+			} catch (error) {
+				console.error(`Error refreshing matches for ${args.year} ${event}`, error);
+				// Continue with other events even if one fails
+			}
+		}
+
+		console.info(`Refreshed match results for year ${args.year}`);
+		return null;
+	},
+});
+
+/**
  * Internal action that refreshes matches for all events that need updating.
  * This is called by the cron job.
  */
@@ -243,22 +276,7 @@ export const refreshMatchResults = internalAction({
 		const currentYear = new Date().getFullYear();
 
 		for (let year = MIN_YEAR; year <= currentYear; year++) {
-			// Get events that need refresh
-			const eventsToRefresh = await ctx.runQuery(internal.matches.getEventsNeedingRefresh, { year });
-
-			console.info(`Found ${eventsToRefresh.length} events for year ${year} needing match refresh`);
-
-			for (const event of eventsToRefresh) {
-				try {
-					await ctx.runAction(internal.matches.refreshMatchesForEvent, {
-						year,
-						firstEventCode: event,
-					});
-				} catch (error) {
-					console.error(`Error refreshing matches for ${year} ${event}`, error);
-					// Continue with other events even if one fails
-				}
-			}
+			await ctx.runAction(internal.matches.refreshMatchResultsForYear, { year });
 		}
 
 		console.info('Refreshed match results');
