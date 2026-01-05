@@ -1,18 +1,52 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { ScoreChart } from '@/components/score-chart';
+import { SITE_NAME, SITE_URL } from '@/lib/constants';
 
 export const Route = createFileRoute('/$year/$eventCode')({
 	component: YearEventPage,
 	head: ({ params }) => {
 		const eventCode = params.eventCode.toUpperCase();
+		const title = `${eventCode} ${params.year} | ${SITE_NAME}`;
+		const ogTitle = `${eventCode} ${params.year} scores`;
+		const description = `View the progression of the match high score at ${eventCode} ${params.year}.`;
+		const canonicalUrl = `${SITE_URL}/${params.year}/${params.eventCode.toLowerCase()}`;
+
 		return {
 			meta: [
 				{
-					title: `${eventCode} ${params.year} | scores.frc.sh`,
+					title,
 				},
 				{
 					name: 'description',
-					content: `View the progression of the match high score at ${eventCode} ${params.year}.`,
+					content: description,
+				},
+				// Open Graph
+				{
+					property: 'og:title',
+					content: ogTitle,
+				},
+				{
+					property: 'og:description',
+					content: description,
+				},
+				{
+					property: 'og:url',
+					content: canonicalUrl,
+				},
+				// Twitter Card
+				{
+					name: 'twitter:title',
+					content: ogTitle,
+				},
+				{
+					name: 'twitter:description',
+					content: description,
+				},
+			],
+			links: [
+				{
+					rel: 'canonical',
+					href: canonicalUrl,
 				},
 			],
 		};

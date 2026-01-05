@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, redirect, useMatch } from '@tanstack/react-rou
 import { EventInput } from '@/components/event-input';
 import { ScoreChart } from '@/components/score-chart';
 import { YearSelect } from '@/components/year-select';
-import { DEFAULT_YEAR } from '@/lib/constants';
+import { DEFAULT_YEAR, SITE_NAME, SITE_URL } from '@/lib/constants';
 
 export const Route = createFileRoute('/$year')({
 	component: YearLayout,
@@ -12,17 +12,51 @@ export const Route = createFileRoute('/$year')({
 			throw redirect({ to: '/', replace: true });
 		}
 	},
-	head: ({ params }) => ({
-		meta: [
-			{
-				title: `${params.year} | scores.frc.sh`,
-			},
-			{
-				name: 'description',
-				content: `View the progression of the world record & event high scores for FRC in ${params.year}.`,
-			},
-		],
-	}),
+	head: ({ params }) => {
+		const title = `${params.year} | ${SITE_NAME}`;
+		const description = `View the progression of the world record & event high scores for FRC in ${params.year}.`;
+		const canonicalUrl = `${SITE_URL}/${params.year}`;
+
+		return {
+			meta: [
+				{
+					title,
+				},
+				{
+					name: 'description',
+					content: description,
+				},
+				// Open Graph
+				{
+					property: 'og:title',
+					content: `${params.year} scores`,
+				},
+				{
+					property: 'og:description',
+					content: description,
+				},
+				{
+					property: 'og:url',
+					content: canonicalUrl,
+				},
+				// Twitter Card
+				{
+					name: 'twitter:title',
+					content: `${params.year} scores`,
+				},
+				{
+					name: 'twitter:description',
+					content: description,
+				},
+			],
+			links: [
+				{
+					rel: 'canonical',
+					href: canonicalUrl,
+				},
+			],
+		};
+	},
 });
 
 function YearLayout() {

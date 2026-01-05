@@ -6,6 +6,7 @@ import { createClientOnlyFn, createIsomorphicFn } from '@tanstack/react-start';
 import { useEffect } from 'react';
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/constants';
 import appCss from '../styles.css?url';
 
 // Script to set theme before hydration to prevent flash
@@ -25,6 +26,7 @@ export const Route = createRootRouteWithContext<{
 }>()({
 	head: () => ({
 		meta: [
+			// Base meta tags
 			{
 				charSet: 'utf-8',
 			},
@@ -33,17 +35,85 @@ export const Route = createRootRouteWithContext<{
 				content: 'width=device-width, initial-scale=1',
 			},
 			{
-				title: 'scores.frc.sh',
+				title: SITE_NAME,
 			},
 			{
 				name: 'description',
-				content: 'View the progression of the world record & event high scores for FRC.',
+				content: SITE_DESCRIPTION,
+			},
+			{
+				name: 'theme-color',
+				content: '#101211',
+			},
+			// Open Graph defaults
+			{
+				property: 'og:type',
+				content: 'website',
+			},
+			{
+				property: 'og:site_name',
+				content: SITE_NAME,
+			},
+			{
+				property: 'og:image',
+				content: `${SITE_URL}/opengraph-image.png`,
+			},
+			{
+				property: 'og:image:width',
+				content: '1200',
+			},
+			{
+				property: 'og:image:height',
+				content: '630',
+			},
+			{
+				property: 'og:image:alt',
+				content: 'scores.frc.sh - FRC High Score Tracker',
+			},
+			// Twitter Card defaults
+			{
+				name: 'twitter:card',
+				content: 'summary_large_image',
+			},
+			{
+				name: 'twitter:image',
+				content: `${SITE_URL}/twitter-image.png`,
+			},
+			{
+				name: 'twitter:image:alt',
+				content: 'scores.frc.sh - FRC High Score Tracker',
 			},
 		],
 		links: [
+			// Stylesheet
 			{
 				rel: 'stylesheet',
 				href: appCss,
+			},
+			// Favicon and icons
+			{
+				rel: 'icon',
+				type: 'image/x-icon',
+				href: '/favicon.ico',
+			},
+			{
+				rel: 'icon',
+				type: 'image/svg+xml',
+				href: '/icon.svg',
+			},
+			{
+				rel: 'icon',
+				type: 'image/png',
+				href: '/icon.png',
+			},
+			{
+				rel: 'apple-touch-icon',
+				href: '/apple-icon.png',
+			},
+			// PWA manifest
+			{
+				rel: 'manifest',
+				href: '/manifest.webmanifest',
 			},
 		],
 	}),
