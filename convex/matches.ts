@@ -169,8 +169,39 @@ export const saveMatchesForEvent = internalMutation({
 });
 
 /**
+ * Internal query that checks if a single event needs its matches refreshed.
+ * An event needs refresh if it has no matches or any match is missing a result.
+ */
+export const eventNeedsRefresh = internalQuery({
+	args: {
+		year: v.number(),
+		firstCode: v.string(),
+	},
+	returns: v.boolean(),
+	handler: async (ctx, args) => {
+		const matches = await ctx.table('events').get('by_year_and_first_code', args.year, args.firstCode).edge('matches');
+
+		if (!matches) {
+			return true;
+		}
+
+		// Event needs refresh if:
+		// 1. No matches exist yet, or
+		// 2. Any match is missing its result
+		if (matches.length === 0) {
+			return true;
+		}
+
+		return matches.some((match) => match.result === undefined);
+	},
+});
+
+/**
  * Internal query that returns events with missing or incomplete match data.
  * Used by the refresh job to know which events need updating.
+ *
+ * This function is optimized to leverage query caching by calling eventNeedsRefresh
+ * for each event individually, reducing document reads on subsequent calls.
  */
 export const getEventsNeedingRefresh = internalQuery({
 	args: {
@@ -178,22 +209,24 @@ export const getEventsNeedingRefresh = internalQuery({
 	},
 	returns: v.array(v.string()),
 	handler: async (ctx, args) => {
-		// Get all events for the year
-		const events = await ctx
+		// First, get just the event first codes for this year
+		const eventFirstCodes = await ctx
 			.table('events', 'by_year_and_code', (q) => q.eq('year', args.year))
-			.map(async (event) => ({
-				...event,
-				matches: await event.edge('matches'),
-			}));
+			.map((event) => event.firstCode);
 
-		const incompleteEvents = events.filter(
-			(event) =>
-				event.matches === undefined ||
-				event.matches.length === 0 ||
-				event.matches.some((match) => match.result === undefined),
-		);
+		// Check each event individually using the cached query
+		const eventsNeedingRefresh: string[] = [];
+		for (const firstCode of eventFirstCodes) {
+			const needsRefresh: boolean = await ctx.runQuery(internal.matches.eventNeedsRefresh, {
+				year: args.year,
+				firstCode,
+			});
+			if (needsRefresh) {
+				eventsNeedingRefresh.push(firstCode);
+			}
+		}
 
-		return incompleteEvents.map((event) => event.firstCode);
+		return eventsNeedingRefresh;
 	},
 });
 
