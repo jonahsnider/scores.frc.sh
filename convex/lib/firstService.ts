@@ -81,14 +81,15 @@ export async function listEventScores(
 
 		return response;
 	} catch (error) {
-		if (
-			error instanceof ResponseError &&
-			error.status === 500 &&
-			error.data === SCORE_DETAILS_NOT_REGISTERED_ERROR_MESSAGE
-		) {
-			return {
-				MatchScores: [],
-			};
+		if (error instanceof ResponseError) {
+			if (error.status === 404) {
+				console.warn(`FIRST event code not found: ${year} ${eventCode} (TBA may have an incorrect FIRST code)`);
+				return { MatchScores: [] };
+			}
+
+			if (error.status === 500 && error.data === SCORE_DETAILS_NOT_REGISTERED_ERROR_MESSAGE) {
+				return { MatchScores: [] };
+			}
 		}
 
 		throw error;
@@ -96,16 +97,25 @@ export async function listEventScores(
 }
 
 export async function getSchedule(year: number, eventCode: string): Promise<FrcSchedule> {
-	const qualSchedule = await http(`${year}/schedule/${eventCode}`, {
-		schema: FrcSchedule,
-		params: { tournamentLevel: FrcMatchLevel.Qualification },
-	});
-	const playoffSchedule = await http(`${year}/schedule/${eventCode}`, {
-		schema: FrcSchedule,
-		params: { tournamentLevel: FrcMatchLevel.Playoff },
-	});
+	try {
+		const qualSchedule = await http(`${year}/schedule/${eventCode}`, {
+			schema: FrcSchedule,
+			params: { tournamentLevel: FrcMatchLevel.Qualification },
+		});
+		const playoffSchedule = await http(`${year}/schedule/${eventCode}`, {
+			schema: FrcSchedule,
+			params: { tournamentLevel: FrcMatchLevel.Playoff },
+		});
 
-	return {
-		Schedule: [...qualSchedule.Schedule, ...playoffSchedule.Schedule],
-	};
+		return {
+			Schedule: [...qualSchedule.Schedule, ...playoffSchedule.Schedule],
+		};
+	} catch (error) {
+		if (error instanceof ResponseError && error.status === 404) {
+			console.warn(`FIRST event code not found: ${year} ${eventCode} (TBA may have an incorrect FIRST code)`);
+			return { Schedule: [] };
+		}
+
+		throw error;
+	}
 }
