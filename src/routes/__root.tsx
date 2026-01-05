@@ -108,8 +108,8 @@ function RootLayout() {
 	return (
 		<>
 			<ScriptOnce>{themeScript}</ScriptOnce>
-			<div className="container mx-auto max-w-5xl px-4 py-4">
-				<div className="flex flex-col gap-1 justify-start items-center min-h-screen">
+			<div className="container mx-auto max-w-5xl">
+				<div className="flex flex-col gap-1 justify-start items-center min-h-screen p-4">
 					<Header />
 
 					<main className="w-full">
