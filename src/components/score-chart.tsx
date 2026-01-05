@@ -22,18 +22,9 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function ScoreChart({ year, eventCode }: Props) {
-	const globalRecordsQuery = useQuery({
-		...convexQuery(api.scores.worldRecordsByYear, { year }),
-		enabled: eventCode === undefined,
-	});
+	const globalRecordsQuery = useQuery(convexQuery(api.scores.worldRecordsByYear, eventCode ? 'skip' : { year }));
 
-	const eventRecordsQuery = useQuery({
-		...convexQuery(api.scores.eventRecords, {
-			year,
-			eventCode: eventCode ?? '',
-		}),
-		enabled: eventCode !== undefined,
-	});
+	const eventRecordsQuery = useQuery(convexQuery(api.scores.eventRecords, eventCode ? { year, eventCode } : 'skip'));
 
 	const usedQuery = eventCode === undefined ? globalRecordsQuery : eventRecordsQuery;
 	const records = usedQuery.data ?? [];
