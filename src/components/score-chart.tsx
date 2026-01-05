@@ -35,7 +35,7 @@ const WEEK_COLORS = [
 const singleSeriesConfig = {
 	score: {
 		label: 'Score',
-		color: 'var(--chart-1)',
+		color: 'var(--color-emerald-500)',
 	},
 } satisfies ChartConfig;
 
