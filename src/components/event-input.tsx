@@ -48,13 +48,9 @@ export function EventInput() {
 		}
 	};
 
-	const eventRecordsQuery = useQuery({
-		...convexQuery(api.scores.eventRecords, {
-			year,
-			eventCode: eventCode ?? '',
-		}),
-		enabled: Boolean(eventCode),
-	});
+	const eventRecordsQuery = useQuery(
+		convexQuery(api.scores.eventRecords, eventCode ? { year, eventCode: eventCode.toUpperCase() } : 'skip'),
+	);
 
 	const isError = eventCode && eventRecordsQuery.data === null;
 
@@ -65,10 +61,10 @@ export function EventInput() {
 				onChange={onChange}
 				value={value.toUpperCase()}
 				type="text"
-				className={cn('w-44 pr-8', isError && 'border-destructive focus-visible:border-destructive')}
+				className={cn({ 'border-destructive focus-visible:border-destructive': isError })}
 			/>
 			<TriangleAlertIcon
-				className={cn('absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-destructive', !isError && 'invisible')}
+				className={cn('absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-destructive', { invisible: !isError })}
 			/>
 		</div>
 	);
