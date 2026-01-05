@@ -135,6 +135,7 @@ export const eventRecordMatches = internalQuery({
 			.table('events', 'by_year_and_code', (q) => q.eq('year', args.year).eq('code', args.eventCode))
 			.map(async (event) => ({
 				...event,
+				// TODO: See if we can add an index on this instead of a filter
 				matches: (await event.edge('matches').filter((q) => q.neq(q.field('result'), undefined))) as MatchWithResult[],
 			}));
 
