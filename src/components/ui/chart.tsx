@@ -240,10 +240,10 @@ function ChartLegendContent({
 	return (
 		<div
 			className={cn(
-				'flex items-center gap-4',
-				align === 'left' && 'justify-start',
-				align === 'center' && 'justify-center',
-				align === 'right' && 'justify-end',
+				'flex flex-wrap items-center gap-x-4 gap-y-1 justify-evenly',
+				align === 'left' && 'sm:justify-start',
+				align === 'center' && 'sm:justify-center',
+				align === 'right' && 'sm:justify-end',
 				verticalAlign === 'top' ? 'pb-3' : 'pt-3',
 				className,
 			)}
@@ -269,7 +269,7 @@ function ChartLegendContent({
 									}}
 								/>
 							)}
-							<span className="text-muted-foreground">{itemConfig?.label}</span>
+							<span className="text-muted-foreground whitespace-nowrap">{itemConfig?.label}</span>
 						</div>
 					);
 				})}
