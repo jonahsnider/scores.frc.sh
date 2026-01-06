@@ -13,6 +13,11 @@ import { matchLevelValidator } from './schema';
  */
 async function fetchMatchesFromFirstApi(year: number, firstEventCode: string) {
 	const schedule = await getSchedule(year, firstEventCode);
+
+	if (schedule.Schedule.length === 0) {
+		return [];
+	}
+
 	const qualsMatchResults = await listEventScores(year, firstEventCode, FrcMatchLevel.Qualification);
 	const playoffsMatchResults = await listEventScores(year, firstEventCode, FrcMatchLevel.Playoff);
 
