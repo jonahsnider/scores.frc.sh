@@ -20,6 +20,8 @@ jobs:
         run: bun biome migrate --write
       - name: Apply lint and formatting fixes
         run: bun run lint:fix
+      - name: Apply Knip fixes
+        run: bun knip --fix
       - name: Run autofix.ci
         uses: autofix-ci/action@v1
         with:

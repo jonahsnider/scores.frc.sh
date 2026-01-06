@@ -22,3 +22,5 @@ jobs:
         run: bun run tsc
       - name: Lint
         run: bun run lint
+      - name: Run Knip
+        run: bun run knip
