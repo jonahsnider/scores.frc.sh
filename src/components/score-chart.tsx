@@ -155,7 +155,6 @@ export function ScoreChart({ year, eventCode }: Props) {
 								tickFormatter={(score) => `${score} pts`}
 							/>
 							<ChartTooltip
-								cursor={{ fill: 'var(--muted)', opacity: 0.3 }}
 								position={{ y: 0 }}
 								content={
 									<ChartTooltipContent
