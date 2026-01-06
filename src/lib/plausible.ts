@@ -1,11 +1,11 @@
-import { init } from '@plausible-analytics/tracker';
-
 let initialized = false;
 
-export function initPlausible() {
+export async function initPlausible() {
 	if (initialized) {
 		return;
 	}
+
+	const { init } = await import('@plausible-analytics/tracker');
 
 	init({
 		domain: 'scores.frc.sh',
