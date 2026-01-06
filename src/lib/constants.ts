@@ -1,7 +1,7 @@
 export const MIN_YEAR = 2023;
 export const MAX_YEAR = new Date().getFullYear();
 
-export const DEFAULT_YEAR = MAX_YEAR;
+export { MAX_YEAR as DEFAULT_YEAR };
 
 /** Base URL for the site, used for SEO metadata */
 export const SITE_URL = 'https://scores.frc.sh';
