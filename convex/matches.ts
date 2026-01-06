@@ -1,4 +1,5 @@
 import { v } from 'convex/values';
+import { dequal as isDeepStrictEqual } from 'dequal';
 import { internal } from './_generated/api';
 import { internalAction } from './_generated/server';
 import { internalMutation, internalQuery } from './functions';
@@ -35,21 +36,14 @@ export const refreshMatchesForEvent = internalAction({
 	},
 	returns: v.null(),
 	handler: async (ctx, args) => {
-		console.info(`Refreshing matches for ${args.year} ${args.firstEventCode}`);
-
-		console.debug(`Fetching schedule and scores from FIRST API for ${args.year} ${args.firstEventCode}`);
 		const matches = await fetchMatchesFromFirstApi(args.year, args.firstEventCode);
 
-		console.debug(`Found ${matches.length} finished matches for ${args.year} ${args.firstEventCode}`);
-
-		console.debug(`Saving ${matches.length} matches to database for ${args.year} ${args.firstEventCode}`);
 		await ctx.runMutation(internal.matches.saveMatchesForEvent, {
 			year: args.year,
 			firstEventCode: args.firstEventCode,
 			matches,
 		});
 
-		console.info(`Refreshed matches for ${args.year} ${args.firstEventCode}`);
 		return null;
 	},
 });
@@ -82,11 +76,8 @@ export const saveMatchesForEvent = internalMutation({
 		// Get the event by year and FIRST code
 		const event = await ctx.table('events').getX('by_year_and_first_code', args.year, args.firstEventCode);
 
-		console.debug(`Loading existing matches for ${args.year} ${args.firstEventCode}`);
-
 		// Get existing matches for this event
 		const existingMatches = await event.edgeX('matches');
-		console.debug(`Found ${existingMatches.length} existing matches for ${args.year} ${args.firstEventCode}`);
 
 		// Create a map of existing matches by level and number for quick lookup
 		const existingMatchesByKey = new Map(
@@ -99,8 +90,6 @@ export const saveMatchesForEvent = internalMutation({
 		// Upsert matches and their results
 		let insertedCount = 0;
 		let updatedCount = 0;
-		let resultsInsertedCount = 0;
-		let resultsUpdatedCount = 0;
 
 		for (const match of args.matches) {
 			const key = `${match.matchLevel}:${match.matchNumber}`;
@@ -110,15 +99,7 @@ export const saveMatchesForEvent = internalMutation({
 
 			if (existingMatch) {
 				// Match already exists, check if we need to update result
-				if (match.result) {
-					if (existingMatch.result) {
-						resultsUpdatedCount++;
-					} else {
-						resultsInsertedCount++;
-					}
-
-					// Get writable ent
-
+				if (match.result && !isDeepStrictEqual(existingMatch.result, match.result)) {
 					await ctx
 						.table('matches')
 						.getX(existingMatch._id)
@@ -129,8 +110,8 @@ export const saveMatchesForEvent = internalMutation({
 								winningTeams: match.result.winningTeams,
 							},
 						});
+					updatedCount++;
 				}
-				updatedCount++;
 			} else {
 				// Insert new match with optional result
 				await ctx.table('matches').insert({
@@ -140,10 +121,6 @@ export const saveMatchesForEvent = internalMutation({
 					result: match.result ?? undefined,
 				});
 				insertedCount++;
-
-				if (match.result) {
-					resultsInsertedCount++;
-				}
 			}
 		}
 
@@ -152,20 +129,15 @@ export const saveMatchesForEvent = internalMutation({
 		for (const existingMatch of existingMatches) {
 			const key = `${existingMatch.matchLevel}:${existingMatch.matchNumber}`;
 			if (!newMatchKeys.has(key)) {
-				console.warn(`Deleting orphaned match ${key} for ${args.year} ${args.firstEventCode}`);
-				// Get writable ent and delete
 				const matchToDelete = await ctx.table('matches').getX(existingMatch._id);
 				await matchToDelete.delete();
 				deletedCount++;
 			}
 		}
 
-		console.info(`Inserted ${insertedCount} matches, updated ${updatedCount} for ${args.year} ${args.firstEventCode}`);
-		if (resultsInsertedCount > 0 || resultsUpdatedCount > 0) {
-			console.debug(`Results: ${resultsInsertedCount} inserted, ${resultsUpdatedCount} updated`);
-		}
-		if (deletedCount > 0) {
-			console.info(`Deleted ${deletedCount} orphaned matches for ${args.year} ${args.firstEventCode}`);
+		// Log summary only if there were changes
+		if (insertedCount > 0 || updatedCount > 0 || deletedCount > 0) {
+			console.info(`${args.year} ${args.firstEventCode} matches: +${insertedCount} ~${updatedCount} -${deletedCount}`);
 		}
 
 		return null;
@@ -221,12 +193,14 @@ export const refreshMatchResultsForYear = internalAction({
 	},
 	returns: v.null(),
 	handler: async (ctx, args) => {
-		console.info(`Refreshing match results for year ${args.year}`);
-
 		// Get events that need refresh
 		const eventsToRefresh = await ctx.runQuery(internal.matches.getEventsNeedingRefresh, { year: args.year });
 
-		console.info(`Found ${eventsToRefresh.length} events for year ${args.year} needing match refresh`);
+		if (eventsToRefresh.length === 0) {
+			return null;
+		}
+
+		console.info(`${args.year}: refreshing ${eventsToRefresh.length} events`);
 
 		for (const event of eventsToRefresh) {
 			try {
@@ -236,11 +210,9 @@ export const refreshMatchResultsForYear = internalAction({
 				});
 			} catch (error) {
 				console.error(`Error refreshing matches for ${args.year} ${event}`, error);
-				// Continue with other events even if one fails
 			}
 		}
 
-		console.info(`Refreshed match results for year ${args.year}`);
 		return null;
 	},
 });
@@ -253,13 +225,12 @@ export const refreshMatchResults = internalAction({
 	args: {},
 	returns: v.null(),
 	handler: async (ctx) => {
-		console.info('Refreshing match results');
+		console.info(`Refreshing matches for ${MIN_YEAR}-${MAX_YEAR}`);
 
 		for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
 			await ctx.runAction(internal.matches.refreshMatchResultsForYear, { year });
 		}
 
-		console.info('Refreshed match results');
 		return null;
 	},
 });

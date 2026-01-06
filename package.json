@@ -30,6 +30,7 @@
 		"convex-ents": "^0.16.0",
 		"convex-helpers": "^0.1.108",
 		"date-fns": "^4.1.0",
+		"dequal": "^2.0.3",
 		"envalid": "^8.1.1",
 		"lucide-react": "^0.562.0",
 		"nitro": "latest",
