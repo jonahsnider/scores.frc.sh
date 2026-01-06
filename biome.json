@@ -1,50 +1,49 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.3.1/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		},
+		"enabled": true
+	},
+	"css": {
+		"formatter": {
+			"enabled": true
+		},
+		"linter": {
+			"enabled": true
+		},
+		"parser": {
+			"cssModules": true,
+			"tailwindDirectives": true
+		}
+	},
 	"files": {
-		"includes": [
-			"**",
-			"!**/.next",
-			"!**/node_modules",
-			"!**/.vercel",
-			"!**/package.json",
-			"!**/.mypy_cache",
-			"!.venv",
-			"!.turbo",
-			"!**/next-env.d.ts"
-		]
+		"ignoreUnknown": false,
+		"includes": ["**", "!**/routeTree.gen.ts", "!convex/_generated/**/*"]
 	},
 	"formatter": {
-		"formatWithErrors": true,
-		"lineWidth": 120
+		"enabled": true,
+		"indentStyle": "tab"
 	},
 	"javascript": {
 		"formatter": {
-			"jsxQuoteStyle": "single",
+			"lineWidth": 120,
 			"quoteStyle": "single"
-		},
-		"globals": ["React"],
-		"parser": {
-			"unsafeParameterDecoratorsEnabled": true
-		}
-	},
-	"json": {
-		"parser": {
-			"allowComments": true
 		}
 	},
 	"linter": {
+		"enabled": true,
+		"includes": ["**", "!src/components/ui/**/*"],
 		"rules": {
-			"complexity": {
-				"noStaticOnlyClass": "off",
-				"useLiteralKeys": "off"
-			},
-			"style": {
-				"noParameterProperties": "off"
-			},
-			"suspicious": {
-				"noEmptyBlockStatements": "off",
-				"noUnknownAtRules": "off"
-			}
+			"recommended": true
 		}
+	},
+	"vcs": {
+		"clientKind": "git",
+		"enabled": true,
+		"useIgnoreFile": true
 	}
 }

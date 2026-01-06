@@ -1,0 +1,12 @@
+{
+	"mcpServers": {
+		"Convex": {
+			"command": "bun",
+			"args": ["convex", "mcp", "start"]
+		},
+		"shadcn": {
+			"command": "bunx",
+			"args": ["shadcn", "mcp"]
+		}
+	}
+}
