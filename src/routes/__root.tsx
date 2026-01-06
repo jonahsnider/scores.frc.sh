@@ -3,6 +3,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import { createRootRouteWithContext, HeadContent, Outlet, ScriptOnce, Scripts } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { createClientOnlyFn, createIsomorphicFn } from '@tanstack/react-start';
+import { Analytics } from '@vercel/analytics/react';
 import { useEffect } from 'react';
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
@@ -195,6 +196,7 @@ function RootLayout() {
 					<Footer />
 				</div>
 			</div>
+			<Analytics />
 		</>
 	);
 }
