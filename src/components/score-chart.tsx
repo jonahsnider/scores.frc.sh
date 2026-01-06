@@ -168,7 +168,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 														className="flex w-1 flex-col rounded"
 														style={{ backgroundColor: `var(--color-${name})` }}
 													/>
-													<div className="flex flex-col gap-1 text-lg">
+													<div className="flex flex-col gap-1 md:text-lg">
 														<div>
 															<span className="font-semibold">{data.eventName}</span>
 															<span className="text-muted-foreground">
