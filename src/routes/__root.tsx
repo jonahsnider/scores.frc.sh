@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/constants';
+import { initPlausible } from '@/lib/plausible';
 import appCss from '../styles.css?url';
 
 // Script to set theme before hydration to prevent flash
@@ -174,6 +175,11 @@ function RootLayout() {
 	});
 
 	useEffect(() => setupPreferredListener(), [setupPreferredListener]);
+
+	// Initialize Plausible analytics (auto-tracks pageviews in SPA)
+	useEffect(() => {
+		initPlausible();
+	}, []);
 
 	return (
 		<>
