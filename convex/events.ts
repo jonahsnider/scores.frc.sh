@@ -2,9 +2,8 @@ import { v } from 'convex/values';
 import { internal } from './_generated/api';
 import { internalAction } from './_generated/server';
 import { internalMutation } from './functions';
+import { MAX_YEAR, MIN_YEAR } from './lib/constants';
 import { getEventsForYear, type TbaEvent, TbaEventType } from './lib/tbaService';
-
-const MIN_YEAR = 2023;
 
 /** Event types to ignore when syncing from TBA */
 const IGNORED_EVENT_TYPES = new Set([TbaEventType.Offseason, TbaEventType.Preseason, TbaEventType.Unlabeled]);
@@ -163,12 +162,10 @@ export const refreshAllEvents = internalAction({
 	args: {},
 	returns: v.null(),
 	handler: async (ctx) => {
-		const currentYear = new Date().getFullYear();
-
 		console.info('Refreshing events');
-		console.debug(`Refreshing events for years ${MIN_YEAR} to ${currentYear}`);
+		console.debug(`Refreshing events for years ${MIN_YEAR} to ${MAX_YEAR}`);
 
-		for (let year = MIN_YEAR; year <= currentYear; year++) {
+		for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
 			try {
 				await ctx.runAction(internal.events.refreshEventsForYear, { year });
 			} catch (error) {

@@ -2,11 +2,10 @@ import { v } from 'convex/values';
 import { internal } from './_generated/api';
 import { internalAction } from './_generated/server';
 import { internalMutation, internalQuery } from './functions';
+import { MAX_YEAR, MIN_YEAR } from './lib/constants';
 import { FrcMatchLevel, getSchedule, listEventScores } from './lib/firstService';
 import { transformMatches } from './lib/matchTransform';
 import { matchLevelValidator } from './schema';
-
-const MIN_YEAR = 2023;
 
 /**
  * Fetch matches from FIRST API for a specific event.
@@ -273,9 +272,7 @@ export const refreshMatchResults = internalAction({
 	handler: async (ctx) => {
 		console.info('Refreshing match results');
 
-		const currentYear = new Date().getFullYear();
-
-		for (let year = MIN_YEAR; year <= currentYear; year++) {
+		for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
 			await ctx.runAction(internal.matches.refreshMatchResultsForYear, { year });
 		}
 

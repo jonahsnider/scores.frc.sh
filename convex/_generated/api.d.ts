@@ -11,6 +11,7 @@
 import type * as crons from "../crons.js";
 import type * as events from "../events.js";
 import type * as functions from "../functions.js";
+import type * as lib_constants from "../lib/constants.js";
 import type * as lib_env from "../lib/env.js";
 import type * as lib_firstService from "../lib/firstService.js";
 import type * as lib_matchTransform from "../lib/matchTransform.js";
@@ -29,6 +30,7 @@ declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   events: typeof events;
   functions: typeof functions;
+  "lib/constants": typeof lib_constants;
   "lib/env": typeof lib_env;
   "lib/firstService": typeof lib_firstService;
   "lib/matchTransform": typeof lib_matchTransform;
