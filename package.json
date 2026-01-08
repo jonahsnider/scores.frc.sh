@@ -4,7 +4,9 @@
 	"type": "module",
 	"scripts": {
 		"build": "vite build",
-		"dev": "vite dev --port 3000",
+		"dev": "concurrently --kill-others \"vite dev --port 3000\" \"convex dev\"",
+		"dev:backend": "convex dev",
+		"dev:frontend": "vite dev --port 3000",
 		"lint": "biome check",
 		"lint:fix": "biome check --write --unsafe",
 		"preview": "vite preview",
@@ -55,6 +57,7 @@
 		"@types/react-dom": "^19.2.0",
 		"@vite-pwa/assets-generator": "^1.0.2",
 		"@vitejs/plugin-react": "^5.0.4",
+		"concurrently": "^9.2.1",
 		"jsdom": "^27.0.0",
 		"knip": "^5.80.0",
 		"typescript": "^5.7.2",
