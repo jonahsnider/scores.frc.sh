@@ -1,9 +1,17 @@
+import { convexQuery } from '@convex-dev/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { ScoreChart } from '@/components/score-chart';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
+import { api } from '../../convex/_generated/api';
 
 export const Route = createFileRoute('/$year/$eventCode')({
 	component: YearEventPage,
+	loader: ({ context: { queryClient }, params }) => {
+		const year = Number(params.year);
+		const eventCode = params.eventCode.toUpperCase();
+
+		void queryClient.prefetchQuery(convexQuery(api.scores.eventRecords, { year, eventCode }));
+	},
 	head: ({ params }) => {
 		const eventCode = params.eventCode.toUpperCase();
 		const title = `${eventCode} ${params.year} | ${SITE_NAME}`;

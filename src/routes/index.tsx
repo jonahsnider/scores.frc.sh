@@ -1,11 +1,15 @@
+import { convexQuery } from '@convex-dev/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { EventInput } from '@/components/event-input';
 import { ScoreChart } from '@/components/score-chart';
 import { YearSelect } from '@/components/year-select';
 import { DEFAULT_YEAR, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/constants';
+import { api } from '../../convex/_generated/api';
 
 export const Route = createFileRoute('/')({
 	component: HomePage,
+	loader: ({ context: { queryClient } }) =>
+		void queryClient.prefetchQuery(convexQuery(api.scores.worldRecordsByYear, { year: DEFAULT_YEAR })),
 	head: () => ({
 		meta: [
 			{

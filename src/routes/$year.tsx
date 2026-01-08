@@ -1,8 +1,10 @@
+import { convexQuery } from '@convex-dev/react-query';
 import { createFileRoute, Outlet, redirect, useMatch } from '@tanstack/react-router';
 import { EventInput } from '@/components/event-input';
 import { ScoreChart } from '@/components/score-chart';
 import { YearSelect } from '@/components/year-select';
 import { DEFAULT_YEAR, SITE_NAME, SITE_URL } from '@/lib/constants';
+import { api } from '../../convex/_generated/api';
 
 export const Route = createFileRoute('/$year')({
 	component: YearLayout,
@@ -11,6 +13,11 @@ export const Route = createFileRoute('/$year')({
 		if (year === DEFAULT_YEAR) {
 			throw redirect({ to: '/', replace: true });
 		}
+	},
+	loader: ({ context: { queryClient }, params }) => {
+		const year = Number(params.year);
+
+		void queryClient.prefetchQuery(convexQuery(api.scores.worldRecordsByYear, { year }));
 	},
 	head: ({ params }) => {
 		const title = `${params.year} | ${SITE_NAME}`;
