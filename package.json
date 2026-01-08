@@ -28,7 +28,7 @@
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"convex": "^1.31.2",
-		"convex-ents": "^0.16.0",
+		"convex-ents": "^0.18.0",
 		"convex-helpers": "^0.1.108",
 		"date-fns": "^4.1.0",
 		"dequal": "^2.0.3",
