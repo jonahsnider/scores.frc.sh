@@ -3,7 +3,6 @@ import { dequal as isDeepStrictEqual } from 'dequal';
 import { internal } from './_generated/api';
 import { internalAction } from './_generated/server';
 import { internalMutation, internalQuery } from './functions';
-import { MAX_YEAR, MIN_YEAR } from './lib/constants';
 import { FrcMatchLevel, getSchedule, listEventScores } from './lib/firstService';
 import { transformMatches } from './lib/matchTransform';
 import { matchLevelValidator } from './schema';
@@ -211,24 +210,6 @@ export const refreshMatchResultsForYear = internalAction({
 			} catch (error) {
 				console.error(`Error refreshing matches for ${args.year} ${event}`, error);
 			}
-		}
-
-		return null;
-	},
-});
-
-/**
- * Internal action that refreshes matches for all events that need updating.
- * This is called by the cron job.
- */
-export const refreshMatchResults = internalAction({
-	args: {},
-	returns: v.null(),
-	handler: async (ctx) => {
-		console.info(`Refreshing matches for ${MIN_YEAR}-${MAX_YEAR}`);
-
-		for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
-			await ctx.runAction(internal.matches.refreshMatchResultsForYear, { year });
 		}
 
 		return null;

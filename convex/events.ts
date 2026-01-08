@@ -3,7 +3,6 @@ import { dequal as isDeepStrictEqual } from 'dequal';
 import { internal } from './_generated/api';
 import { internalAction } from './_generated/server';
 import { internalMutation } from './functions';
-import { MAX_YEAR, MIN_YEAR } from './lib/constants';
 import { getEventsForYear, type TbaEvent, TbaEventType } from './lib/tbaService';
 
 /** Event types to ignore when syncing from TBA */
@@ -140,28 +139,6 @@ export const saveEventsForYear = internalMutation({
 		// Log summary only if there were changes
 		if (insertedCount > 0 || updatedCount > 0 || deletedCount > 0) {
 			console.info(`${args.year} events: +${insertedCount} ~${updatedCount} -${deletedCount}`);
-		}
-
-		return null;
-	},
-});
-
-/**
- * Internal action that refreshes events for all years from MIN_YEAR to current year.
- * This is called by the daily cron job.
- */
-export const refreshAllEvents = internalAction({
-	args: {},
-	returns: v.null(),
-	handler: async (ctx) => {
-		console.info(`Refreshing events for ${MIN_YEAR}-${MAX_YEAR}`);
-
-		for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
-			try {
-				await ctx.runAction(internal.events.refreshEventsForYear, { year });
-			} catch (error) {
-				console.error(`Error refreshing events for ${year}`, error);
-			}
 		}
 
 		return null;
