@@ -61,6 +61,7 @@ export function EventInput() {
 				onChange={onChange}
 				value={value.toUpperCase()}
 				type="text"
+				autoFocus
 				className={cn({ 'border-destructive focus-visible:border-destructive': isError })}
 			/>
 			<TriangleAlertIcon
