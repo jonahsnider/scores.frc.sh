@@ -1,13 +1,12 @@
 import { convexQuery } from '@convex-dev/react-query';
-import { createFileRoute, Outlet, redirect, useMatch } from '@tanstack/react-router';
-import { EventInput } from '@/components/event-input';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { ScoreChart } from '@/components/score-chart';
-import { YearSelect } from '@/components/year-select';
+import { ScorePageLayout } from '@/components/score-page-layout';
 import { DEFAULT_YEAR, SITE_NAME, SITE_URL } from '@/lib/constants';
 import { api } from '../../convex/_generated/api';
 
-export const Route = createFileRoute('/$year')({
-	component: YearLayout,
+export const Route = createFileRoute('/$year_')({
+	component: YearPage,
 	beforeLoad: ({ params }) => {
 		const year = Number(params.year);
 		if (year === DEFAULT_YEAR) {
@@ -66,25 +65,13 @@ export const Route = createFileRoute('/$year')({
 	},
 });
 
-function YearLayout() {
+function YearPage() {
 	const { year } = Route.useParams();
 	const yearNumber = Number(year);
 
-	// Check if there's a child route (eventCode)
-	const childMatch = useMatch({
-		from: '/$year/$eventCode',
-		shouldThrow: false,
-	});
-	const hasEventCode = childMatch !== undefined;
-
 	return (
-		<div className="flex flex-col gap-4 justify-center items-center w-full pt-2">
-			<div className="flex gap-4">
-				<YearSelect />
-				<EventInput />
-			</div>
-
-			{hasEventCode ? <Outlet /> : <ScoreChart year={yearNumber} />}
-		</div>
+		<ScorePageLayout>
+			<ScoreChart year={yearNumber} />
+		</ScorePageLayout>
 	);
 }

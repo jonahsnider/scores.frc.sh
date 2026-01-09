@@ -9,12 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as YearRouteImport } from './routes/$year'
+import { Route as YearRouteImport } from './routes/$year_'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as YearEventCodeRouteImport } from './routes/$year.$eventCode'
 
 const YearRoute = YearRouteImport.update({
-  id: '/$year',
+  id: '/$year_',
   path: '/$year',
   getParentRoute: () => rootRouteImport,
 } as any)
@@ -24,25 +24,25 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const YearEventCodeRoute = YearEventCodeRouteImport.update({
-  id: '/$eventCode',
-  path: '/$eventCode',
-  getParentRoute: () => YearRoute,
+  id: '/$year/$eventCode',
+  path: '/$year/$eventCode',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/$year': typeof YearRouteWithChildren
+  '/$year': typeof YearRoute
   '/$year/$eventCode': typeof YearEventCodeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/$year': typeof YearRouteWithChildren
+  '/$year': typeof YearRoute
   '/$year/$eventCode': typeof YearEventCodeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/$year': typeof YearRouteWithChildren
+  '/$year_': typeof YearRoute
   '/$year/$eventCode': typeof YearEventCodeRoute
 }
 export interface FileRouteTypes {
@@ -50,18 +50,19 @@ export interface FileRouteTypes {
   fullPaths: '/' | '/$year' | '/$year/$eventCode'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/$year' | '/$year/$eventCode'
-  id: '__root__' | '/' | '/$year' | '/$year/$eventCode'
+  id: '__root__' | '/' | '/$year_' | '/$year/$eventCode'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  YearRoute: typeof YearRouteWithChildren
+  YearRoute: typeof YearRoute
+  YearEventCodeRoute: typeof YearEventCodeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/$year': {
-      id: '/$year'
+    '/$year_': {
+      id: '/$year_'
       path: '/$year'
       fullPath: '/$year'
       preLoaderRoute: typeof YearRouteImport
@@ -76,27 +77,18 @@ declare module '@tanstack/react-router' {
     }
     '/$year/$eventCode': {
       id: '/$year/$eventCode'
-      path: '/$eventCode'
+      path: '/$year/$eventCode'
       fullPath: '/$year/$eventCode'
       preLoaderRoute: typeof YearEventCodeRouteImport
-      parentRoute: typeof YearRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
-interface YearRouteChildren {
-  YearEventCodeRoute: typeof YearEventCodeRoute
-}
-
-const YearRouteChildren: YearRouteChildren = {
-  YearEventCodeRoute: YearEventCodeRoute,
-}
-
-const YearRouteWithChildren = YearRoute._addFileChildren(YearRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  YearRoute: YearRouteWithChildren,
+  YearRoute: YearRoute,
+  YearEventCodeRoute: YearEventCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

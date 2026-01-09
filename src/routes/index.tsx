@@ -1,8 +1,7 @@
 import { convexQuery } from '@convex-dev/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { EventInput } from '@/components/event-input';
 import { ScoreChart } from '@/components/score-chart';
-import { YearSelect } from '@/components/year-select';
+import { ScorePageLayout } from '@/components/score-page-layout';
 import { DEFAULT_YEAR, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/constants';
 import { api } from '../../convex/_generated/api';
 
@@ -53,13 +52,8 @@ export const Route = createFileRoute('/')({
 
 function HomePage() {
 	return (
-		<div className="flex flex-col gap-4 justify-center items-center w-full pt-2">
-			<div className="flex gap-4">
-				<YearSelect />
-				<EventInput />
-			</div>
-
+		<ScorePageLayout>
 			<ScoreChart year={DEFAULT_YEAR} />
-		</div>
+		</ScorePageLayout>
 	);
 }

@@ -1,6 +1,7 @@
 import { convexQuery } from '@convex-dev/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { ScoreChart } from '@/components/score-chart';
+import { ScorePageLayout } from '@/components/score-page-layout';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
 import { api } from '../../convex/_generated/api';
 
@@ -65,5 +66,9 @@ function YearEventPage() {
 	const { year, eventCode } = Route.useParams();
 	const yearNumber = Number(year);
 
-	return <ScoreChart year={yearNumber} eventCode={eventCode.toUpperCase()} />;
+	return (
+		<ScorePageLayout>
+			<ScoreChart year={yearNumber} eventCode={eventCode.toUpperCase()} />
+		</ScorePageLayout>
+	);
 }
