@@ -16,10 +16,10 @@ for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
 			{ year },
 		);
 
-		// Past years: refresh match results weekly
-		crons.weekly(
+		// Past years: refresh match results monthly
+		crons.monthly(
 			`Refresh ${year} match results`,
-			{ dayOfWeek: 'sunday', hourUTC: 0, minuteUTC: 0 },
+			{ day: 1, hourUTC: 0, minuteUTC: 0 },
 			internal.matches.refreshMatchResultsForYear,
 			{ year },
 		);
