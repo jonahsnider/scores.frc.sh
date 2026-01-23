@@ -35,7 +35,7 @@
 		"date-fns": "^4.1.0",
 		"dequal": "^2.0.3",
 		"envalid": "^8.1.1",
-		"lucide-react": "^0.562.0",
+		"lucide-react": "^0.563.0",
 		"nitro": "latest",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
