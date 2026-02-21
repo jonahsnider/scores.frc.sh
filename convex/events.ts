@@ -6,13 +6,18 @@ import { internalMutation } from './functions';
 import { getEventsForYear, type TbaEvent, TbaEventType } from './lib/tbaService';
 
 /** Event types to ignore when syncing from TBA */
-const IGNORED_EVENT_TYPES = new Set([TbaEventType.Offseason, TbaEventType.Preseason, TbaEventType.Unlabeled]);
+const IGNORED_EVENT_TYPES = new Set([TbaEventType.Offseason, TbaEventType.Unlabeled]);
 
 /**
  * Normalize TBA week number to a 1-indexed week number.
  * TBA uses 0-indexed weeks, championship events have null week.
  */
 function normalizeTbaWeek(event: TbaEvent): number {
+	// Preseason events are week 0
+	if (event.event_type === TbaEventType.Preseason) {
+		return 0;
+	}
+
 	if (event.week !== null) {
 		return event.week + 1;
 	}
