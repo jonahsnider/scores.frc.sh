@@ -17,7 +17,7 @@ export type MatchResultData = {
 export type TransformedMatch = {
 	matchNumber: number;
 	matchLevel: MatchLevel;
-	result: MatchResultData;
+	result: MatchResultData | null;
 };
 
 /**
@@ -69,7 +69,7 @@ export function frcScoreToMatchResult(score: FrcEventMatchScore, scheduleMatch: 
 
 /**
  * Transform raw FIRST API schedule and scores into our match format.
- * Filters to only finished matches (those with scores).
+ * Returns all scheduled matches, with null results for unplayed ones.
  */
 export function transformMatches(
 	schedule: FrcScheduleMatch[],
@@ -83,23 +83,15 @@ export function transformMatches(
 		),
 	);
 
-	// Filter to finished matches (those with scores) and transform
-	return schedule
-		.filter((match) => {
-			const key = `${match.tournamentLevel}:${match.matchNumber}`;
-			return scoreMap.has(key);
-		})
-		.map((match) => {
-			const key = `${match.tournamentLevel}:${match.matchNumber}`;
-			const score = scoreMap.get(key);
-			if (!score) {
-				throw new Error(`Score not found for match ${key}`);
-			}
+	// Transform all scheduled matches, with null results for unplayed ones
+	return schedule.map((match) => {
+		const key = `${match.tournamentLevel}:${match.matchNumber}`;
+		const score = scoreMap.get(key);
 
-			return {
-				matchNumber: match.matchNumber,
-				matchLevel: convertMatchLevel(match.tournamentLevel as FrcMatchLevel),
-				result: frcScoreToMatchResult(score, match),
-			};
-		});
+		return {
+			matchNumber: match.matchNumber,
+			matchLevel: convertMatchLevel(match.tournamentLevel as FrcMatchLevel),
+			result: score ? frcScoreToMatchResult(score, match) : null,
+		};
+	});
 }
