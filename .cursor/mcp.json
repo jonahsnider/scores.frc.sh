@@ -5,7 +5,7 @@
 			"args": ["convex", "mcp", "start"]
 		},
 		"shadcn": {
-			"command": "bunx",
+			"command": "bun",
 			"args": ["shadcn", "mcp"]
 		}
 	}

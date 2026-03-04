@@ -2,13 +2,13 @@
 	"mcpServers": {
 		"shadcn": {
 			"type": "stdio",
-			"command": "bunx",
+			"command": "bun",
 			"args": ["shadcn", "mcp"],
 			"env": {}
 		},
 		"convex": {
 			"type": "stdio",
-			"command": "bunx",
+			"command": "bun",
 			"args": ["convex", "mcp", "start"],
 			"env": {}
 		}
