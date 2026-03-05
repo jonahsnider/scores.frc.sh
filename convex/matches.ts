@@ -170,11 +170,19 @@ export const getEventsNeedingRefresh = internalQuery({
 			matchesMissingResults.filter((match) => match.year === args.year).map((match) => match.firstCode),
 		);
 
-		// Query 2: Get events with no matches at all
+		// Query 2: Get events with no matches at all, or events with only qual matches
+		// (no playoff matches means elims schedule hasn't been created yet)
 		const allEvents = await ctx.table('events', 'by_year_and_code', (q) => q.eq('year', args.year));
 		for (const event of allEvents) {
-			const match = await event.edge('matches').first();
-			if (!match) {
+			const matches = await event.edge('matches');
+
+			if (matches.length === 0) {
+				eventFirstCodes.add(event.firstCode);
+				continue;
+			}
+
+			const hasPlayoffMatch = matches.some((match) => match.matchLevel === 'playoffs');
+			if (!hasPlayoffMatch) {
 				eventFirstCodes.add(event.firstCode);
 			}
 		}
