@@ -6,7 +6,7 @@
 		"build": "vite build",
 		"dev": "bun run --parallel dev:frontend dev:backend",
 		"dev:backend": "convex dev",
-		"dev:frontend": "vite dev --port 3000",
+		"dev:frontend": "portless scores.frc.sh vite dev",
 		"lint": "biome check",
 		"lint:fix": "biome check --write --unsafe",
 		"preview": "vite preview",
