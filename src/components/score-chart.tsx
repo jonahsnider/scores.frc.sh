@@ -3,7 +3,7 @@
 import { convexQuery } from '@convex-dev/react-query';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
-import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, Legend, type MouseHandlerDataParam, XAxis, YAxis } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	type ChartConfig,
@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/chart';
 import { formatMatch, formatRecordHeldFor, tbaUrl, weekKey, weekName } from '@/lib/chart-utils';
 import { api } from '../../convex/_generated/api';
-import type { MatchLevel } from '../../convex/schema';
 
 type Props = {
 	year: number;
@@ -94,14 +93,16 @@ export function ScoreChart({ year, eventCode }: Props) {
 					? 'No data available'
 					: undefined;
 
-	const handleChartClick = (data: {
-		activePayload?: Array<{
-			payload: { eventCode: string; matchNumber: number; matchLevel: MatchLevel };
-		}>;
-	}) => {
-		const payload = data.activePayload?.[0]?.payload;
-		if (payload) {
-			window.open(tbaUrl(year, payload.eventCode, payload.matchNumber, payload.matchLevel), '_blank');
+	const handleChartClick = (data: MouseHandlerDataParam) => {
+		if (!data.isTooltipActive) {
+			return;
+		}
+
+		const index = Number(data.activeTooltipIndex);
+
+		const record = chartData[index];
+		if (record) {
+			window.open(tbaUrl(year, record.eventCode, record.matchNumber, record.matchLevel), '_blank');
 		}
 	};
 
@@ -194,7 +195,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 								<Legend
 									verticalAlign="top"
 									align="right"
-									content={<ChartLegendContent verticalAlign="top" align="right" />}
+									content={<ChartLegendContent verticalAlign="top" className="justify-end" />}
 								/>
 							)}
 							{seriesToRender.map((series) => (
