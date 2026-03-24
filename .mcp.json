@@ -1,16 +1,20 @@
 {
 	"mcpServers": {
-		"shadcn": {
-			"type": "stdio",
-			"command": "bun",
-			"args": ["shadcn", "mcp"],
-			"env": {}
-		},
 		"convex": {
-			"type": "stdio",
-			"command": "bun",
 			"args": ["convex", "mcp", "start"],
-			"env": {}
+			"command": "bun",
+			"env": {},
+			"type": "stdio"
+		},
+		"shadcn": {
+			"args": ["shadcn", "mcp"],
+			"command": "bun",
+			"env": {},
+			"type": "stdio"
+		},
+		"vercel": {
+			"type": "http",
+			"url": "https://mcp.vercel.com"
 		}
 	}
 }
