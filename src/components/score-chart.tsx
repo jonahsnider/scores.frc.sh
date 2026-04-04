@@ -152,6 +152,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 								tickLine={false}
 								axisLine={false}
 								tickMargin={8}
+								width="auto"
 								domain={[0, 'auto']}
 								tickFormatter={(score) => `${score} pts`}
 							/>
