@@ -27,8 +27,6 @@ const config: KnipConfig = {
 		'class-variance-authority',
 	],
 
-	ignoreBinaries: ['portless'],
-
 	rules: {
 		enumMembers: 'off',
 	},

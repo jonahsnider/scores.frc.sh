@@ -12,17 +12,15 @@ jobs:
     steps:
       - name: Checkout Git repository
         uses: actions/checkout@v6
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-      - name: Migrate Biome schema
-        run: bun biome migrate --write
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1
+        with:
+          cache: true
       - name: Apply lint and formatting fixes
-        run: bun run lint:fix
+        run: vp check --fix
       - name: Apply Knip fixes
-        run: bun knip --fix
+        run: vp exec knip --fix
       - name: Run autofix.ci
         uses: autofix-ci/action@v1
         with:
-          commit-message: "refactor: apply automatic fixes"
+          commit-message: 'refactor: apply automatic fixes'
