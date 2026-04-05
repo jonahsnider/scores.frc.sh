@@ -58,7 +58,7 @@
 		"@vitejs/plugin-react": "^6.0.0",
 		"jsdom": "^29.0.0",
 		"knip": "^6.0.0",
-		"portless": "0.9.4",
+		"portless": "0.9.6",
 		"typescript": "^6.0.0",
 		"vite": "^8.0.0",
 		"vitest": "^4.0.0"
