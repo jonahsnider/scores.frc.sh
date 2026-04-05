@@ -113,7 +113,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 	return (
 		<Card className="w-full max-w-5xl">
 			<CardHeader>
-				<CardTitle className="text-lg sm:text-xl md:text-2xl">
+				<CardTitle className="text-lg sm:text-xl md:text-2xl font-heading">
 					{eventCode ? `High scores for ${eventCode.toUpperCase()} ${year}` : `Global high scores for ${year}`}
 				</CardTitle>
 			</CardHeader>

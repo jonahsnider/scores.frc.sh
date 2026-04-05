@@ -1,7 +1,7 @@
 export function Footer() {
 	return (
 		<footer className="flex flex-col gap-1 pt-8 sm:pt-12 justify-center w-full items-center text-center">
-			<h2 className="text-base sm:text-lg font-semibold text-foreground">Other projects</h2>
+			<h2 className="text-base sm:text-lg font-semibold text-foreground font-heading">Other projects</h2>
 
 			<div className="flex gap-2 justify-center items-center text-sm sm:text-base">
 				<a
