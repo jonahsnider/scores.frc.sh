@@ -13,7 +13,7 @@ const config = defineConfig({
 		useTabs: true,
 		singleQuote: true,
 		printWidth: 120,
-		ignorePatterns: ['**/routeTree.gen.ts', 'convex/_generated/**/*'],
+		ignorePatterns: ['src/components/ui/**/*', '**/routeTree.gen.ts', 'convex/_generated/**/*'],
 	},
 	lint: {
 		ignorePatterns: ['src/components/ui/**/*', '**/routeTree.gen.ts', 'convex/_generated/**/*'],
