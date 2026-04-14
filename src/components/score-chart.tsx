@@ -196,7 +196,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 								<Legend
 									verticalAlign="top"
 									align="right"
-									content={<ChartLegendContent verticalAlign="top" className="justify-end" />}
+									content={<ChartLegendContent verticalAlign="top" className="sm:justify-end" />}
 								/>
 							)}
 							{seriesToRender.map((series) => (
