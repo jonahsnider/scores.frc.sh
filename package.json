@@ -6,7 +6,7 @@
 		"build": "vp build",
 		"dev": "bun run --parallel dev:frontend dev:backend",
 		"dev:backend": "convex dev",
-		"dev:frontend": "portless scores.frc.sh vite dev",
+		"dev:frontend": "portless scores.frc.sh vp dev",
 		"lint": "vp lint",
 		"lint:fix": "vp lint --fix",
 		"prepare": "vp config",
