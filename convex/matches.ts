@@ -223,3 +223,18 @@ export const refreshMatchResultsForYear = internalAction({
 		return null;
 	},
 });
+
+/**
+ * Internal action that refreshes match results for the current calendar year.
+ * The year is resolved at invocation time so cron jobs scheduled against
+ * this action stay correct across year boundaries without a redeploy.
+ */
+export const refreshMatchResultsForCurrentYear = internalAction({
+	args: {},
+	returns: v.null(),
+	handler: async (ctx) => {
+		const year = new Date().getUTCFullYear();
+		await ctx.runAction(internal.matches.refreshMatchResultsForYear, { year });
+		return null;
+	},
+});

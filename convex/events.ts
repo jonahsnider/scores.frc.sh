@@ -67,6 +67,21 @@ export const refreshEventsForYear = internalAction({
 });
 
 /**
+ * Internal action that refreshes events for the current calendar year.
+ * The year is resolved at invocation time so cron jobs scheduled against
+ * this action stay correct across year boundaries without a redeploy.
+ */
+export const refreshEventsForCurrentYear = internalAction({
+	args: {},
+	returns: v.null(),
+	handler: async (ctx) => {
+		const year = new Date().getUTCFullYear();
+		await ctx.runAction(internal.events.refreshEventsForYear, { year });
+		return null;
+	},
+});
+
+/**
  * Internal mutation that saves events to the database for a specific year.
  * This performs an upsert operation and removes orphaned events.
  */
