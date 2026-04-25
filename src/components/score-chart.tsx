@@ -2,6 +2,7 @@
 
 import { convexQuery } from '@convex-dev/react-query';
 import { useQuery } from '@tanstack/react-query';
+import { formatCss, interpolate } from 'culori';
 import { useMemo, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, Legend, type MouseHandlerDataParam, XAxis, YAxis } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,16 +21,18 @@ type Props = {
 	eventCode?: string;
 };
 
-// Color palette using Tailwind colors
-const WEEK_COLORS = [
-	'var(--color-emerald-500)',
-	'var(--color-teal-500)',
-	'var(--color-cyan-500)',
-	'var(--color-sky-500)',
-	'var(--color-blue-500)',
-	'var(--color-indigo-500)',
-	'var(--color-violet-500)',
-];
+// OKLCH anchors sourced from Tailwind v4's default palette
+// (emerald-500, blue-500, fuchsia-500). Colors are interpolated in OKLCH
+// across these anchors so contrast stays good regardless of week count.
+const colorScale = interpolate(
+	['oklch(0.696 0.17 162.48)', 'oklch(0.623 0.214 259.815)', 'oklch(0.667 0.295 322.15)'],
+	'oklch',
+);
+
+function weekColor(index: number, total: number): string {
+	const t = total <= 1 ? 0 : index / (total - 1);
+	return formatCss(colorScale(t));
+}
 
 const singleSeriesConfig = {
 	score: {
@@ -58,7 +61,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 		return Object.fromEntries(
 			weekNumbers.map((weekNum, index) => [
 				weekKey(weekNum),
-				{ label: weekName(weekNum), color: WEEK_COLORS[index % WEEK_COLORS.length] },
+				{ label: weekName(weekNum), color: weekColor(index, weekNumbers.length) },
 			]),
 		);
 	}, [weekNumbers, eventCode]);
