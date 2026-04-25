@@ -196,6 +196,11 @@ export function ScoreChart({ year, eventCode }: Props) {
 								<Legend
 									verticalAlign="top"
 									align="right"
+									itemSorter={(item) => {
+										const key = String(item.dataKey ?? item.value ?? '');
+										const index = seriesToRender.indexOf(key);
+										return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+									}}
 									content={<ChartLegendContent verticalAlign="top" className="sm:justify-end" />}
 								/>
 							)}
