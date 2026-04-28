@@ -60,7 +60,7 @@
 		"@vite-pwa/assets-generator": "^1.0.2",
 		"@vitejs/plugin-react": "^6.0.0",
 		"knip": "^6.0.0",
-		"portless": "0.11.0",
+		"portless": "0.11.1",
 		"typescript": "^6.0.0",
 		"vite": "npm:@voidzero-dev/vite-plus-core@latest",
 		"vite-plus": "latest"
