@@ -86,16 +86,19 @@ export function ScoreChart({ year, eventCode }: Props) {
 		return { ...base, [weekKey(record.event.weekNumber)]: record.result.score };
 	});
 
-	// Bridge adjacent weeks so every segment has more than 2 data points for area fill.
-	// At each week transition, give the last point of the ending week a value for
-	// the next week's key (equal to the current score) so the next Area segment
-	// starts from where the previous one left off.
+	// Bridge adjacent weeks so every segment has enough defined points for area fill.
+	// At each week transition, copy the boundary score onto both sides:
+	// - the last point of the ending week gets the next week's key
+	// - the first point of the next week gets the ending week's key
+	// This keeps the fill continuous even when a week only has a single record.
 	if (!eventCode) {
 		for (let i = 0; i < chartData.length - 1; i++) {
 			const currentWeek = records[i].event.weekNumber;
 			const nextWeek = records[i + 1].event.weekNumber;
 			if (currentWeek !== nextWeek) {
-				chartData[i][weekKey(nextWeek)] = records[i].result.score;
+				const currentScore = records[i].result.score;
+				chartData[i][weekKey(nextWeek)] = currentScore;
+				chartData[i + 1][weekKey(currentWeek)] = currentScore;
 			}
 		}
 	}
