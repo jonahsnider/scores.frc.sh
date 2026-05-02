@@ -86,6 +86,20 @@ export function ScoreChart({ year, eventCode }: Props) {
 		return { ...base, [weekKey(record.event.weekNumber)]: record.result.score };
 	});
 
+	// Bridge adjacent weeks so every segment has ≥2 data points for area fill.
+	// At each week transition, give the last point of the ending week a value for
+	// the next week's key (equal to the current score) so the next Area segment
+	// starts from where the previous one left off.
+	if (!eventCode) {
+		for (let i = 0; i < chartData.length - 1; i++) {
+			const currentWeek = records[i].event.weekNumber;
+			const nextWeek = records[i + 1].event.weekNumber;
+			if (currentWeek !== nextWeek) {
+				chartData[i][weekKey(nextWeek)] = records[i].result.score;
+			}
+		}
+	}
+
 	const statusText = usedQuery.isPending
 		? 'Loading data...'
 		: usedQuery.isError
