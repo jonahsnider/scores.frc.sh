@@ -86,7 +86,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 		return { ...base, [weekKey(record.event.weekNumber)]: record.result.score };
 	});
 
-	// Bridge adjacent weeks so every segment has ≥2 data points for area fill.
+	// Bridge adjacent weeks so every segment has more than 2 data points for area fill.
 	// At each week transition, give the last point of the ending week a value for
 	// the next week's key (equal to the current score) so the next Area segment
 	// starts from where the previous one left off.
