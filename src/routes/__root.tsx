@@ -45,7 +45,7 @@ export const Route = createRootRouteWithContext<{
 			},
 			{
 				name: 'theme-color',
-				content: '#101211',
+				content: '#0c0a09',
 			},
 			// Open Graph defaults
 			{
