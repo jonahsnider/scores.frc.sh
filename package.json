@@ -52,7 +52,7 @@
 		"zod": "^4.3.5"
 	},
 	"devDependencies": {
-		"@tanstack/devtools-vite": "^0.6.0",
+		"@tanstack/devtools-vite": "^0.7.0",
 		"@types/culori": "^4.0.1",
 		"@types/node": "^22.10.2",
 		"@types/react": "^19.2.0",
