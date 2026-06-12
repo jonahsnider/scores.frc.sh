@@ -1,6 +1,6 @@
 import { up } from 'up-fetch';
 import { z } from 'zod';
-import { env } from './env';
+import { env } from '../_generated/server';
 
 const http = up(fetch, () => ({
 	baseUrl: 'https://www.thebluealliance.com/api/v3',

@@ -1,7 +1,7 @@
 import { stringToBase64 } from 'uint8array-extras';
 import { ResponseError, up } from 'up-fetch';
 import { z } from 'zod';
-import { env } from './env';
+import { env } from '../_generated/server';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
