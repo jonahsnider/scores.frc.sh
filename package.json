@@ -61,7 +61,7 @@
 		"@vitejs/plugin-react": "^6.0.0",
 		"knip": "^6.0.0",
 		"portless": "0.15.1",
-		"typescript": "^6.0.0",
+		"typescript": "^7.0.0",
 		"vite": "npm:@voidzero-dev/vite-plus-core@latest",
 		"vite-plus": "latest"
 	},
