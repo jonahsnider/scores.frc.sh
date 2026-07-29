@@ -16,7 +16,10 @@ export const Route = createFileRoute('/$year_')({
 	loader: ({ context: { queryClient }, params }) => {
 		const year = Number(params.year);
 
-		void queryClient.prefetchQuery(convexQuery(api.scores.worldRecordsByYear, { year }));
+		void Promise.all([
+			queryClient.prefetchQuery(convexQuery(api.scores.worldRecordsByYear, { year })),
+			queryClient.prefetchQuery(convexQuery(api.matches.lastFetched, { year })),
+		]);
 	},
 	head: ({ params }) => {
 		const title = `${params.year} | ${SITE_NAME}`;

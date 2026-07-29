@@ -11,7 +11,10 @@ export const Route = createFileRoute('/$year/$eventCode')({
 		const year = Number(params.year);
 		const eventCode = params.eventCode.toUpperCase();
 
-		void queryClient.prefetchQuery(convexQuery(api.scores.eventRecords, { year, eventCode }));
+		void Promise.all([
+			queryClient.prefetchQuery(convexQuery(api.scores.eventRecords, { year, eventCode })),
+			queryClient.prefetchQuery(convexQuery(api.matches.lastFetched, { year, eventCode })),
+		]);
 	},
 	head: ({ params }) => {
 		const eventCode = params.eventCode.toUpperCase();

@@ -7,8 +7,12 @@ import { api } from '../../convex/_generated/api';
 
 export const Route = createFileRoute('/')({
 	component: HomePage,
-	loader: ({ context: { queryClient } }) =>
-		void queryClient.prefetchQuery(convexQuery(api.scores.worldRecordsByYear, { year: DEFAULT_YEAR })),
+	loader: ({ context: { queryClient } }) => {
+		void Promise.all([
+			queryClient.prefetchQuery(convexQuery(api.scores.worldRecordsByYear, { year: DEFAULT_YEAR })),
+			queryClient.prefetchQuery(convexQuery(api.matches.lastFetched, { year: DEFAULT_YEAR })),
+		]);
+	},
 	head: () => ({
 		meta: [
 			{

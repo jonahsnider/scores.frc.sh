@@ -23,7 +23,15 @@ const schema = defineEntSchema({
 	})
 		.index('by_year_and_code', ['year', 'code'])
 		.index('by_year_and_first_code', ['year', 'firstCode'])
+		.edge('matchFetchStatus', { to: 'eventMatchFetchStatuses', ref: 'eventId' })
 		.edges('matches', { to: 'matches', ref: 'eventId' }),
+
+	eventMatchFetchStatuses: defineEnt({
+		year: v.number(),
+		lastFetchedAt: v.number(),
+	})
+		.edge('event', { to: 'events', field: 'eventId' })
+		.index('by_year_and_last_fetched_at', ['year', 'lastFetchedAt']),
 
 	matches: defineEnt({
 		matchNumber: v.number(),

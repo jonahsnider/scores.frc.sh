@@ -2,7 +2,7 @@ import { v } from 'convex/values';
 import { dequal as isDeepStrictEqual } from 'dequal';
 import { internal } from './_generated/api';
 import { internalAction } from './_generated/server';
-import { internalMutation, internalQuery } from './functions';
+import { internalMutation, internalQuery, query } from './functions';
 import { FrcMatchLevel, getSchedule, listEventScores } from './lib/firstService';
 import { transformMatches } from './lib/matchTransform';
 import { matchLevelValidator } from './schema';
@@ -23,6 +23,42 @@ async function fetchMatchesFromFirstApi(year: number, firstEventCode: string) {
 
 	return transformMatches(schedule.Schedule, qualsMatchResults.MatchScores, playoffsMatchResults.MatchScores);
 }
+
+/**
+ * Get the last successful FIRST match data fetch time.
+ *
+ * When an event code is provided, returns that event's fetch time.
+ * Otherwise, returns the most recent event fetch time for the year.
+ */
+export const lastFetched = query({
+	args: {
+		year: v.number(),
+		eventCode: v.optional(v.string()),
+	},
+	returns: v.union(v.number(), v.null()),
+	handler: async (ctx, args) => {
+		if (args.eventCode !== undefined) {
+			const eventCode = args.eventCode;
+			const event = await ctx
+				.table('events', 'by_year_and_code', (q) => q.eq('year', args.year).eq('code', eventCode))
+				.unique();
+
+			if (!event) {
+				return null;
+			}
+
+			const fetchStatus = await event.edge('matchFetchStatus');
+			return fetchStatus?.lastFetchedAt ?? null;
+		}
+
+		const fetchStatus = await ctx
+			.table('eventMatchFetchStatuses', 'by_year_and_last_fetched_at', (q) => q.eq('year', args.year))
+			.order('desc')
+			.first();
+
+		return fetchStatus?.lastFetchedAt ?? null;
+	},
+});
 
 /**
  * Internal action that fetches matches from FIRST API for a specific event.
@@ -72,6 +108,8 @@ export const saveMatchesForEvent = internalMutation({
 	},
 	returns: v.null(),
 	handler: async (ctx, args) => {
+		const fetchedAt = Date.now();
+
 		// Get the event by year and FIRST code
 		const event = await ctx.table('events').getX('by_year_and_first_code', args.year, args.firstEventCode);
 
@@ -132,6 +170,19 @@ export const saveMatchesForEvent = internalMutation({
 				await matchToDelete.delete();
 				deletedCount++;
 			}
+		}
+
+		const existingFetchStatus = await event.edge('matchFetchStatus');
+		if (existingFetchStatus) {
+			await ctx.table('eventMatchFetchStatuses').getX(existingFetchStatus._id).patch({
+				lastFetchedAt: fetchedAt,
+			});
+		} else {
+			await ctx.table('eventMatchFetchStatuses').insert({
+				eventId: event._id,
+				year: args.year,
+				lastFetchedAt: fetchedAt,
+			});
 		}
 
 		// Log summary only if there were changes

@@ -5,7 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 import { formatCss, interpolate } from 'culori';
 import { useMemo, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, Legend, type MouseHandlerDataParam, XAxis, YAxis } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { LastFetchedTime } from '@/components/last-fetched-time';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	type ChartConfig,
 	ChartContainer,
@@ -44,6 +45,7 @@ const singleSeriesConfig = {
 export function ScoreChart({ year, eventCode }: Props) {
 	const globalRecordsQuery = useQuery(convexQuery(api.scores.worldRecordsByYear, eventCode ? 'skip' : { year }));
 	const eventRecordsQuery = useQuery(convexQuery(api.scores.eventRecords, eventCode ? { year, eventCode } : 'skip'));
+	const lastFetchedQuery = useQuery(convexQuery(api.matches.lastFetched, eventCode ? { year, eventCode } : { year }));
 
 	const usedQuery = eventCode === undefined ? globalRecordsQuery : eventRecordsQuery;
 	const records = usedQuery.data ?? [];
@@ -231,6 +233,12 @@ export function ScoreChart({ year, eventCode }: Props) {
 					</ChartContainer>
 				)}
 			</CardContent>
+
+			{lastFetchedQuery.data !== null && lastFetchedQuery.data !== undefined && (
+				<CardFooter className="justify-end">
+					<LastFetchedTime label="Updated" timestamp={lastFetchedQuery.data} />
+				</CardFooter>
+			)}
 		</Card>
 	);
 }
