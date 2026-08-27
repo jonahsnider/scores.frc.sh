@@ -4,7 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"build": "vp build",
-		"dev": "bun run --parallel dev:frontend dev:backend",
+		"dev": "pnpm run --parallel \"/^dev:.*/\"",
 		"dev:backend": "convex dev",
 		"dev:frontend": "portless scores.frc.sh vp dev",
 		"lint": "vp lint",
@@ -69,5 +69,12 @@
 		"vite": "npm:@voidzero-dev/vite-plus-core@latest",
 		"vitest": "npm:@voidzero-dev/vite-plus-test@latest"
 	},
-	"packageManager": "bun@1.3.11"
+	"devEngines": {
+		"runtime": {
+			"name": "node",
+			"version": "26.x",
+			"onFail": "error"
+		}
+	},
+	"packageManager": "pnpm@11.24.0"
 }

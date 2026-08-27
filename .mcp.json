@@ -1,14 +1,14 @@
 {
 	"mcpServers": {
 		"convex": {
-			"args": ["convex", "mcp", "start"],
-			"command": "bun",
+			"args": ["exec", "convex", "mcp", "start"],
+			"command": "pnpm",
 			"env": {},
 			"type": "stdio"
 		},
 		"shadcn": {
-			"args": ["shadcn", "mcp"],
-			"command": "bun",
+			"args": ["exec", "shadcn", "mcp"],
+			"command": "pnpm",
 			"env": {},
 			"type": "stdio"
 		},

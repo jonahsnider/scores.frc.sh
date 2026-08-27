@@ -9,18 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as YearRouteImport } from './routes/$year_'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as YearRouteImport } from './routes/$year_'
 import { Route as YearEventCodeRouteImport } from './routes/$year.$eventCode'
 
-const YearRoute = YearRouteImport.update({
-  id: '/$year_',
-  path: '/$year',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const YearRoute = YearRouteImport.update({
+  id: '/$year_',
+  path: '/$year',
   getParentRoute: () => rootRouteImport,
 } as any)
 const YearEventCodeRoute = YearEventCodeRouteImport.update({
@@ -61,18 +61,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/$year_': {
-      id: '/$year_'
-      path: '/$year'
-      fullPath: '/$year'
-      preLoaderRoute: typeof YearRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$year_': {
+      id: '/$year_'
+      path: '/$year'
+      fullPath: '/$year'
+      preLoaderRoute: typeof YearRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$year/$eventCode': {
