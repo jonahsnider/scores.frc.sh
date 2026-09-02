@@ -112,7 +112,7 @@ importers:
         version: 1.5.0
       up-fetch:
         specifier: ^2.5.0
-        version: 2.6.0
+        version: 2.6.1
       zod:
         specifier: ^4.3.5
         version: 4.5.4
@@ -4314,8 +4314,8 @@ packages:
       uploadthing:
         optional: true
 
-  up-fetch@2.6.0:
-    resolution: {integrity: sha512-gWV2S83NlheUZRJq6a79EOc3ZkW1AfvU96HT7KiH1O3ZmmaqdkhkygFiHfeEsRi69lP0JDVpblyWkqib4NPw3Q==}
+  up-fetch@2.6.1:
+    resolution: {integrity: sha512-4fWXql+u539ulvBHT9mrDBLnBA2wRaD9aRZdg2J576HnVKr+r9YWq/36skBGtvz6gAImmfFg49RlOIAdbSzDlg==}
     engines: {node: '>=18'}
 
   update-browserslist-db@1.3.1:
@@ -8025,7 +8025,7 @@ snapshots:
       db0: 0.3.4
       ofetch: 2.0.0-alpha.3
 
-  up-fetch@2.6.0: {}
+  up-fetch@2.6.1: {}
 
   update-browserslist-db@1.3.1(browserslist@4.28.8):
     dependencies:
