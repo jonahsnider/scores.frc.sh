@@ -62,8 +62,8 @@
 		"knip": "^6.0.0",
 		"portless": "0.15.6",
 		"typescript": "^7.0.0",
-		"vite": "npm:@voidzero-dev/vite-plus-core@latest",
-		"vite-plus": "latest"
+		"vite": "catalog:",
+		"vite-plus": "catalog:"
 	},
 	"overrides": {
 		"vite": "npm:@voidzero-dev/vite-plus-core@latest",
