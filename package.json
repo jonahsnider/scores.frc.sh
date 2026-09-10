@@ -65,10 +65,6 @@
 		"vite": "catalog:",
 		"vite-plus": "catalog:"
 	},
-	"overrides": {
-		"vite": "npm:@voidzero-dev/vite-plus-core@latest",
-		"vitest": "npm:@voidzero-dev/vite-plus-test@latest"
-	},
 	"devEngines": {
 		"runtime": {
 			"name": "node",
