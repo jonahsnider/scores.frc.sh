@@ -183,7 +183,7 @@ importers:
         version: 1.8.0(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@convex-dev/react-query':
         specifier: ^0.1.0
-        version: 0.1.0(@tanstack/react-query@5.103.1(react@19.3.0))(convex@1.45.0(react@19.3.0))
+        version: 0.1.0(@tanstack/react-query@5.103.1(react@19.3.0))(convex@1.46.0(react@19.3.0))
       '@fontsource-variable/public-sans':
         specifier: ^5.2.7
         version: 5.3.0
@@ -230,14 +230,14 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       convex:
-        specifier: 1.45.0
-        version: 1.45.0(react@19.3.0)
+        specifier: 1.46.0
+        version: 1.46.0(react@19.3.0)
       convex-ents:
         specifier: 0.20.0
-        version: 0.20.0(convex@1.45.0(react@19.3.0))
+        version: 0.20.0(convex@1.46.0(react@19.3.0))
       convex-helpers:
         specifier: 0.1.124
-        version: 0.1.124(@standard-schema/spec@1.1.0)(convex@1.45.0(react@19.3.0))(hono@4.13.5)(react@19.3.0)(typescript@7.0.2)(zod@4.6.5)
+        version: 0.1.124(@standard-schema/spec@1.1.0)(convex@1.46.0(react@19.3.0))(hono@4.13.5)(react@19.3.0)(typescript@7.0.2)(zod@4.6.5)
       culori:
         specifier: ^4.0.2
         version: 4.0.2
@@ -2805,8 +2805,8 @@ packages:
       zod:
         optional: true
 
-  convex@1.45.0:
-    resolution: {integrity: sha512-AV3B56Ptu/14d76g3urBJ50dwpiZa6uJaLT84OWox5aCwZIJiuAamdjv3lLHDzs8vv5kC31anEZohhUe3qJ2bA==}
+  convex@1.46.0:
+    resolution: {integrity: sha512-dhBwDQTZDOhi5SUGAX17EWNehCdNq6/UFrSL0eLZuGfMkdsQbCVWVRZCzbZ5CF+/pgvoGxtApbEoTSipqL4JTw==}
     engines: {node: '>=20.0.0', npm: '>=7.0.0'}
     hasBin: true
     peerDependencies:
@@ -4798,10 +4798,10 @@ snapshots:
 
   '@canvas/image-data@1.1.0': {}
 
-  '@convex-dev/react-query@0.1.0(@tanstack/react-query@5.103.1(react@19.3.0))(convex@1.45.0(react@19.3.0))':
+  '@convex-dev/react-query@0.1.0(@tanstack/react-query@5.103.1(react@19.3.0))(convex@1.46.0(react@19.3.0))':
     dependencies:
       '@tanstack/react-query': 5.103.1(react@19.3.0)
-      convex: 1.45.0(react@19.3.0)
+      convex: 1.46.0(react@19.3.0)
 
   '@dotenvx/dotenvx@1.75.1':
     dependencies:
@@ -6505,13 +6505,13 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  convex-ents@0.20.0(convex@1.45.0(react@19.3.0)):
+  convex-ents@0.20.0(convex@1.46.0(react@19.3.0)):
     dependencies:
-      convex: 1.45.0(react@19.3.0)
+      convex: 1.46.0(react@19.3.0)
 
-  convex-helpers@0.1.124(@standard-schema/spec@1.1.0)(convex@1.45.0(react@19.3.0))(hono@4.13.5)(react@19.3.0)(typescript@7.0.2)(zod@4.6.5):
+  convex-helpers@0.1.124(@standard-schema/spec@1.1.0)(convex@1.46.0(react@19.3.0))(hono@4.13.5)(react@19.3.0)(typescript@7.0.2)(zod@4.6.5):
     dependencies:
-      convex: 1.45.0(react@19.3.0)
+      convex: 1.46.0(react@19.3.0)
     optionalDependencies:
       '@standard-schema/spec': 1.1.0
       hono: 4.13.5
@@ -6519,7 +6519,7 @@ snapshots:
       typescript: 7.0.2
       zod: 4.6.5
 
-  convex@1.45.0(react@19.3.0):
+  convex@1.46.0(react@19.3.0):
     dependencies:
       esbuild: 0.27.0
       prettier: 3.9.6
