@@ -5,7 +5,8 @@ import { internalAction } from './_generated/server';
 import { internalMutation, internalQuery, query } from './functions';
 import { FrcMatchLevel, getSchedule, listEventScores } from './lib/firstService';
 import { transformMatches } from './lib/matchTransform';
-import { matchLevelValidator } from './schema';
+import { filterMatchesToRecordBreaking } from './lib/recordMatches';
+import { type MatchWithResult, matchLevelValidator } from './schema';
 
 /**
  * Fetch matches from FIRST API for a specific event.
@@ -186,7 +187,74 @@ export const saveMatchesForEvent = internalMutation({
 			console.info(`${args.year} ${args.firstEventCode} matches: +${insertedCount} ~${updatedCount} -${deletedCount}`);
 		}
 
+		await ctx.runMutation(internal.matches.rebuildRecordMatchesForEvent, { eventId: event._id });
+
 		return null;
+	},
+});
+
+/** Keep an event's record-breaking matches in sync with its match results. */
+export const rebuildRecordMatchesForEvent = internalMutation({
+	args: { eventId: v.id('events') },
+	returns: v.null(),
+	handler: async (ctx, args) => {
+		const event = await ctx.table('events').getX(args.eventId);
+		const matches = (await event.edge('matches')).filter((match) => match.result !== undefined) as MatchWithResult[];
+		const candidates = filterMatchesToRecordBreaking(matches);
+		const existingRecords = await event.edge('recordMatches');
+		const existingByKey = new Map(
+			existingRecords.map((record) => [`${record.matchLevel}:${record.matchNumber}`, record]),
+		);
+		const candidateKeys = new Set<string>();
+
+		for (const candidate of candidates) {
+			const key = `${candidate.matchLevel}:${candidate.matchNumber}`;
+			candidateKeys.add(key);
+			const existing = existingByKey.get(key);
+			if (existing) {
+				if (!isDeepStrictEqual(existing.result, candidate.result)) {
+					await ctx.table('recordMatches').getX(existing._id).patch({ result: candidate.result });
+				}
+			} else {
+				await ctx.table('recordMatches').insert({
+					eventId: event._id,
+					year: event.year,
+					matchNumber: candidate.matchNumber,
+					matchLevel: candidate.matchLevel,
+					result: candidate.result,
+				});
+			}
+		}
+
+		for (const record of existingRecords) {
+			const key = `${record.matchLevel}:${record.matchNumber}`;
+			if (!candidateKeys.has(key)) {
+				await ctx.table('recordMatches').getX(record._id).delete();
+			}
+		}
+		return null;
+	},
+});
+
+export const eventIdsForRecordBackfill = internalQuery({
+	args: { year: v.number() },
+	returns: v.array(v.id('events')),
+	handler: async (ctx, args) => {
+		const events = await ctx.table('events', 'by_year_and_code', (q) => q.eq('year', args.year));
+		return events.map((event) => event._id);
+	},
+});
+
+/** Populate record matches for an existing year after adding the table. */
+export const backfillRecordMatchesForYear = internalAction({
+	args: { year: v.number() },
+	returns: v.number(),
+	handler: async (ctx, args): Promise<number> => {
+		const eventIds = await ctx.runQuery(internal.matches.eventIdsForRecordBackfill, { year: args.year });
+		for (const eventId of eventIds) {
+			await ctx.runMutation(internal.matches.rebuildRecordMatchesForEvent, { eventId });
+		}
+		return eventIds.length;
 	},
 });
 

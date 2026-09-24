@@ -1,8 +1,8 @@
 import { type Infer, v } from 'convex/values';
-import { internal } from './_generated/api';
 import type { Doc } from './_generated/dataModel';
-import { internalQuery, query } from './functions';
-import { type EventWithMatches, type MatchWithResult, matchLevelValidator, matchWithResultValidator } from './schema';
+import { query } from './functions';
+import { filterMatchesToRecordBreaking } from './lib/recordMatches';
+import { matchLevelValidator } from './schema';
 
 /**
  * Validator for a single high score record.
@@ -29,26 +29,6 @@ const highScoreResultValidator = v.object({
 type HighScoreResult = Infer<typeof highScoreResultValidator>;
 
 /**
- * Helper function to compute record-breaking matches from a list of match results.
- */
-function filterMatchesToRecordBreaking(events: EventWithMatches[]): MatchWithResult[] {
-	// Sort by timestamp ascending
-	const sortedMatches = events
-		.flatMap((event) => event.matches)
-		.sort((a, b) => a.result.timestamp - b.result.timestamp);
-
-	// Find record-breaking matches
-	let currentRecord = -1;
-	return sortedMatches.filter((match) => {
-		if (match.result.score > currentRecord) {
-			currentRecord = match.result.score;
-			return true;
-		}
-		return false;
-	});
-}
-
-/**
  * Get world record high scores for a specific year.
  *
  * Returns all record-breaking matches ordered by when they occurred,
@@ -60,27 +40,11 @@ export const worldRecordsByYear = query({
 	},
 	returns: v.array(highScoreResultValidator),
 	handler: async (ctx, args): Promise<HighScoreResult[]> => {
-		// Get all events for the year
-		const events = await ctx.table('events', 'by_year_and_code', (q) => q.eq('year', args.year));
-
-		// Get records for each event using the cached eventRecords query
-		const allEventRecords = await Promise.all(
-			events.map((event) =>
-				ctx.runQuery(internal.scores.eventRecordMatches, {
-					year: args.year,
-					eventCode: event.code,
-				}),
-			),
-		);
-
-		// Combine events with their cached per-event records to filter for world records
-		const eventsWithMatches: EventWithMatches[] = events.map((event, idx) => ({
-			...event.doc(),
-			matches: allEventRecords[idx] ?? [],
-		}));
-
-		// Filter to only the actual world record-breaking matches
-		const worldRecords = filterMatchesToRecordBreaking(eventsWithMatches);
+		const [events, recordMatches] = await Promise.all([
+			ctx.table('events', 'by_year_and_code', (q) => q.eq('year', args.year)),
+			ctx.table('recordMatches', 'by_year', (q) => q.eq('year', args.year)),
+		]);
+		const worldRecords = filterMatchesToRecordBreaking(recordMatches);
 
 		return transformMatchToHighScore(worldRecords, events);
 	},
@@ -110,44 +74,12 @@ export const eventRecords = query({
 			return null;
 		}
 
-		// Get record-breaking matches
-		const matches = await ctx.runQuery(internal.scores.eventRecordMatches, {
-			year: args.year,
-			eventCode: args.eventCode,
-		});
-
-		if (!matches) {
-			return null;
-		}
-
-		return transformMatchToHighScore(matches, [event]);
+		const records = await event.edge('recordMatches');
+		return transformMatchToHighScore(filterMatchesToRecordBreaking(records), [event]);
 	},
 });
 
-export const eventRecordMatches = internalQuery({
-	args: {
-		year: v.number(),
-		eventCode: v.string(),
-	},
-	returns: v.nullable(v.array(matchWithResultValidator)),
-	handler: async (ctx, args) => {
-		const [event] = await ctx
-			.table('events', 'by_year_and_code', (q) => q.eq('year', args.year).eq('code', args.eventCode))
-			.map(async (event) => ({
-				...event,
-				// TODO: See if we can add an index on this instead of a filter
-				matches: (await event.edge('matches').filter((q) => q.neq(q.field('result'), undefined))) as MatchWithResult[],
-			}));
-
-		if (!event) {
-			return null;
-		}
-
-		return filterMatchesToRecordBreaking([event]);
-	},
-});
-
-function transformMatchToHighScore(records: MatchWithResult[], events: Doc<'events'>[]): HighScoreResult[] {
+function transformMatchToHighScore(records: Doc<'recordMatches'>[], events: Doc<'events'>[]): HighScoreResult[] {
 	const eventMap = new Map(events.map((event) => [event._id, event]));
 
 	return records.map((record, idx) => {

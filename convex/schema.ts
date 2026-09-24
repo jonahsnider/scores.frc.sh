@@ -24,7 +24,8 @@ const schema = defineEntSchema({
 		.index('by_year_and_code', ['year', 'code'])
 		.index('by_year_and_first_code', ['year', 'firstCode'])
 		.edge('matchFetchStatus', { to: 'eventMatchFetchStatuses', ref: 'eventId' })
-		.edges('matches', { to: 'matches', ref: 'eventId' }),
+		.edges('matches', { to: 'matches', ref: 'eventId' })
+		.edges('recordMatches', { to: 'recordMatches', ref: 'eventId' }),
 
 	eventMatchFetchStatuses: defineEnt({
 		year: v.number(),
@@ -40,6 +41,15 @@ const schema = defineEntSchema({
 	})
 		.edge('event', { to: 'events', field: 'eventId' })
 		.index('by_result', ['result']),
+
+	recordMatches: defineEnt({
+		year: v.number(),
+		matchNumber: v.number(),
+		matchLevel: matchLevelValidator,
+		result: matchResultValidator,
+	})
+		.edge('event', { to: 'events', field: 'eventId' })
+		.index('by_year', ['year']),
 });
 
 export default schema;
@@ -52,8 +62,3 @@ export const matchWithResultValidator = schema.tables.matches.validator.omit('re
 	_creationTime: v.number(),
 });
 export type MatchWithResult = Infer<typeof matchWithResultValidator>;
-
-export const eventWithMatchesValidator = schema.tables.events.validator.extend({
-	matches: v.array(matchWithResultValidator),
-});
-export type EventWithMatches = Infer<typeof eventWithMatchesValidator>;
