@@ -5,7 +5,7 @@ import viteReact from '@vitejs/plugin-react';
 import { nitro } from 'nitro/vite';
 import { defineConfig } from 'vite-plus';
 
-const config = defineConfig({
+const config = defineConfig(({ command }) => ({
 	staged: {
 		'*': 'vp check --fix',
 	},
@@ -21,7 +21,13 @@ const config = defineConfig({
 	resolve: {
 		tsconfigPaths: true,
 	},
-	plugins: [devtools(), nitro(), tailwindcss(), tanstackStart(), viteReact()],
-});
+	plugins: [
+		devtools(),
+		nitro({ preset: command === 'build' ? 'cloudflare_module' : 'node_server' }),
+		tailwindcss(),
+		tanstackStart(),
+		viteReact(),
+	],
+}));
 
 export default config;

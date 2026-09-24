@@ -5,12 +5,11 @@ import { setTimeout as delay } from 'node:timers/promises';
 const host = '127.0.0.1';
 const port = 30_000 + (process.pid % 10_000);
 const origin = `http://${host}:${port}`;
-const server = spawn(process.execPath, ['.output/server/index.mjs'], {
+const server = spawn('vp', ['exec', 'wrangler', 'dev', '--local', '--ip', host, '--port', String(port)], {
+	detached: true,
 	env: {
 		...process.env,
-		HOST: host,
 		NODE_ENV: 'production',
-		PORT: String(port),
 	},
 	stdio: ['ignore', 'pipe', 'pipe'],
 });
@@ -26,7 +25,7 @@ async function request(path: string) {
 
 	while (Date.now() < deadline) {
 		if (server.exitCode !== null) {
-			throw new Error(`Production server exited with code ${server.exitCode}.\n${output}`);
+			throw new Error(`Worker exited with code ${server.exitCode}.\n${output}`);
 		}
 
 		try {
@@ -36,7 +35,7 @@ async function request(path: string) {
 		}
 	}
 
-	throw new Error(`Production server did not start within 10 seconds.\n${output}`);
+	throw new Error(`Worker did not start within 10 seconds.\n${output}`);
 }
 
 try {
@@ -58,15 +57,20 @@ try {
 		}
 	}
 
-	console.log(`SSR smoke test passed for ${paths.join(', ')}`);
+	const icon = await request('/icon.svg');
+	if (icon.status !== 200 || !icon.headers.get('content-type')?.includes('image/svg+xml')) {
+		throw new Error(`/icon.svg was not served as an SVG asset (HTTP ${icon.status}).\n${output}`);
+	}
+
+	console.log(`Worker smoke test passed for ${paths.join(', ')} and /icon.svg`);
 } finally {
 	if (server.exitCode === null) {
 		const exited = once(server, 'exit');
-		server.kill();
+		process.kill(-server.pid!, 'SIGTERM');
 		const stopped = await Promise.race([exited.then(() => true), delay(2_000).then(() => false)]);
 
 		if (!stopped && server.exitCode === null) {
-			server.kill('SIGKILL');
+			process.kill(-server.pid!, 'SIGKILL');
 			await once(server, 'exit');
 		}
 	}

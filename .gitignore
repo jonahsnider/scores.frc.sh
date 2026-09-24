@@ -14,3 +14,4 @@ todos.json
 .turbo
 .vercel
 .env*
+.dev.vars*
