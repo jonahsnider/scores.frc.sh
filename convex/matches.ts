@@ -36,24 +36,24 @@ export const lastFetched = query({
 		year: v.number(),
 		eventCode: v.optional(v.string()),
 	},
-	returns: v.number(),
+	returns: v.nullable(v.number()),
 	handler: async (ctx, args) => {
 		if (args.eventCode !== undefined) {
 			const eventCode = args.eventCode;
 			const event = await ctx
 				.table('events', 'by_year_and_code', (q) => q.eq('year', args.year).eq('code', eventCode))
-				.uniqueX();
+				.unique();
 
-			const fetchStatus = await event.edgeX('matchFetchStatus');
-			return fetchStatus.lastFetchedAt;
+			const fetchStatus = await event?.edge('matchFetchStatus');
+			return fetchStatus?.lastFetchedAt ?? null;
 		}
 
 		const fetchStatus = await ctx
 			.table('eventMatchFetchStatuses', 'by_year_and_last_fetched_at', (q) => q.eq('year', args.year))
 			.order('desc')
-			.firstX();
+			.first();
 
-		return fetchStatus.lastFetchedAt;
+		return fetchStatus?.lastFetchedAt ?? null;
 	},
 });
 

@@ -243,7 +243,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 				)}
 			</CardContent>
 
-			{lastFetchedQuery.data !== undefined && (
+			{lastFetchedQuery.data != null && (
 				<CardFooter className="justify-end">
 					<LastFetchedTime label="Updated" timestamp={lastFetchedQuery.data} />
 				</CardFooter>
