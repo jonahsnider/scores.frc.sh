@@ -4,7 +4,16 @@ import { convexQuery } from '@convex-dev/react-query';
 import { useQuery } from '@tanstack/react-query';
 import { formatCss, interpolate } from 'culori';
 import { useMemo, useState } from 'react';
-import { Area, AreaChart, CartesianGrid, Legend, type MouseHandlerDataParam, XAxis, YAxis } from 'recharts';
+import {
+	Area,
+	AreaChart,
+	CartesianGrid,
+	Legend,
+	type LegendPayload,
+	type MouseHandlerDataParam,
+	XAxis,
+	YAxis,
+} from 'recharts';
 import { LastFetchedTime } from '@/components/last-fetched-time';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -201,7 +210,7 @@ export function ScoreChart({ year, eventCode }: Props) {
 								<Legend
 									verticalAlign="top"
 									align="right"
-									itemSorter={(item) => {
+									itemSorter={(item: LegendPayload) => {
 										const key = String(item.dataKey ?? item.value ?? '');
 										const index = seriesToRender.indexOf(key);
 										return index === -1 ? Number.MAX_SAFE_INTEGER : index;
