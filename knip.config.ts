@@ -21,8 +21,6 @@ const config: KnipConfig = {
 	ignoreDependencies: [
 		// Used in vite.config.ts via plugin
 		'@tanstack/router-plugin',
-		// Used for SSR with TanStack Router
-		'@tanstack/react-router-ssr-query',
 		// Used by shadcn/ui components for styling variants
 		'class-variance-authority',
 	],
