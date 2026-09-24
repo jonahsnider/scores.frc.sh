@@ -1,5 +1,13 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "scores-frc-sh",
-	"compatibility_date": "2026-09-24"
+	"compatibility_date": "2026-09-24",
+	"workers_dev": false,
+	"preview_urls": false,
+	"routes": [
+		{
+			"pattern": "scores.frc.sh",
+			"custom_domain": true
+		}
+	]
 }
