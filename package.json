@@ -63,7 +63,7 @@
 		"typescript": "^7.0.0",
 		"vite": "catalog:",
 		"vite-plus": "catalog:",
-		"wrangler": "4.138.0"
+		"wrangler": "4.139.0"
 	},
 	"devEngines": {
 		"runtime": {
