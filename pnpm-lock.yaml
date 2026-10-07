@@ -227,8 +227,8 @@ importers:
         specifier: 1.46.0
         version: 1.46.0(react@19.3.0)
       convex-ents:
-        specifier: 0.20.0
-        version: 0.20.0(convex@1.46.0(react@19.3.0))
+        specifier: 0.20.1
+        version: 0.20.1(convex@1.46.0(react@19.3.0))
       convex-helpers:
         specifier: 0.1.127
         version: 0.1.127(@standard-schema/spec@1.1.0)(convex@1.46.0(react@19.3.0))(hono@4.13.5)(react@19.3.0)(typescript@7.0.2)(zod@4.6.5)
@@ -2980,8 +2980,8 @@ packages:
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
-  convex-ents@0.20.0:
-    resolution: {integrity: sha512-o647Au9PzEoH9TiKmc1dDevjxYQcNXjet5TNCzS49lo1FiLj2iN4ztWvqwYV6xAwzyCBxit/nyjmCicEAZCjKw==}
+  convex-ents@0.20.1:
+    resolution: {integrity: sha512-SFNsKKqfW4ZAl2Fs+fR05mE253sqPN0M+ss5qnzH5DjAl+IzGuWPE8X+FRXfxjD4ZLIDYy0rMtWXWI487JQMDg==}
     peerDependencies:
       convex: ^1.31.3
 
@@ -6876,7 +6876,7 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  convex-ents@0.20.0(convex@1.46.0(react@19.3.0)):
+  convex-ents@0.20.1(convex@1.46.0(react@19.3.0)):
     dependencies:
       convex: 1.46.0(react@19.3.0)
 
