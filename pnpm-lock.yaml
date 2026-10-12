@@ -189,7 +189,7 @@ importers:
         version: 5.3.0
       '@fontsource-variable/source-sans-3':
         specifier: ^5.2.9
-        version: 5.3.0
+        version: 5.3.1
       '@plausible-analytics/tracker':
         specifier: ^0.4.4
         version: 0.4.6
@@ -891,8 +891,8 @@ packages:
   '@fontsource-variable/public-sans@5.3.0':
     resolution: {integrity: sha512-AVfkmAt50BMXWpOO21FAntiJFKGX6xTc2dSL8dxtDteONe9IuRXJWGbs0EbG955vAMCq23ENeuopuW87cGWDSQ==}
 
-  '@fontsource-variable/source-sans-3@5.3.0':
-    resolution: {integrity: sha512-dpi0GZk7EQe2tYpg6Q0Fx0OmUgnuGu+0rHPgtXqtKhglYmJuP7jZ12Mu1uN+NfRaJRY1Emn8AQJEWzmoZ4wa9g==}
+  '@fontsource-variable/source-sans-3@5.3.1':
+    resolution: {integrity: sha512-u0p5Z/PM2e1uxYOMiodLM6NVzxHwULcB6Oi7QSr2WU/sdoLBFP/BeOZ3YYHeJ6rHsjPZA1nZweZVaV7sf2MAyQ==}
 
   '@hono/node-server@2.1.1':
     resolution: {integrity: sha512-ELuehkj5VCBdgEw9zs+ivkKwyzzUCSQuE96YmiPvn1ECBoZCczbFXJLeEGMTYjphP6gydh4pHMqEYPVMYUVgQg==}
@@ -5452,7 +5452,7 @@ snapshots:
 
   '@fontsource-variable/public-sans@5.3.0': {}
 
-  '@fontsource-variable/source-sans-3@5.3.0': {}
+  '@fontsource-variable/source-sans-3@5.3.1': {}
 
   '@hono/node-server@2.1.1(hono@4.13.5)':
     dependencies:
