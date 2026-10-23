@@ -230,8 +230,8 @@ importers:
         specifier: 0.20.1
         version: 0.20.1(convex@1.47.0(react@19.3.1))
       convex-helpers:
-        specifier: 0.1.128
-        version: 0.1.128(@standard-schema/spec@1.1.0)(convex@1.47.0(react@19.3.1))(hono@4.13.5)(react@19.3.1)(typescript@7.0.2)(zod@4.6.7)
+        specifier: 0.1.129
+        version: 0.1.129(@standard-schema/spec@1.1.0)(convex@1.47.0(react@19.3.1))(hono@4.13.5)(react@19.3.1)(typescript@7.0.2)(zod@4.6.7)
       culori:
         specifier: ^4.0.2
         version: 4.0.2
@@ -3066,8 +3066,8 @@ packages:
     peerDependencies:
       convex: ^1.31.3
 
-  convex-helpers@0.1.128:
-    resolution: {integrity: sha512-5n7uKsJrYnnybvuSAWgDQ9d5Avqk4CzFsJ22SXow4tHmVxSUH6qiJCeomWWxcLSfN9t9jpKIXNJiGJrjddS4ng==}
+  convex-helpers@0.1.129:
+    resolution: {integrity: sha512-8QJLbym0fKsf3tYcF2ZTX37NeYt/BkOFBjBwB2LR1fXUAajeYaTLV11gi/0IVOU/jCdH2j/VseHhHid1qQcqFw==}
     hasBin: true
     peerDependencies:
       '@standard-schema/spec': ^1.0.0
@@ -7033,7 +7033,7 @@ snapshots:
     dependencies:
       convex: 1.47.0(react@19.3.1)
 
-  convex-helpers@0.1.128(@standard-schema/spec@1.1.0)(convex@1.47.0(react@19.3.1))(hono@4.13.5)(react@19.3.1)(typescript@7.0.2)(zod@4.6.7):
+  convex-helpers@0.1.129(@standard-schema/spec@1.1.0)(convex@1.47.0(react@19.3.1))(hono@4.13.5)(react@19.3.1)(typescript@7.0.2)(zod@4.6.7):
     dependencies:
       convex: 1.47.0(react@19.3.1)
     optionalDependencies:
