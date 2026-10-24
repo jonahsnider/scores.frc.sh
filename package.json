@@ -36,7 +36,7 @@
 		"culori": "^4.0.2",
 		"date-fns": "^4.1.0",
 		"dequal": "^2.0.3",
-		"envalid": "^8.1.1",
+		"envalid": "^9.0.0",
 		"lucide-react": "^1.0.0",
 		"nitro": "latest",
 		"react": "^19.2.0",
