@@ -242,8 +242,8 @@ importers:
         specifier: ^2.0.3
         version: 2.0.3
       envalid:
-        specifier: ^8.1.1
-        version: 8.2.0
+        specifier: ^9.0.0
+        version: 9.0.0
       lucide-react:
         specifier: ^1.0.0
         version: 1.61.0(@types/react@19.3.0)(react@19.3.1)
@@ -3332,9 +3332,9 @@ packages:
     resolution: {integrity: sha512-2iDP2DfheAMMAKeXBggEuFmpSq+1Xs6wQoHba1g65pZFXlC3VHD1O6/tgVzS6GQLv+P2koPKZPKgKhXkigNBdg==}
     hasBin: true
 
-  envalid@8.2.0:
-    resolution: {integrity: sha512-CkPvea95dwMYE1wnKX5mQXkOpiMs9O+ncv8NqZy+gW7FuzpUp06KTdUHb18xFG8CqQHmfmRqGLF5DuGaBWNrSw==}
-    engines: {node: '>=18'}
+  envalid@9.0.0:
+    resolution: {integrity: sha512-yGeeseY35RhYaDpBsNgL/fEaBqCsnCsRGCOmWHGLR+gaLE22Yk8fYbwkarIQxV2i4rj0F86EIFd32Yi0fqIZWQ==}
+    engines: {node: '>=22'}
 
   error-stack-parser-es@1.0.5:
     resolution: {integrity: sha512-5qucVt2XcuGMcEGgWI7i+yZpmpByQ8J1lHhcL7PwqCwu9FPP3VUXzT4ltHe5i2z9dePwEHcDVOAfSnHsOlCXRA==}
@@ -7228,9 +7228,7 @@ snapshots:
       httpxy: 0.5.5
       srvx: 1.0.3
 
-  envalid@8.2.0:
-    dependencies:
-      tslib: 2.8.1
+  envalid@9.0.0: {}
 
   error-stack-parser-es@1.0.5: {}
 
